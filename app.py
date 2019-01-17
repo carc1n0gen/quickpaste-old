@@ -3,6 +3,8 @@ import sqlite3
 import hashlib
 from functools import wraps
 from flask import Flask, request, render_template, redirect, url_for, g
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from flask_htmlmin import HTMLMIN
 from flask_assets import Environment, Bundle
 
@@ -11,6 +13,11 @@ app = Flask('quickpaste')
 app.config.from_pyfile('config.py')
 HTMLMIN(app)
 assets = Environment(app)
+limiter = Limiter(
+    app,
+    key_func=get_remote_address,
+    default_limits=["1 per second"],
+)
 
 js = Bundle('js/main.js', output='bundle.js')
 css = Bundle('css/fontello.css', 'css/styles.css', output='bundle.css')
@@ -71,6 +78,14 @@ def get_text(hexhash):
     return item[1]
 
 
+@app.errorhandler(429)
+def ratelimit_handler(e):
+    respond_with = request.headers.get('X-Respondwith')
+    if respond_with == 'link':
+        return ('Too many requests. Limit 1 per 1 second.', 429)
+    return render_template('4xx.html', title='Too many requests', message='Limit 1 per 1 second'), 429
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
@@ -88,7 +103,7 @@ def index():
 def view(hash):
     text = get_text(hash)
     if text is None:
-        return render_template('not_found.html'), 404
+        return render_template('4xx.html', title='Not found', message='There doesn\'t seem to be a paste here'), 404
     return render_template('view.html', text=text)
 
 
