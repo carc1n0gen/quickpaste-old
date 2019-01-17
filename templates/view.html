@@ -1,0 +1,5 @@
+{% extends 'layouts/layout.html' %}
+{% include 'partials/header.html' %}
+{% block content %}
+<pre>{% for line in text.splitlines() %}<code>{{ line }}</code>{% endfor %}</pre>
+{% endblock %}
