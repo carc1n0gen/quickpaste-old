@@ -9,6 +9,7 @@ flask-htmlmin = "*"
 waitress = "*"
 flask-assets = "*"
 flask-limiter = "*"
+alembic = "*"
 
 [dev-packages]
 
