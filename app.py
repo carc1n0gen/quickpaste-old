@@ -15,8 +15,7 @@ HTMLMIN(app)
 assets = Environment(app)
 limiter = Limiter(
     app,
-    key_func=get_remote_address,
-    default_limits=["1 per second"],
+    key_func=get_remote_address
 )
 
 js = Bundle('js/main.js', output='bundle.js')

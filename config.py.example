@@ -3,3 +3,4 @@ from os import path
 ROOT = path.realpath(path.dirname(__file__))
 DB_PATH = path.join(ROOT, 'data/database.db')
 MINIFY_PAGE = True
+RATELIMIT_DEFAULT = '1 per second'
