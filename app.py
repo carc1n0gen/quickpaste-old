@@ -7,10 +7,19 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_htmlmin import HTMLMIN
 from flask_assets import Environment, Bundle
+from pygments import highlight
+from pygments.lexers import guess_lexer, get_lexer_for_filename
+from pygments.formatters import HtmlFormatter
+from werkzeug.contrib.fixers import ProxyFix
 
 
 app = Flask('quickpaste')
 app.config.from_pyfile('config.py')
+
+if app.config.get('BEHIND_PROXY'):
+    # DO NOT DO THIS IN PROD UNLESS YOU SERVE THE APP BEHIND A REVERSE PROXY!
+    app.wsgi_app = ProxyFix(app.wsgi_app)
+
 HTMLMIN(app)
 assets = Environment(app)
 limiter = Limiter(
@@ -19,7 +28,7 @@ limiter = Limiter(
 )
 
 js = Bundle('js/main.js', output='bundle.js')
-css = Bundle('css/fontello.css', 'css/styles.css', output='bundle.css')
+css = Bundle('css/normalize.css', 'css/highlight.css', 'css/fontello.css', 'css/styles.css', output='bundle.css')
 assets.register('js_all', js)
 assets.register('css_all', css)
 
@@ -81,7 +90,7 @@ def get_text(hexhash):
 def ratelimit_handler(e):
     respond_with = request.headers.get('X-Respondwith')
     if respond_with == 'link':
-        return ('Too many requests. Limit 1 per 1 second.', 429)
+        return ('Too many requests. Limit 1 per 1 second.\n', 429)
     return render_template('4xx.html', title='Too many requests', message='Limit 1 per 1 second'), 429
 
 
@@ -91,19 +100,25 @@ def index():
         text = request.form.get('text')
         if text is None or text.strip() == '':
             return respond_with_redirect_or_text(redirect(url_for('index')),
-                '400 Missing text', 400)
+                '400 Missing text\n', 400)
         hexhash = insert_text(text)
         return respond_with_redirect_or_text(
-            redirect(url_for('view', hash=hexhash)), '{}{}'.format(request.host_url, hexhash), 200)
+            redirect(url_for('view', hash=hexhash)), '{}{}\n'.format(request.host_url, hexhash), 200)
     return render_template('index.html')
 
 
 @app.route('/<string:hash>', methods=['GET'])
-def view(hash):
+@app.route('/<string:hash>.<string:extension>', methods=['GET'])
+def view(hash, extension=None):
     text = get_text(hash)
     if text is None:
         return render_template('4xx.html', title='Not found', message='There doesn\'t seem to be a paste here'), 404
-    return render_template('view.html', text=text)
+    lines = len(text.splitlines())
+    if extension is not None:
+        lexer = get_lexer_for_filename('foo.{}'.format(extension))
+    else:
+        lexer = guess_lexer(text)
+    return render_template('view.html', text=highlight(text, lexer, HtmlFormatter()), lines=lines)
 
 
 @app.route('/about', methods=['GET'])

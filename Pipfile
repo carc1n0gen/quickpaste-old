@@ -10,6 +10,7 @@ waitress = "*"
 flask-assets = "*"
 flask-limiter = "*"
 alembic = "*"
+pygments = "*"
 
 [dev-packages]
 

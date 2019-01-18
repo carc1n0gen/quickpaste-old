@@ -5,4 +5,5 @@ ROOT = path.realpath(path.dirname(__file__))
 # connection string in the alembic.ini
 DB_PATH = path.join(ROOT, 'data/database.db')
 MINIFY_PAGE = True
+BEHIND_PROXY = False
 RATELIMIT_DEFAULT = '1 per second'
