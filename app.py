@@ -8,6 +8,7 @@ from flask_limiter.util import get_remote_address
 from flask_htmlmin import HTMLMIN
 from flask_assets import Environment, Bundle
 from pygments import highlight
+from pygments.util import ClassNotFound
 from pygments.lexers import guess_lexer, get_lexer_for_filename
 from pygments.formatters import HtmlFormatter
 from werkzeug.contrib.fixers import ProxyFix
@@ -113,11 +114,11 @@ def view(hash, extension=None):
     text = get_text(hash)
     if text is None:
         return render_template('4xx.html', title='Not found', message='There doesn\'t seem to be a paste here'), 404
-    lines = len(text.splitlines())
-    if extension is not None:
+    try: 
         lexer = get_lexer_for_filename('foo.{}'.format(extension))
-    else:
+    except ClassNotFound:
         lexer = guess_lexer(text)
+    lines = len(text.splitlines())
     return render_template('view.html', text=highlight(text, lexer, HtmlFormatter()), lines=lines)
 
 

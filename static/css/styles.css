@@ -19,9 +19,10 @@ header {
 
 header h1 {
     margin: 0;
-    padding: 10px;
+    padding: 10px 10px 15px 10px;
     background-color: #4b5162;
     color: #aaa;
+    text-align: center;
     text-decoration: underline;
     text-decoration-color: #5294e2;
     -webkit-text-decoration-color: #5294e2;
@@ -31,6 +32,7 @@ header h1 {
 header .links {
     text-align: center;
     padding: 10px;
+    font-size: 24px;
 }
 
 header .links a {
@@ -43,7 +45,7 @@ header button {
     background-color: transparent;
     border: none;
     color: #5294e2;
-    font-size: 16px;
+    font-size: 24px;
     cursor: pointer;
 }
 
@@ -68,7 +70,7 @@ textarea {
     font-family: 'Courier New', Courier, monospace;
     background-color: transparent;
     resize: none;
-    overflow-y: scroll;
+    overflow-y: auto;
     font-size: 16px;
     border: none;
     color: #aaa;
