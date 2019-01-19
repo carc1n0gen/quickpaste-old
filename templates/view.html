@@ -1,6 +1,6 @@
 {% extends 'layouts/layout.html' %}
-{% include 'partials/header.html' %}
 {% block content %}
+{% include 'partials/header.html' %}
 {{ text | safe }}
 <div class="lines">
     {% for line in range(1, lines + 1) %}

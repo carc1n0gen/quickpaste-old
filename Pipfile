@@ -11,6 +11,8 @@ flask-assets = "*"
 flask-limiter = "*"
 alembic = "*"
 pygments = "*"
+jsmin = "*"
+cssmin = "*"
 
 [dev-packages]
 

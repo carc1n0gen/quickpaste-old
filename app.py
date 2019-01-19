@@ -28,8 +28,8 @@ limiter = Limiter(
     key_func=get_remote_address
 )
 
-js = Bundle('js/main.js', output='bundle.js')
-css = Bundle('css/normalize.css', 'css/highlight.css', 'css/fontello.css', 'css/styles.css', output='bundle.css')
+js = Bundle('js/main.js', filters='jsmin', output='bundle.js')
+css = Bundle('css/normalize.css', 'css/highlight.css', 'css/fontello.css', 'css/styles.css', filters='cssmin', output='bundle.css')
 assets.register('js_all', js)
 assets.register('css_all', css)
 

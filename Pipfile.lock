@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "4ea64723610c26dd49fc5c7bdf5541c12bf679a2bb9a5b502093d29d46e1eb64"
+            "sha256": "10caedf3369c459b90136a44530bc6613c8796c5165bdfd1050d67b79578350e"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -30,6 +30,13 @@
             ],
             "version": "==7.0"
         },
+        "cssmin": {
+            "hashes": [
+                "sha256:e012f0cc8401efcf2620332339011564738ae32be8c84b2e43ce8beaec1067b6"
+            ],
+            "index": "pypi",
+            "version": "==0.2.0"
+        },
         "flask": {
             "hashes": [
                 "sha256:2271c0070dbcb5275fad4a82e29f23ab92682dc45f9dfbc22c02ba9b9322ce48",
@@ -55,7 +62,6 @@
         },
         "flask-limiter": {
             "hashes": [
-                "sha256:473aa5bc97310406aa8c12ab3dc080697bcfa8cd21a6d0aba30916911bbc673c",
                 "sha256:8cce98dcf25bf2ddbb824c2b503b4fc8e1a139154240fd2c60d9306bad8a0db8"
             ],
             "index": "pypi",
@@ -80,6 +86,13 @@
                 "sha256:f84be1bb0040caca4cea721fcbbbbd61f9be9464ca236387158b0feea01914a4"
             ],
             "version": "==2.10"
+        },
+        "jsmin": {
+            "hashes": [
+                "sha256:b6df99b2cd1c75d9d342e4335b535789b8da9107ec748212706ef7bbe5c2553b"
+            ],
+            "index": "pypi",
+            "version": "==2.2.2"
         },
         "limits": {
             "hashes": [
