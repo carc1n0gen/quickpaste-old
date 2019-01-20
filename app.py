@@ -95,6 +95,14 @@ def ratelimit_handler(e):
     return render_template('4xx.html', title='Too many requests', message='Limit 1 per 1 second'), 429
 
 
+@app.errorhandler(500)
+def server_error_handler(e):
+    respond_with = request.headers.get('X-Respondwith')
+    if respond_with == 'link':
+        return ('Uh oh. Shit really hit the fan\n', 500)
+    return render_template('5xx.html', title='Uh oh', message='Shit really hit the fan'), 500
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
@@ -124,7 +132,7 @@ def view(hash, extension=None):
 
 @app.route('/about', methods=['GET'])
 def about():
-    return render_template('about.html', host_url=request.host_url)
+    return render_template('about.html', host_url=request.host_url, body_class='about')
 
 
 if __name__ == '__main__':

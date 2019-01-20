@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="{{ ASSET_URL }}">
     {% endassets %}
 </head>
-<body>
+<body {% if body_class %}class="{{body_class}}"{% endif %}>
     {% block content %}{% endblock %}
     {% assets 'js_all' %}
     <script src="{{ ASSET_URL }}"></script>

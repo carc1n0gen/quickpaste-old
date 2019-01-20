@@ -9,6 +9,10 @@ body {
     color: #aaa;
 }
 
+.about {
+    padding: 25px;
+}
+
 header {
     position: fixed;
     top: 0;
