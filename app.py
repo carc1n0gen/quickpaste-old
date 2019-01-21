@@ -89,10 +89,11 @@ def get_text(hexhash):
 
 @app.errorhandler(429)
 def ratelimit_handler(e):
+    ratelimit = app.config.get('RATELIMIT_DEFAULT')
     respond_with = request.headers.get('X-Respondwith')
     if respond_with == 'link':
-        return ('Too many requests. Limit 1 per 1 second.\n', 429)
-    return render_template('4xx.html', title='Too many requests', message='Limit 1 per 1 second'), 429
+        return ('Too many requests. {}.\n'.format(ratelimit), 429)
+    return render_template('4xx.html', title='Too many requests', message=ratelimit), 429
 
 
 @app.errorhandler(500)
