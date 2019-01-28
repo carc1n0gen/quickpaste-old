@@ -1,7 +1,6 @@
 import time
 import sqlite3
 import hashlib
-from functools import wraps
 from flask import Flask, request, render_template, redirect, url_for, g
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -29,7 +28,8 @@ limiter = Limiter(
 )
 
 js = Bundle('js/main.js', filters='jsmin', output='bundle.js')
-css = Bundle('css/normalize.css', 'css/highlight.css', 'css/fontello.css', 'css/styles.css', filters='cssmin', output='bundle.css')
+css = Bundle('css/normalize.css', 'css/highlight.css', 'css/fontello.css',
+             'css/styles.css', filters='cssmin', output='bundle.css')
 assets.register('js_all', js)
 assets.register('css_all', css)
 
@@ -93,7 +93,8 @@ def ratelimit_handler(e):
     respond_with = request.headers.get('X-Respondwith')
     if respond_with == 'link':
         return ('Too many requests. {}.\n'.format(ratelimit), 429)
-    return render_template('4xx.html', title='Too many requests', message=ratelimit), 429
+    return render_template('4xx.html', title='Too many requests',
+                           message=ratelimit), 429
 
 
 @app.errorhandler(500)
@@ -101,7 +102,8 @@ def server_error_handler(e):
     respond_with = request.headers.get('X-Respondwith')
     if respond_with == 'link':
         return ('Uh oh. Shit really hit the fan\n', 500)
-    return render_template('5xx.html', title='Uh oh', message='Shit really hit the fan'), 500
+    return render_template('5xx.html', title='Uh oh',
+                           message='Shit really hit the fan'), 500
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -110,30 +112,36 @@ def index():
         text = request.form.get('text')
         if text is None or text.strip() == '':
             return respond_with_redirect_or_text(redirect(url_for('index')),
-                '400 Missing text\n', 400)
+                                                 '400 Missing text\n', 400)
         hexhash = insert_text(text)
         return respond_with_redirect_or_text(
-            redirect(url_for('view', hash=hexhash)), '{}{}\n'.format(request.host_url, hexhash), 200)
+            redirect(url_for('view', hash=hexhash)), '{}{}\n'.format(
+                request.host_url, hexhash), 200)
     return render_template('index.html')
 
 
-@app.route('/<string:hash>', methods=['GET'])
-@app.route('/<string:hash>.<string:extension>', methods=['GET'])
-def view(hash, extension=None):
-    text = get_text(hash)
+@app.route('/<string:hexhash>', methods=['GET'])
+@app.route('/<string:hexhash>.<string:extension>', methods=['GET'])
+def view(hexhash, extension=None):
+    text = get_text(hexhash)
     if text is None:
-        return render_template('4xx.html', title='Not found', message='There doesn\'t seem to be a paste here'), 404
-    try: 
+        return render_template(
+            '4xx.html', title='Not found',
+            message='There doesn\'t seem to be a paste here'), 404
+    try:
         lexer = get_lexer_for_filename('foo.{}'.format(extension))
     except ClassNotFound:
         lexer = guess_lexer(text)
     lines = len(text.splitlines())
-    return render_template('view.html', text=highlight(text, lexer, HtmlFormatter()), lines=lines)
+    return render_template('view.html',
+                           text=highlight(text, lexer,
+                                          HtmlFormatter()), lines=lines)
 
 
 @app.route('/about', methods=['GET'])
 def about():
-    return render_template('about.html', host_url=request.host_url, body_class='about')
+    return render_template('about.html', host_url=request.host_url,
+                           body_class='about')
 
 
 if __name__ == '__main__':
