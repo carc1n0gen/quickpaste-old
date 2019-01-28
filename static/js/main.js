@@ -19,13 +19,13 @@ window.addEventListener('load', function () {
         location.pathname !== '/about' && open('/about', '_self');
     }
 
-    function indentText() {
+    // function indentText() {
 
-    }
+    // }
 
-    function unindentText() {
+    // function unindentText() {
 
-    }
+    // }
 
     onkeydown = onkeyup = function (e) {
         keyState[e.key] = e.type == 'keydown';
