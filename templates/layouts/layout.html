@@ -10,10 +10,13 @@
     <link rel="stylesheet" href="{{ ASSET_URL }}">
     {% endassets %}
 </head>
-<body {% if body_class %}class="{{body_class}}"{% endif %}>
+<body {% if body_class %}class="{{ body_class }}"{% endif %}>
     {% block content %}{% endblock %}
     {% assets 'js_all' %}
     <script src="{{ ASSET_URL }}"></script>
     {% endassets %}
+    {% if config.GA_ENABLED %}
+        {% include 'partials/analytics.html' %}
+    {% endif %}
 </body>
 </html>

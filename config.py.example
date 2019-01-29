@@ -6,4 +6,6 @@ ROOT = path.realpath(path.dirname(__file__))
 DB_PATH = path.join(ROOT, 'data/database.db')
 MINIFY_PAGE = True
 BEHIND_PROXY = False
-RATELIMIT_DEFAULT = '1 per second'
+RATELIMIT_DEFAULT = '2 per second'
+GA_ENABLED = False
+GA_ID = 'ENTER GOOGLE ANALYTICS ID' # Remember to also set GA_ENABLED = True
