@@ -78,9 +78,7 @@ def get_text(hexhash):
         return None
 
     conn = get_db()
-    result = conn.execute('SELECT * FROM pastes WHERE hash = :hash', {
-        'hash': binhash
-    })
+    result = conn.execute('SELECT * FROM pastes WHERE hash=?', [binhash])
     item = result.fetchone()
     if item is None:
         return None
@@ -115,7 +113,7 @@ def index():
                                                  '400 Missing text\n', 400)
         hexhash = insert_text(text)
         return respond_with_redirect_or_text(
-            redirect(url_for('view', hash=hexhash)), '{}{}\n'.format(
+            redirect(url_for('view', hexhash=hexhash)), '{}{}\n'.format(
                 request.host_url, hexhash), 200)
     return render_template('index.html')
 

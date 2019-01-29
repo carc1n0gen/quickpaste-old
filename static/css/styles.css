@@ -25,12 +25,12 @@ header h1 {
     margin: 0;
     padding: 10px 10px 15px 10px;
     background-color: #4b5162;
-    color: #aaa;
+    color: #ed9d13;
     text-align: center;
     text-decoration: underline;
-    text-decoration-color: #5294e2;
-    -webkit-text-decoration-color: #5294e2;
-    -moz-text-decoration-color: #5294e2;
+    text-decoration-color: #447fcf;
+    -webkit-text-decoration-color: #447fcf;
+    -moz-text-decoration-color: #447fcf;
 }
 
 header .links {
@@ -48,13 +48,13 @@ header button {
     padding: 0;
     background-color: transparent;
     border: none;
-    color: #5294e2;
+    color: #447fcf;
     font-size: 24px;
     cursor: pointer;
 }
 
 header a {
-    color: #5294e2;
+    color: #447fcf;
     text-decoration: none;
 }
 
@@ -100,6 +100,7 @@ pre {
     text-align: right;
     font-family: monospace;
     font-size: 16px;
+    color: #999;
     background-color: #4b5162;
     -webkit-user-select: none;    
     -moz-user-select: none;
