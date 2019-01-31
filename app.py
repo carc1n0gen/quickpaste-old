@@ -51,7 +51,7 @@ def close_connection(exception):
 def respond_with_redirect_or_text(redirect, text, status=200):
     respond_with = request.headers.get('X-Respondwith')
     if (respond_with == 'link'):
-        return (text, status)
+        return (text, status, {'Content-type': 'text/plain'})
     return redirect
 
 
