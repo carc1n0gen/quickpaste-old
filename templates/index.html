@@ -2,7 +2,7 @@
 {% block content %}
 <form method="POST" id="form">
     {% include 'partials/header.html' %}
-    <div class="start">></div>
-    <textarea spellcheck="false" name="text" id="text" aria-label="Code box"></textarea>
+    <div class="start" aria-hidden="true">></div>
+    <textarea spellcheck="false" name="text" id="text" placeholder="type or paste some code" aria-label="Code box"></textarea>
 </form>
 {% endblock %}

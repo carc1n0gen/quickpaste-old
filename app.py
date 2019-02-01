@@ -22,16 +22,12 @@ if app.config.get('BEHIND_PROXY'):
 
 HTMLMIN(app)
 assets = Environment(app)
-limiter = Limiter(
-    app,
-    key_func=get_remote_address
-)
-
-js = Bundle('js/main.js', filters='jsmin', output='bundle.js')
-css = Bundle('css/normalize.css', 'css/highlight.css', 'css/fontello.css',
-             'css/styles.css', filters='cssmin', output='bundle.css')
-assets.register('js_all', js)
-assets.register('css_all', css)
+limiter = Limiter(app, key_func=get_remote_address)
+assets.register('js_all', Bundle(
+    'js/main.js', filters='jsmin', output='bundle.js'))
+assets.register('css_all', Bundle(
+    'css/normalize.css', 'css/highlight.css', 'css/fontello.css',
+    'css/styles.css', filters='cssmin', output='bundle.css'))
 
 
 def get_db():
@@ -58,15 +54,11 @@ def respond_with_redirect_or_text(redirect, text, status=200):
 def insert_text(text):
     hash = hashlib.md5(text.encode('utf-8'))
     conn = get_db()
-    result = conn.execute("SELECT * FROM pastes WHERE hash = :hash", {
-        'hash': hash.digest()
-    })
+    result = conn.execute(
+        "SELECT * FROM pastes WHERE hash = ?", [hash.digest()])
     if result.fetchone() is None:
-        conn.execute("INSERT INTO pastes VALUES (:hash, :text, :timestamp)", {
-            'hash': hash.digest(),
-            'text': text,
-            'timestamp': time.time()
-        })
+        conn.execute("INSERT INTO pastes VALUES (?, ?, ?)",
+                     [hash.digest(), text, time.time()])
         conn.commit()
     return hash.hexdigest()
 
