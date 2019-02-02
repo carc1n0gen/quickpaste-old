@@ -106,10 +106,11 @@ def errorhandler(e):
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
+        maxlength = app.config.get('MAX_PASTE_LENGTH')
         text = request.form.get('text')
         if text is None or text.strip() == '':
             raise BadRequest()
-        elif len(text) > app.config['MAX_PASTE_LENGTH']:
+        elif maxlength is not None and len(text) > maxlength:
             raise RequestEntityTooLarge()
         hexhash = insert_text(text)
         return respond_with_redirect_or_text(
