@@ -11,7 +11,7 @@ from pygments.util import ClassNotFound
 from pygments.lexers import guess_lexer, get_lexer_for_filename
 from pygments.formatters import HtmlFormatter
 from werkzeug.contrib.fixers import ProxyFix
-from werkzeug.exceptions import NotFound, BadRequest
+from werkzeug.exceptions import NotFound, BadRequest, RequestEntityTooLarge
 
 
 app = Flask('quickpaste')
@@ -79,12 +79,16 @@ def respond_with_redirect_or_text(redirect, text, status=200):
 
 @app.errorhandler(400)
 @app.errorhandler(404)
+@app.errorhandler(413)
 @app.errorhandler(429)
 @app.errorhandler(500)
 def errorhandler(e):
     error_responses = {
         'BadRequest': respond_with_redirect_or_text(
             redirect('/'), '400 missing text\n', 400),
+        'RequestEntityTooLarge': (render_template(
+            '4xx.html', title='Too many characters',
+            message='Limit: {}'.format(app.config['MAX_PASTE_LENGTH'])), 413),
         'NotFound': (render_template(
             '4xx.html', title='Not found',
             message='There doesn\'t seem to be a paste here'), 404),
@@ -95,7 +99,6 @@ def errorhandler(e):
         'InternalServerError': (render_template(
             '5xx.html', title='Uh oh', message='Shit really hit the fan'), 500)
     }
-    print(e)
     return error_responses.get(
         e.__class__.__name__, error_responses['InternalServerError'])
 
@@ -106,6 +109,8 @@ def index():
         text = request.form.get('text')
         if text is None or text.strip() == '':
             raise BadRequest()
+        elif len(text) > app.config['MAX_PASTE_LENGTH']:
+            raise RequestEntityTooLarge()
         hexhash = insert_text(text)
         return respond_with_redirect_or_text(
             redirect(url_for('view', hexhash=hexhash)), '{}{}\n'.format(
