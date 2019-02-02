@@ -11,6 +11,7 @@ from pygments.util import ClassNotFound
 from pygments.lexers import guess_lexer, get_lexer_for_filename
 from pygments.formatters import HtmlFormatter
 from werkzeug.contrib.fixers import ProxyFix
+from werkzeug.exceptions import NotFound, BadRequest
 
 
 app = Flask('quickpaste')
@@ -44,13 +45,6 @@ def close_connection(exception):
         db.close()
 
 
-def respond_with_redirect_or_text(redirect, text, status=200):
-    respond_with = request.headers.get('X-Respondwith')
-    if (respond_with == 'link'):
-        return (text, status, {'Content-type': 'text/plain'})
-    return redirect
-
-
 def insert_text(text):
     hash = hashlib.md5(text.encode('utf-8'))
     conn = get_db()
@@ -67,8 +61,7 @@ def get_text(hexhash):
     try:
         binhash = bytes.fromhex(hexhash)
     except ValueError:
-        return None
-
+        raise NotFound()
     conn = get_db()
     result = conn.execute('SELECT * FROM pastes WHERE hash=?', [binhash])
     item = result.fetchone()
@@ -77,23 +70,34 @@ def get_text(hexhash):
     return item[1]
 
 
+def respond_with_redirect_or_text(redirect, text, status=200):
+    respond_with = request.headers.get('X-Respondwith')
+    if (respond_with == 'link'):
+        return (text, status, {'Content-type': 'text/plain'})
+    return redirect
+
+
+@app.errorhandler(400)
+@app.errorhandler(404)
 @app.errorhandler(429)
-def ratelimit_handler(e):
-    ratelimit = app.config.get('RATELIMIT_DEFAULT')
-    respond_with = request.headers.get('X-Respondwith')
-    if respond_with == 'link':
-        return ('Too many requests. {}.\n'.format(ratelimit), 429)
-    return render_template('4xx.html', title='Too many requests',
-                           message=ratelimit), 429
-
-
 @app.errorhandler(500)
-def server_error_handler(e):
-    respond_with = request.headers.get('X-Respondwith')
-    if respond_with == 'link':
-        return ('Uh oh. Shit really hit the fan\n', 500)
-    return render_template('5xx.html', title='Uh oh',
-                           message='Shit really hit the fan'), 500
+def errorhandler(e):
+    error_responses = {
+        'BadRequest': respond_with_redirect_or_text(
+            redirect('/'), '400 missing text\n', 400),
+        'NotFound': (render_template(
+            '4xx.html', title='Not found',
+            message='There doesn\'t seem to be a paste here'), 404),
+        'TooManyRequests': (render_template(
+            '4xx.html', title='Too many requests',
+            message='Limit: {}'.format(app.config.get('RATELIMIT_DEFAULT'))),
+            429),
+        'InternalServerError': (render_template(
+            '5xx.html', title='Uh oh', message='Shit really hit the fan'), 500)
+    }
+    print(e)
+    return error_responses.get(
+        e.__class__.__name__, error_responses['InternalServerError'])
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -101,8 +105,7 @@ def index():
     if request.method == 'POST':
         text = request.form.get('text')
         if text is None or text.strip() == '':
-            return respond_with_redirect_or_text(redirect(url_for('index')),
-                                                 '400 Missing text\n', 400)
+            raise BadRequest()
         hexhash = insert_text(text)
         return respond_with_redirect_or_text(
             redirect(url_for('view', hexhash=hexhash)), '{}{}\n'.format(
@@ -114,25 +117,16 @@ def index():
 @app.route('/<string:hexhash>.<string:extension>', methods=['GET'])
 def view(hexhash, extension=None):
     text = get_text(hexhash)
-    if text is None:
-        return render_template(
-            '4xx.html', title='Not found',
-            message='There doesn\'t seem to be a paste here'), 404
     try:
         lexer = get_lexer_for_filename('foo.{}'.format(extension))
     except ClassNotFound:
         lexer = guess_lexer(text)
     lines = len(text.splitlines())
-    return render_template('view.html',
-                           text=highlight(text, lexer,
-                                          HtmlFormatter()), lines=lines)
+    return render_template(
+        'view.html', text=highlight(text, lexer, HtmlFormatter()), lines=lines)
 
 
 @app.route('/about', methods=['GET'])
 def about():
-    return render_template('about.html', host_url=request.host_url,
-                           body_class='about')
-
-
-if __name__ == '__main__':
-    app.run()
+    return render_template(
+        'about.html', host_url=request.host_url, body_class='about')

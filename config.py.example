@@ -4,6 +4,7 @@ ROOT = path.realpath(path.dirname(__file__))
 # NOTE: if you change the path to the database you also need to change the
 # connection string in the alembic.ini
 DB_PATH = path.join(ROOT, 'data/database.db')
+MAX_CONTENT_LENGTH = 1024 * 10
 MINIFY_PAGE = True
 BEHIND_PROXY = False
 RATELIMIT_DEFAULT = '2 per second'

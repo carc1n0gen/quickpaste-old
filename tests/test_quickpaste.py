@@ -7,6 +7,7 @@ from alembic.config import Config
 from app import app
 from app import limiter
 
+
 @pytest.fixture
 def client():
     app.config['DB_PATH'] = 'database-test.db'
@@ -48,11 +49,12 @@ def test_should_return_redirect_to_paste(client):
     hash = hashlib.md5(b'hello_world')
     rv = client.post('/', data={'text': 'hello_world'})
     assert rv.status == '302 FOUND'
-    assert rv.headers['Location'] == 'http://localhost/{}'.format(hash.hexdigest())
+    assert rv.headers['Location'] == 'http://localhost/{}'.format(
+        hash.hexdigest())
 
 
 def test_should_return_link_to_paste(client):
-    hash = hashlib.md5(b'hello_world')
-    rv = client.post('/', data={'text': 'hello_world'}, headers={'X-Respondwith': 'link'})
+    rv = client.post('/', data={'text': 'hello_world'},
+                     headers={'X-Respondwith': 'link'})
     assert rv.status == '200 OK'
     assert rv.headers['Content-type'] == 'text/plain'
