@@ -145,7 +145,8 @@ def view(hexhash, extension=None):
     lines = len(text.splitlines())
     return render_template(
         'view.html', hexhhash=hexhash,
-        text=highlight(text, lexer, HtmlFormatter()), lines=lines)
+        text=highlight(text, lexer, HtmlFormatter()), lines=lines,
+        disabled=['save'])
 
 
 @app.route('/about', methods=['GET'])
