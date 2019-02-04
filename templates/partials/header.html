@@ -3,14 +3,39 @@
         <h1>quickpaste</h1>
     </a>
     <nav class="links">
+        {% if disabled and 'save' in disabled %}
+        <button type="submit" title="save paste (disabled)" disabled class="disabled">
+            <span class="sr-only">save paste (disabled)</span>
+            <i class="icon-floppy"></i>
+        </button>
+        {% else %}
         <button type="submit" title="save paste">
             <span class="sr-only">save paste</span>
             <i class="icon-floppy"></i>
         </button>
+        {% endif %}
+        {% if disabled and 'clone' in disabled %}
+        <a class="disabled" title="clone and edit (disabled)">
+            <span class="sr-only">clone and edit (disabled)</span>
+            <i class="icon-pencil"></i>
+        </a>
+        {% else %}
+        <a href="/?clone={{ hexhhash }}" title="clone and edit">
+            <span class="sr-only">clone and edit</span>
+            <i class="icon-pencil"></i>
+        </a>
+        {% endif %}
+        {% if disabled and 'new' in disabled %}
+        <a class="disabled" title="new paste (disabled)">
+            <span class="sr-only">new paste (disabled)</span>
+            <i class="icon-plus"></i>
+        </a>
+        {% else %}
         <a href="/" title="new paste">
             <span class="sr-only">new paste</span>
             <i class="icon-plus"></i>
         </a>
+        {% endif %}
         <a href="/about" title="about quickpaste">
             <span class="sr-only">about quickpaste</span>
             <i class="icon-help"></i>

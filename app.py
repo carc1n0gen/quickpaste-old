@@ -60,8 +60,8 @@ def insert_text(text):
 def get_text(hexhash):
     try:
         binhash = bytes.fromhex(hexhash)
-    except ValueError:
-        raise NotFound()
+    except (ValueError, TypeError):
+        return None
     conn = get_db()
     result = conn.execute('SELECT * FROM pastes WHERE hash=?', [binhash])
     item = result.fetchone()
@@ -79,34 +79,39 @@ def respond_with_redirect_or_text(redirect, text, status=200):
 
 @app.errorhandler(400)
 def bad_request(e):
-    respond_with_redirect_or_text(redirect('/'), '400 missing text\n', 400)
+    return respond_with_redirect_or_text(
+        redirect('/'), '400 missing text\n', 400)
 
 
 @app.errorhandler(404)
 def not_found(e):
-    render_template(
+    return render_template(
         '4xx.html', title='Not found',
-        message='There doesn\'t seem to be a paste here'), 404
+        message='There doesn\'t seem to be a paste here',
+        disabled=['clone', 'save'], body_class='about'), 404
 
 
 @app.errorhandler(413)
 def too_large(e):
-    render_template(
+    return render_template(
         '4xx.html', title='Too many characters',
-        message='Limit: {}'.format(app.config['MAX_PASTE_LENGTH'])), 413
+        message='Limit: {}'.format(app.config['MAX_PASTE_LENGTH']),
+        disabled=['clone', 'save'], body_class='about'), 413
 
 
 @app.errorhandler(429)
 def rate_limit(e):
-    render_template(
+    return render_template(
         '4xx.html', title='Too many requests',
-        message='Limit: {}'.format(app.config.get('RATELIMIT_DEFAULT'))), 429
+        message='Limit: {}'.format(app.config.get('RATELIMIT_DEFAULT')),
+        disabled=['clone', 'save'], body_class='about'), 429
 
 
 @app.errorhandler(500)
 def internal_error(e):
-    render_template(
-        '5xx.html', title='Uh oh', message='Shit really hit the fan'), 500
+    return render_template(
+        '5xx.html', title='Uh oh', message='Shit really hit the fan',
+        disabled=['clone', 'save'], body_class='about'), 500
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -122,23 +127,29 @@ def index():
         return respond_with_redirect_or_text(
             redirect(url_for('view', hexhash=hexhash)), '{}{}\n'.format(
                 request.host_url, hexhash), 200)
-    return render_template('index.html')
+
+    text = get_text(request.args.get('clone'))
+    return render_template('index.html', text=text, disabled=['clone', 'new'])
 
 
 @app.route('/<string:hexhash>', methods=['GET'])
 @app.route('/<string:hexhash>.<string:extension>', methods=['GET'])
 def view(hexhash, extension=None):
     text = get_text(hexhash)
+    if text is None:
+        raise NotFound()
     try:
         lexer = get_lexer_for_filename('foo.{}'.format(extension))
     except ClassNotFound:
         lexer = guess_lexer(text)
     lines = len(text.splitlines())
     return render_template(
-        'view.html', text=highlight(text, lexer, HtmlFormatter()), lines=lines)
+        'view.html', hexhhash=hexhash,
+        text=highlight(text, lexer, HtmlFormatter()), lines=lines)
 
 
 @app.route('/about', methods=['GET'])
 def about():
     return render_template(
-        'about.html', host_url=request.host_url, body_class='about')
+        'about.html', host_url=request.host_url, body_class='about',
+        disabled=['save', 'clone'])

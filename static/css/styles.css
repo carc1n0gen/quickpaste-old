@@ -9,6 +9,11 @@ body {
     color: #aaa;
 }
 
+a {
+    color: #447fcf;
+    text-decoration: none;
+}
+
 .about {
     padding: 25px;
 }
@@ -39,12 +44,7 @@ header .links {
     font-size: 24px;
 }
 
-header .links a {
-    margin: 0 5px;
-}
-
 header button {
-    margin: 0 5px;
     padding: 0;
     background-color: transparent;
     border: none;
@@ -53,9 +53,9 @@ header button {
     cursor: pointer;
 }
 
-header a {
-    color: #447fcf;
-    text-decoration: none;
+header .disabled {
+    color: #50719b;
+    cursor: default;
 }
 
 .start {
@@ -111,11 +111,6 @@ pre {
 .page {
     width: 850px;
     font-family: Arial, Helvetica, sans-serif;
-}
-
-.page a {
-    color: #5294e2;
-    text-decoration: none;
 }
 
 .terminal-command {
