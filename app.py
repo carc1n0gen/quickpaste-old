@@ -1,6 +1,7 @@
 import time
 import sqlite3
 import hashlib
+from logging.handlers import RotatingFileHandler
 from flask import Flask, request, render_template, redirect, url_for, g
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -20,6 +21,10 @@ app.config.from_pyfile('config.py')
 if app.config.get('BEHIND_PROXY'):
     # DO NOT DO THIS IN PROD UNLESS YOU SERVE THE APP BEHIND A REVERSE PROXY!
     app.wsgi_app = ProxyFix(app.wsgi_app)
+
+handler = RotatingFileHandler(app.config['LOG_FILE'], maxBytes=1024 * 1024)
+app.logger.setLevel(app.config['LOG_LEVEL'])
+app.logger.addHandler(handler)
 
 HTMLMIN(app)
 assets = Environment(app)
