@@ -114,11 +114,23 @@ pre {
 }
 
 .terminal-command {
+    padding: 5px;
     background-color: #4b5162;
+    border-radius: 4px;
 }
 
 .terminal-command:before {
-    content: '$';
+    content: '$ ';
+}
+
+.notice {
+    display: inline-block;
+    padding: 5px;
+    margin-top: 20px;
+    background-color: #aaa;
+    color: #383c4a;
+    border-radius: 4px;
+    font-style: italic;
 }
 
 .sr-only {

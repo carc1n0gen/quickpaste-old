@@ -5,15 +5,29 @@
     <h1>What the heck is this?</h1>
     <p>A dead simple code snippet sharing tool.</p>
 
+    <h2>Are the snippets stored forever?</h2>
+    <p>Short answer: <strong>no!</strong>. Long answer: I plan to have snippets that are older than one week deleted
+        (soon<sup>TM</sup>).</p>
+
     <h2>Where's the code?</h2>
     <p><a href="https://github.com/carc1n0gen/quickpaste">It's right here!</a></p>
 
     <h2>Help! I'm a terminal hipster!</h2>
     <pre><code class="terminal-command">cat file-name | curl -H "X-Respondwith: link" -X POST -d "text=$(&lt;/dev/stdin)" {{host_url}}</code></pre>
 
-    <small>The "X-Respondwith: link" is important.  Otherwise you will get a redirect response.</small>
+    <span class="notice">Notice: The "X-Respondwith: link" is important. Otherwise you will get a redirect response.</span>
 
-    <h2>This looks suspiciously similar to <a href="https://hastebin.com/" target="_blank">another paste tool I know about</a></h2>
-    <p>That's because the look and feel of this paste tool is very inspired by that one (I'm not a good designer). But I wrote this from scratch.</p>
+    <p>You could even alias the curl part of that command:</p>
+
+    <pre><code class="terminal-command">alias quickpaste="curl -H \"X-Respondwith: link\" -X POST -d \"text=\$(&lt;/dev/stdin)\" {{host_url}}"</code></pre>
+
+    <p>To make it as simple as:</p>
+
+    <pre><code class="terminal-command">cat file-name | quickpaste</code></pre>
+
+    <h2>This looks suspiciously similar to <a href="https://hastebin.com/" target="_blank">another paste tool I know
+            about</a></h2>
+    <p>That's because the look and feel of this paste tool is very inspired by that one (I'm not a good designer). But
+        I wrote this from scratch.</p>
 </div>
 {% endblock %}
