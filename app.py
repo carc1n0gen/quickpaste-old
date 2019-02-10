@@ -91,7 +91,7 @@ def bad_request(e):
 @app.errorhandler(404)
 def not_found(e):
     return render_template(
-        '4xx.html', title='Not found',
+        '4xx.jinja', title='Not found',
         message='There doesn\'t seem to be a paste here',
         disabled=['clone', 'save'], body_class='about'), 404
 
@@ -99,7 +99,7 @@ def not_found(e):
 @app.errorhandler(413)
 def too_large(e):
     return render_template(
-        '4xx.html', title='Too many characters',
+        '4xx.jinja', title='Too many characters',
         message='Limit: {}'.format(app.config['MAX_PASTE_LENGTH']),
         disabled=['clone', 'save'], body_class='about'), 413
 
@@ -107,7 +107,7 @@ def too_large(e):
 @app.errorhandler(429)
 def rate_limit(e):
     return render_template(
-        '4xx.html', title='Too many requests',
+        '4xx.jinja', title='Too many requests',
         message='Limit: {}'.format(app.config.get('RATELIMIT_DEFAULT')),
         disabled=['clone', 'save'], body_class='about'), 429
 
@@ -115,7 +115,7 @@ def rate_limit(e):
 @app.errorhandler(500)
 def internal_error(e):
     return render_template(
-        '5xx.html', title='Uh oh', message='Shit really hit the fan',
+        '5xx.jinja', title='Uh oh', message='Shit really hit the fan',
         disabled=['clone', 'save'], body_class='about'), 500
 
 
@@ -134,7 +134,7 @@ def index():
                 request.host_url, hexhash), 200)
 
     text = get_text(request.args.get('clone'))
-    return render_template('index.html', text=text, disabled=['clone', 'new'])
+    return render_template('index.jinja', text=text, disabled=['clone', 'new'])
 
 
 @app.route('/<string:hexhash>', methods=['GET'])
@@ -149,7 +149,7 @@ def view(hexhash, extension=None):
         lexer = guess_lexer(text)
     lines = len(text.splitlines())
     return render_template(
-        'view.html', hexhhash=hexhash,
+        'view.jinja', hexhhash=hexhash,
         text=highlight(text, lexer, HtmlFormatter()), lines=lines,
         disabled=['save'])
 
@@ -157,5 +157,5 @@ def view(hexhash, extension=None):
 @app.route('/about', methods=['GET'])
 def about():
     return render_template(
-        'about.html', host_url=request.host_url, body_class='about',
+        'about.jinja', host_url=request.host_url, body_class='about',
         disabled=['save', 'clone'])

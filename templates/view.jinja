@@ -1,6 +1,6 @@
-{% extends 'layouts/layout.html' %}
+{% extends 'layouts/layout.jinja' %}
 {% block content %}
-{% include 'partials/header.html' %}
+{% include 'partials/header.jinja' %}
 {{ text | safe }}
 <div class="lines">
     {% for line in range(1, lines + 1) %}
