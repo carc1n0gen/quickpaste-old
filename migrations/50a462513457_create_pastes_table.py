@@ -18,7 +18,7 @@ depends_on = None
 
 def upgrade():
     op.create_table('pastes',
-        sa.Column('hash', sa.Binary(16)),
+        sa.Column('hash', sa.LargeBinary(16)),
         sa.Column('text', sa.Text()),
         sa.Column('timestamp', sa.TIMESTAMP()),
         sa.PrimaryKeyConstraint('hash')

@@ -9,10 +9,11 @@ flask-htmlmin = "*"
 waitress = "*"
 flask-assets = "*"
 flask-limiter = "*"
-alembic = "*"
 pygments = "*"
 jsmin = "*"
 cssmin = "*"
+flask-sqlalchemy = "*"
+flask-alembic = "*"
 
 [dev-packages]
 flake8 = "*"

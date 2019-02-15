@@ -6,7 +6,9 @@ from flask import Flask, request, render_template, redirect, url_for, g
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_htmlmin import HTMLMIN
+from flask_alembic import Alembic
 from flask_assets import Environment, Bundle
+from flask_sqlalchemy import SQLAlchemy
 from pygments import highlight
 from pygments.util import ClassNotFound
 from pygments.lexers import guess_lexer, get_lexer_for_filename
@@ -27,6 +29,8 @@ app.logger.setLevel(app.config['LOG_LEVEL'])
 app.logger.addHandler(handler)
 
 HTMLMIN(app)
+db = SQLAlchemy(app)
+alembic = Alembic(app)
 assets = Environment(app)
 limiter = Limiter(app, key_func=get_remote_address)
 assets.register('js_all', Bundle(
@@ -36,29 +40,14 @@ assets.register('css_all', Bundle(
     'css/styles.css', filters='cssmin', output='bundle.css'))
 
 
-def get_db():
-    db = getattr(g, '_database', None)
-    if db is None:
-        db = g._database = sqlite3.connect(app.config['DB_PATH'])
-    return db
-
-
-@app.teardown_appcontext
-def close_connection(exception):
-    db = getattr(g, '_database', None)
-    if db is not None:
-        db.close()
-
-
 def insert_text(text):
     hash = hashlib.md5(text.encode('utf-8'))
-    conn = get_db()
-    result = conn.execute(
+    result = db.engine.execute(
         "SELECT * FROM pastes WHERE hash = ?", [hash.digest()])
-    if result.fetchone() is None:
-        conn.execute("INSERT INTO pastes VALUES (?, ?, ?)",
+    if result.first() is None:
+        db.engine.execute("INSERT INTO pastes VALUES (?, ?, ?)",
                      [hash.digest(), text, time.time()])
-        conn.commit()
+    result.close()
     return hash.hexdigest()
 
 
@@ -67,11 +56,11 @@ def get_text(hexhash):
         binhash = bytes.fromhex(hexhash)
     except (ValueError, TypeError):
         return None
-    conn = get_db()
-    result = conn.execute('SELECT * FROM pastes WHERE hash=?', [binhash])
-    item = result.fetchone()
+    result = db.engine.execute('SELECT * FROM pastes WHERE hash=?', [binhash])
+    item = result.first()
     if item is None:
         return None
+    result.close()
     return item[1]
 
 
