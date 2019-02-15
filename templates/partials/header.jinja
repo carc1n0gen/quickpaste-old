@@ -25,6 +25,17 @@
             <i class="icon-pencil"></i>
         </a>
         {% endif %}
+        {% if disabled and 'raw' in disabled %}
+        <a class="disabled" title="raw text (disabled)">
+            <span class="sr-only">raw text (disabled)</span>
+            <i class="icon-text-width"></i>
+        </a>
+        {% else %}
+        <a href="/raw/{{ hexhhash }}" title="raw text">
+            <span class="sr-only">raw text</span>
+            <i class="icon-text-width"></i>
+        </a>
+        {% endif %}
         {% if disabled and 'new' in disabled %}
         <a class="disabled" title="new paste (disabled)">
             <span class="sr-only">new paste (disabled)</span>

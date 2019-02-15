@@ -49,7 +49,7 @@ def insert_text(text):
         "SELECT * FROM pastes WHERE hash = ?", [hash.digest()])
     if result.first() is None:
         db.engine.execute("INSERT INTO pastes VALUES (?, ?, ?)",
-                     [hash.digest(), text, time.time()])
+                          [hash.digest(), text, time.time()])
     result.close()
     return hash.hexdigest()
 
@@ -133,7 +133,8 @@ def index():
                 request.host_url, hexhash), 200)
 
     text = get_text(request.args.get('clone'))
-    return render_template('index.jinja', text=text, disabled=['clone', 'new'])
+    return render_template(
+        'index.jinja', text=text, disabled=['clone', 'new', 'raw'])
 
 
 @app.route('/<string:hexhash>', methods=['GET'])
@@ -153,8 +154,17 @@ def view(hexhash, extension=None):
         disabled=['save'])
 
 
+@app.route('/raw/<string:hexhash>', methods=['GET'])
+def raw(hexhash):
+    text = get_text(hexhash)
+    if text is None:
+        raise NotFound()
+    
+    return (text, 200, {'Content-type': 'text/plain'})
+
+
 @app.route('/about', methods=['GET'])
 def about():
     return render_template(
         'about.jinja', host_url=request.host_url, body_class='about',
-        disabled=['save', 'clone'])
+        disabled=['save', 'clone', 'raw'])
