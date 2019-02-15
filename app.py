@@ -1,4 +1,5 @@
 import time
+import traceback
 import sqlite3
 import hashlib
 from logging.handlers import RotatingFileHandler
@@ -9,6 +10,7 @@ from flask_htmlmin import HTMLMIN
 from flask_alembic import Alembic
 from flask_assets import Environment, Bundle
 from flask_sqlalchemy import SQLAlchemy
+from flask_mail import Mail, Message
 from pygments import highlight
 from pygments.util import ClassNotFound
 from pygments.lexers import guess_lexer, get_lexer_for_filename
@@ -31,6 +33,7 @@ app.logger.addHandler(handler)
 HTMLMIN(app)
 db = SQLAlchemy(app)
 alembic = Alembic(app)
+mail = Mail(app)
 assets = Environment(app)
 limiter = Limiter(app, key_func=get_remote_address)
 assets.register('js_all', Bundle(
@@ -103,6 +106,13 @@ def rate_limit(e):
 
 @app.errorhandler(500)
 def internal_error(e):
+    tb = traceback.format_exc()
+    mail.send(Message(
+        subject='Error From {}'.format(request.host_url),
+        recipients=[app.config['MAIL_RECIPIENT']],
+        body=render_template('email/error.txt.jinja', tb=tb),
+        html=render_template('email/error.html.jinja', tb=tb)
+    ))
     return render_template(
         '5xx.jinja', title='Uh oh', message='Shit really hit the fan',
         disabled=['clone', 'save'], body_class='about'), 500
