@@ -16,7 +16,7 @@ from werkzeug.exceptions import NotFound, BadRequest, RequestEntityTooLarge
 
 
 app = Flask('quickpaste')
-app.config.from_pyfile('config.py')
+app.config.from_json('config.json')
 
 if app.config.get('BEHIND_PROXY'):
     # DO NOT DO THIS IN PROD UNLESS YOU SERVE THE APP BEHIND A REVERSE PROXY!

@@ -1,0 +1,25 @@
+{
+    "BEHIND_PROXY": false,
+
+    "LOG_FILE": "./data/app.log",
+    "LOG_LEVEL": "INFO",
+
+    "MAX_PASTE_LENGTH": 10240,
+    "MINIFY_PAGE": true,
+    "RATELIMIT_DEFAULT": "2 per second",
+
+    "GA_ENABLED": false,
+    "GA_ID": "ENTER YOUR GOOGLE ANALYTICS ID",
+
+    "SQLALCHEMY_DATABASE_URI": "sqlite:///data/database.db",
+    "SQLALCHEMY_TRACK_MODIFICATIONS": false,
+
+    "MAIL_SERVER": "smtp.example.com",
+    "MAIL_PORT": 25,
+    "MAIL_USE_TLS": false,
+    "MAIL_USE_SSL": false,
+    "MAIL_USERNAME": "username",
+    "MAIL_PASSWORD": "password",
+    "MAIL_DEFAULT_SENDER": "sender <sender@example.com>",
+    "MAIL_RECIPIENT": "recipient@example.com"
+}
