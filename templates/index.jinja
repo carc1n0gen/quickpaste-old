@@ -3,6 +3,21 @@
 <form method="POST" id="form">
     {% include 'partials/header.jinja' %}
     <div class="start" aria-hidden="true">></div>
-    <textarea spellcheck="false" name="text" id="text" placeholder="type or paste some code" aria-label="Code box">{% if text %}{{ text }}{% endif %}</textarea>
+    <textarea spellcheck="false" name="text" id="text" placeholder="type or paste some code" aria-label="Code box">{{ text if text }}</textarea>
 </form>
+{% endblock %}
+{% block bottom_scripts %}
+<script>
+window.addEventListener('load', function () {
+    var text = document.getElementById('text');
+    var form = document.getElementById('form');
+
+    form.addEventListener('submit', function savePaste(e) {
+        e.preventDefault();
+        if (text.value && text.value.trim()) {
+            form && form.submit();
+        }
+    });
+});
+</script>
 {% endblock %}

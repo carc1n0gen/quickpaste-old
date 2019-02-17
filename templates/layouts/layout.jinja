@@ -12,9 +12,10 @@
 </head>
 <body {% if body_class %}class="{{ body_class }}"{% endif %}>
     {% block content %}{% endblock %}
-    {% assets 'js_all' %}
+    {# {% assets 'js_all' %}
     <script src="{{ ASSET_URL }}"></script>
-    {% endassets %}
+    {% endassets %} #}
+    {% block bottom_scripts %}{% endblock %}
     {% if config.GA_ENABLED %}
         {% include 'partials/analytics.jinja' %}
     {% endif %}
