@@ -26,20 +26,7 @@ header {
     background-color: #404552;
 }
 
-header h1 {
-    margin: 0;
-    padding: 10px 10px 15px 10px;
-    background-color: #4b5162;
-    color: #ed9d13;
-    text-align: center;
-    text-decoration: underline;
-    text-decoration-color: #447fcf;
-    -webkit-text-decoration-color: #447fcf;
-    -moz-text-decoration-color: #447fcf;
-}
-
 header .links {
-    text-align: center;
     padding: 5px;
     font-size: 20px;
 }
@@ -49,8 +36,71 @@ header button {
     background-color: transparent;
     border: none;
     color: #447fcf;
-    font-size: 20px;
     cursor: pointer;
+}
+
+header .links a,
+header .links button {
+    position: relative;
+    display: block;
+    margin: 0 0 0.5em 0;
+    font-size: 32px;
+}
+
+header .links a:before,
+header .links button:before {
+    position: absolute;
+    padding: 5px 5px 5px 5px;
+    display: block;
+    content: attr(data-message);
+    top: 3px;
+    right: 58px;
+    height: 18px;
+    background-color: #ccc;
+    color: #000;
+    font-size: 16px;
+    line-height: 18px;
+    text-align: right;
+    white-space: nowrap;
+    z-index: 1;
+    width: auto;
+}
+
+header .links a:after,
+header .links button:after {
+    position: absolute;
+    top: 3px;
+    right: 44px;
+    display: block;
+    width: 0px;
+    height: 0px;
+    content: '';
+    border-top: 14px solid transparent;
+    border-bottom: 14px solid transparent;
+    border-left: 14px solid #ccc;
+}
+
+header .links a:before,
+header .links button:before,
+header .links a:after,
+header .links button:after {
+    opacity: 0;
+    -webkit-transition: opacity .25s ease-in-out;
+    -moz-transition: opacity .25s ease-in-out;
+    -ms-transition: opacity .25s ease-in-out;
+    -o-transition: opacity .25s ease-in-out;
+    transition: opacity .25s ease-in-out;
+}
+
+header .links a:hover:before,
+header .links button:hover:before,
+header .links a:hover:after,
+header .links button:hover:after {
+    opacity: 1;
+}
+
+header .links .last {
+    margin: 0;
 }
 
 header .disabled {
@@ -74,10 +124,17 @@ textarea {
     font-family: 'Courier New', Courier, monospace;
     background-color: transparent;
     resize: none;
-    overflow-y: auto;
     font-size: 16px;
     border: none;
     color: #aaa;
+    overflow-y: scroll;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE 10+ */
+}
+
+textarea::-webkit-scrollbar {
+    width: 0;
+    height: 0;
 }
 
 textarea:focus {
