@@ -54,8 +54,7 @@ header .links button:before {
     display: block;
     content: attr(data-message);
     top: 3px;
-    right: 58px;
-    height: 18px;
+    right: -1000px;
     background-color: #ccc;
     color: #000;
     font-size: 16px;
@@ -70,7 +69,7 @@ header .links a:after,
 header .links button:after {
     position: absolute;
     top: 3px;
-    right: 44px;
+    right: -1000px;
     display: block;
     width: 0px;
     height: 0px;
@@ -97,6 +96,16 @@ header .links button:hover:before,
 header .links a:hover:after,
 header .links button:hover:after {
     opacity: 1;
+}
+
+header .links a:hover:before,
+header .links button:hover:before {
+    right: 58px;
+}
+
+header .links a:hover:after,
+header .links button:hover:after {
+    right: 44px;
 }
 
 header .links .last {
