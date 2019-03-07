@@ -105,14 +105,20 @@ def rate_limit(e):
 
 
 @app.errorhandler(500)
+@app.errorhandler(Exception)
 def internal_error(e):
     tb = traceback.format_exc()
-    mail.send(Message(
-        subject='Error From {}'.format(request.host_url),
-        recipients=[app.config['MAIL_RECIPIENT']],
-        body=render_template('email/error.txt.jinja', tb=tb),
-        html=render_template('email/error.html.jinja', tb=tb)
-    ))
+    try:
+        mail.send(Message(
+            subject='Error From {}'.format(request.host_url),
+            recipients=[app.config['MAIL_RECIPIENT']],
+            
+            body=render_template('email/error.txt.jinja', tb=tb),
+            html=render_template('email/error.html.jinja', tb=tb)
+        ))
+    except:
+        app.logger.error(f'Failed to send error email {tb}')
+
     return render_template(
         '5xx.jinja', title='Uh oh', message='Shit really hit the fan',
         disabled=['clone', 'save'], body_class='about'), 500
