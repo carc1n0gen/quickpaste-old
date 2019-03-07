@@ -1,58 +1,55 @@
 <header>
-    {# <a href="/">
-        <h1>quickpaste</h1>
-    </a> #}
     <nav class="links">
+        {% if disabled and 'new' in disabled %}
+        <a class="disabled" data-message="Start a new paste (disabled)">
+            <span class="sr-only">Start a new paste (disabled)</span>
+            <i class="icon-plus"></i>
+        </a>
+        {% else %}
+        <a href="/" data-message="Start a new paste">
+            <span class="sr-only">Start a new paste</span>
+            <i class="icon-plus"></i>
+        </a>
+        {% endif %}
         {% if disabled and 'save' in disabled %}
-        <button type="submit" title="save paste (disabled)" disabled class="disabled">
-            <span class="sr-only">save paste (disabled)</span>
+        <button type="submit" data-message="Save this paste (disabled)" disabled class="disabled">
+            <span class="sr-only">Save this paste (disabled)</span>
             <i class="icon-floppy"></i>
         </button>
         {% else %}
-        <button type="submit" title="save paste">
-            <span class="sr-only">save paste</span>
+        <button type="submit" data-message="Save this paste">
+            <span class="sr-only">Save this paste</span>
             <i class="icon-floppy"></i>
         </button>
         {% endif %}
         {% if disabled and 'clone' in disabled %}
-        <a class="disabled" title="clone and edit (disabled)">
-            <span class="sr-only">clone and edit (disabled)</span>
+        <a class="disabled" data-message="Clone and edit this paste (disabled)">
+            <span class="sr-only">Clone and edit this paste (disabled)</span>
             <i class="icon-pencil"></i>
         </a>
         {% else %}
-        <a href="/?clone={{ hexhhash }}" title="clone and edit">
-            <span class="sr-only">clone and edit</span>
+        <a href="/?clone={{ hexhhash }}" data-message="Clone and edit this paste">
+            <span class="sr-only">Clone and edit this paste</span>
             <i class="icon-pencil"></i>
         </a>
         {% endif %}
         {% if disabled and 'raw' in disabled %}
-        <a class="disabled" title="raw text (disabled)">
-            <span class="sr-only">raw text (disabled)</span>
+        <a class="disabled" data-message="View paste as raw text (disabled)">
+            <span class="sr-only">View paste as raw text (disabled)</span>
             <i class="icon-text-width"></i>
         </a>
         {% else %}
-        <a href="/raw/{{ hexhhash }}" title="raw text">
-            <span class="sr-only">raw text</span>
+        <a href="/raw/{{ hexhhash }}" data-message="View paste as raw text">
+            <span class="sr-only">View paste as raw text</span>
             <i class="icon-text-width"></i>
         </a>
         {% endif %}
-        {% if disabled and 'new' in disabled %}
-        <a class="disabled" title="new paste (disabled)">
-            <span class="sr-only">new paste (disabled)</span>
-            <i class="icon-plus"></i>
-        </a>
-        {% else %}
-        <a href="/" title="new paste">
-            <span class="sr-only">new paste</span>
-            <i class="icon-plus"></i>
-        </a>
-        {% endif %}
-        <a href="/about" title="about quickpaste">
-            <span class="sr-only">about quickpaste</span>
+        <a href="/about" data-message="Quickpaste help and info">
+            <span class="sr-only">Quickpaste help and info</span>
             <i class="icon-help"></i>
         </a>
-        <a href="https://github.com/carc1n0gen/quickpaste" title="the code">
-            <span class="sr-only">the code</span>
+        <a href="https://github.com/carc1n0gen/quickpaste" data-message="View the source code" class="last">
+            <span class="sr-only">View the source code</span>
             <i class="icon-github-circled"></i>
         </a>
     </nav>
