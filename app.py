@@ -2,6 +2,7 @@ import time
 import traceback
 import sqlite3
 import hashlib
+from datetime import datetime, timedelta
 from logging.handlers import RotatingFileHandler
 from flask import Flask, request, render_template, redirect, url_for, g
 from flask_limiter import Limiter
@@ -104,24 +105,25 @@ def rate_limit(e):
         disabled=['clone', 'save'], body_class='about'), 429
 
 
-@app.errorhandler(500)
-@app.errorhandler(Exception)
-def internal_error(e):
-    tb = traceback.format_exc()
-    try:
-        mail.send(Message(
-            subject='Error From {}'.format(request.host_url),
-            recipients=[app.config['MAIL_RECIPIENT']],
-            
-            body=render_template('email/error.txt.jinja', tb=tb),
-            html=render_template('email/error.html.jinja', tb=tb)
-        ))
-    except:
-        app.logger.error(f'Failed to send error email {tb}')
+if not app.debug:
+    @app.errorhandler(500)
+    @app.errorhandler(Exception)
+    def internal_error(e):
+        tb = traceback.format_exc()
+        try:
+            mail.send(Message(
+                subject='Error From {}'.format(request.host_url),
+                recipients=[app.config['MAIL_RECIPIENT']],
+                
+                body=render_template('email/error.txt.jinja', tb=tb),
+                html=render_template('email/error.html.jinja', tb=tb)
+            ))
+        except:
+            app.logger.error(f'Failed to send error email {tb}')
 
-    return render_template(
-        '5xx.jinja', title='Uh oh', message='Shit really hit the fan',
-        disabled=['clone', 'save'], body_class='about'), 500
+        return render_template(
+            '5xx.jinja', title='Uh oh', message='Shit really hit the fan',
+            disabled=['clone', 'save'], body_class='about'), 500
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -174,3 +176,12 @@ def about():
     return render_template(
         'about.jinja', host_url=request.host_url, body_class='about',
         disabled=['save', 'clone', 'raw'])
+
+
+@app.cli.command()
+def cleanup():
+    week_ago = datetime.now() - timedelta(weeks=1)
+    db.engine.execute('DELETE FROM pastes WHERE timestamp < ?',
+                      [week_ago.timestamp()])
+    print('Deleted up pastes older than one week.')
+    
