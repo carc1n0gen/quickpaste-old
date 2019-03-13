@@ -249,6 +249,10 @@ pre {
         width: 100%;
     }
 
+    .about {
+        padding: 25px 10px;
+    }
+
     .lines {
         padding-top: 40px;
     }
