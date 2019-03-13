@@ -223,6 +223,10 @@ pre {
         text-align: center;
     }
 
+    .start {
+        top: 40px;
+    }
+
     header .links a,
     header .links button {
         margin: 0;
@@ -239,6 +243,10 @@ pre {
     header .links a,
     header .links button {
         display: inline;
+    }
+
+    .page {
+        width: 100%;
     }
 
     .lines {
