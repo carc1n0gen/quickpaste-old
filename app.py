@@ -1,10 +1,9 @@
 import time
 import traceback
-import sqlite3
 import hashlib
 from datetime import datetime, timedelta
 from logging.handlers import RotatingFileHandler
-from flask import Flask, request, render_template, redirect, url_for, g
+from flask import Flask, request, render_template, redirect, url_for
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_htmlmin import HTMLMIN
@@ -114,11 +113,10 @@ if not app.debug:
             mail.send(Message(
                 subject='Error From {}'.format(request.host_url),
                 recipients=[app.config['MAIL_RECIPIENT']],
-                
                 body=render_template('email/error.txt.jinja', tb=tb),
                 html=render_template('email/error.html.jinja', tb=tb)
             ))
-        except:
+        except Exception:
             app.logger.error(f'Failed to send error email {tb}')
 
         return render_template(
@@ -167,7 +165,7 @@ def raw(hexhash):
     text = get_text(hexhash)
     if text is None:
         raise NotFound()
-    
+
     return (text, 200, {'Content-type': 'text/plain'})
 
 
@@ -183,5 +181,4 @@ def cleanup():
     week_ago = datetime.now() - timedelta(weeks=1)
     db.engine.execute('DELETE FROM pastes WHERE timestamp < ?',
                       [week_ago.timestamp()])
-    print('Deleted up pastes older than one week.')
-    
+    print('Deleted pastes older than one week.')

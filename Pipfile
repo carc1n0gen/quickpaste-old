@@ -21,6 +21,8 @@ flake8 = "*"
 autopep8 = "*"
 pytest = "*"
 v = {editable = true,version = "*"}
+coverage = "*"
+pytest-cov = "*"
 
 [requires]
 python_version = "3.7"
