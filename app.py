@@ -178,8 +178,8 @@ def about():
 
 @app.cli.command()
 def cleanup():
-    # Reminder: the timestamp < ? looks backwards because we are storing unix 
-    # timestamps which are the number of seconds since the epoch. This means 
+    # Reminder: the timestamp < ? looks backwards because we are storing unix
+    # timestamps which are the number of seconds since the epoch. This means
     # that a lower number of seconds is longer ago than a greater number.
     week_ago = datetime.now() - timedelta(weeks=1)
     db.engine.execute('DELETE FROM pastes WHERE timestamp < ?',
