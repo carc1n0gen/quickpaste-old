@@ -87,9 +87,7 @@ Random Things
 
 **How long are pastes on official [quickpaste](https://quickpaste.net/) kept?**
 
-The built in script that deletes week old pastes is only run once a day.  
-there is a window of period where week old pastes stick around, but it isn't
-very long.
+The built in script that deletes week old pastes is run once a day.
 
 **Why do I need to configure an email sender?**
 
