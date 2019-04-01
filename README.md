@@ -85,9 +85,11 @@ You will need to configure something like a cron to run that.
 Random Things
 -------------
 
-**How long are pastes on official [quickpaste]() kept?**
+**How long are pastes on official [quickpaste](https://quickpaste.net/) kept?**
 
-For one week, give or take a few hours.  The cleanup is run only once a day.
+The built in script that deletes week old pastes is only run once a day.  
+there is a window of period where week old pastes stick around, but it isn't
+very long.
 
 **Why do I need to configure an email sender?**
 
