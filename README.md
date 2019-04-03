@@ -6,8 +6,8 @@ A dead simple code snippet sharing tool.
 Requirements
 ------------
 
+* python 3.7 (_May work on earlier versions but is totally untested_)
 * [pipenv](https://pipenv.readthedocs.io/en/latest/) is used for dependency management.
-
 * A database supported by [SQLAlchemy](https://docs.sqlalchemy.org/en/latest/core/engines.html#supported-databases)
 
 
@@ -66,11 +66,37 @@ edit as needed.  Below is a copy of the latest example config.
 }
 ``` 
 
+Running In Development
+----------------------
+
+`FLASK_ENV=development pipenv run flask run`
+
+Running In Production
+---------------------
+
+Use a proper wsgi container.  I like to use waitress with nginx reverse proxy
+in front of it, but that's totally personal preference.  More info at the
+official [flask deployment page](http://flask.pocoo.org/docs/1.0/deploying/).
+
+**Example running with waitress-serve**:
+
+`PYTHONPATH=/path/to/quickpaste waitress-serve --port=8000 app:app`
+
+You'll want to configure a daemon of some kind to keep the app running.
+
 Updating
 --------
 
 Pull the latest changes from master, or checkout the latest tag, sync
 dependencies, check for new configuration keys, and run migrations
+
+`git fetch`
+
+`git pull` or `git checkout <version>`
+
+`pipenv sync`
+
+`pipenv run flask db upgrade head`
 
 Running Cleanup
 ---------------
