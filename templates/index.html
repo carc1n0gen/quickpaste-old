@@ -1,7 +1,7 @@
-{% extends 'layouts/layout.jinja' %}
+{% extends 'layouts/layout.html' %}
 {% block content %}
 <form method="POST" id="form">
-    {% include 'partials/header.jinja' %}
+    {% include 'partials/header.html' %}
     <div class="start" aria-hidden="true">></div>
     <textarea spellcheck="false" name="text" id="text" placeholder="type or paste some code" aria-label="Code box">{{ text if text }}</textarea>
 </form>

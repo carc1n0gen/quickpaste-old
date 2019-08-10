@@ -23,6 +23,7 @@ pytest = "*"
 v = {editable = true,version = "*"}
 coverage = "*"
 pytest-cov = "*"
+python-dotenv = "*"
 
 [requires]
 python_version = "3.7"

@@ -3,7 +3,8 @@ import traceback
 import hashlib
 from datetime import datetime, timedelta
 from logging.handlers import RotatingFileHandler
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, url_for, \
+    make_response
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_htmlmin import HTMLMIN
@@ -16,14 +17,16 @@ from pygments.util import ClassNotFound
 from pygments.lexers import guess_lexer, get_lexer_for_filename
 from pygments.formatters import HtmlFormatter
 from werkzeug.contrib.fixers import ProxyFix
-from werkzeug.exceptions import NotFound, BadRequest, RequestEntityTooLarge
+from werkzeug.exceptions import NotFound, BadRequest, \
+    RequestEntityTooLarge
 
 
 app = Flask('quickpaste')
 app.config.from_json('config.json')
 
 if app.config.get('BEHIND_PROXY'):
-    # DO NOT DO THIS IN PROD UNLESS YOU SERVE THE APP BEHIND A REVERSE PROXY!
+    # DO NOT DO THIS IN PROD UNLESS YOU SERVE THE APP BEHIND A 
+    # REVERSE PROXY!
     app.wsgi_app = ProxyFix(app.wsgi_app)
 
 handler = RotatingFileHandler(app.config['LOG_FILE'], maxBytes=1024 * 1024)
@@ -59,7 +62,8 @@ def get_text(hexhash):
         binhash = bytes.fromhex(hexhash)
     except (ValueError, TypeError):
         return None
-    result = db.engine.execute('SELECT * FROM pastes WHERE hash=?', [binhash])
+    result = db.engine.execute(
+        'SELECT * FROM pastes WHERE hash=?', [binhash])
     item = result.first()
     if item is None:
         return None
@@ -70,7 +74,7 @@ def get_text(hexhash):
 def respond_with_redirect_or_text(redirect, text, status=200):
     respond_with = request.headers.get('X-Respondwith')
     if (respond_with == 'link'):
-        return (text, status, {'Content-type': 'text/plain'})
+        return (text, status, {'Content-type': 'text/plain; charset=utf-8'})
     return redirect
 
 
@@ -83,7 +87,7 @@ def bad_request(e):
 @app.errorhandler(404)
 def not_found(e):
     return render_template(
-        '4xx.jinja', title='Not found',
+        '4xx.html', title='Not found',
         message='There doesn\'t seem to be a paste here',
         disabled=['clone', 'save'], body_class='about'), 404
 
@@ -91,7 +95,7 @@ def not_found(e):
 @app.errorhandler(413)
 def too_large(e):
     return render_template(
-        '4xx.jinja', title='Too many characters',
+        '4xx.html', title='Too many characters',
         message='Limit: {}'.format(app.config['MAX_PASTE_LENGTH']),
         disabled=['clone', 'save'], body_class='about'), 413
 
@@ -99,7 +103,7 @@ def too_large(e):
 @app.errorhandler(429)
 def rate_limit(e):
     return render_template(
-        '4xx.jinja', title='Too many requests',
+        '4xx.html', title='Too many requests',
         message='Limit: {}'.format(app.config.get('RATELIMIT_DEFAULT')),
         disabled=['clone', 'save'], body_class='about'), 429
 
@@ -120,7 +124,7 @@ if not app.debug:
             app.logger.error(f'Failed to send error email {tb}')
 
         return render_template(
-            '5xx.jinja', title='Uh oh', message='Shit really hit the fan',
+            '5xx.html', title='Uh oh', message='Shit really hit the fan',
             disabled=['clone', 'save'], body_class='about'), 500
 
 
@@ -140,7 +144,7 @@ def index():
 
     text = get_text(request.args.get('clone'))
     return render_template(
-        'index.jinja', text=text, disabled=['clone', 'new', 'raw'])
+        'index.html', text=text, disabled=['clone', 'new', 'raw', 'download'])
 
 
 @app.route('/<string:hexhash>', methods=['GET'])
@@ -155,7 +159,7 @@ def view(hexhash, extension=None):
         lexer = guess_lexer(text)
     lines = len(text.splitlines())
     return render_template(
-        'view.jinja', hexhhash=hexhash,
+        'view.html', hexhash=hexhash, extension=extension,
         text=highlight(text, lexer, HtmlFormatter()), lines=lines,
         disabled=['save'])
 
@@ -166,21 +170,36 @@ def raw(hexhash):
     if text is None:
         raise NotFound()
 
-    return (text, 200, {'Content-type': 'text/plain'})
+    return (text, 200, {'Content-type': 'text/plain; charset=utf-8'})
+
+
+
+@app.route('/download/<string:hexhash>', methods=['GET'])
+@app.route('/download/<string:hexhash>.<string:extension>', methods=['GET'])
+def download(hexhash, extension='txt'):
+    text = get_text(hexhash)
+    if text is None:
+        raise NotFound()
+    res = make_response(text)
+    res.headers['Content-Disposition'] = \
+        f'attachment; filename={hexhash}.{extension}'
+    res.headers['Content-type'] = 'text/plain; charset=utf-8'
+    return res
 
 
 @app.route('/about', methods=['GET'])
 def about():
     return render_template(
-        'about.jinja', host_url=request.host_url, body_class='about',
-        disabled=['save', 'clone', 'raw'])
+        'about.html', host_url=request.host_url, body_class='about',
+        disabled=['save', 'clone', 'raw', 'download'])
 
 
 @app.cli.command()
 def cleanup():
-    # Reminder: the timestamp < ? looks backwards because we are storing unix
-    # timestamps which are the number of seconds since the epoch. This means
-    # that a lower number of seconds is longer ago than a greater number.
+    # Reminder: the timestamp < ? looks backwards because we are storing 
+    # unix timestamps which are the number of seconds since the epoch. 
+    # This means that a lower number of seconds is longer ago than a 
+    # greater number.
     week_ago = datetime.now() - timedelta(weeks=1)
     db.engine.execute('DELETE FROM pastes WHERE timestamp < ?',
                       [week_ago.timestamp()])
