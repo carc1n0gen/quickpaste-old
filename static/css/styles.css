@@ -4,7 +4,7 @@
 
 body {
     margin: 0;
-    padding: 25px 55px;
+    padding: 25px 55px 25px 50px;
     background-color: #383c4a;
     color: #aaa;
 }
@@ -24,6 +24,7 @@ header {
     right: 0;
     font-family: Arial, Helvetica, sans-serif;
     background-color: #404552;
+    z-index: 1;
 }
 
 header .links {
@@ -173,6 +174,35 @@ pre {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.line {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.line:before {
+    /* The clickable area for toggle line highlight */
+    position: absolute;
+    content: '';
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.line.highlighted:after {
+    /* The actual highlight area isn't clickable */
+    position: absolute;
+    left: -30px;
+    content: '';
+    width: 10000px;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.15);
+    pointer-events: none;
 }
 
 .page {

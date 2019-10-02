@@ -23,11 +23,14 @@ Setup
     (optional) `cd quickpaste && git checkout <version>`
 
 2.
+    Create a `quickpaste/data` directory.
+
+3.
 	Install dependencies.
 
 	`pipenv sync`
 
-3.
+4.
 	Run database migrations.
 
 	`pipenv run flask db upgrade head`

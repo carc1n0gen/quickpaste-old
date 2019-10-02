@@ -128,6 +128,59 @@ if not app.debug:
             disabled=['clone', 'save'], body_class='about'), 500
 
 
+about_text = """
+# Quickpaste
+
+A dead simple code sharing tool.
+
+
+## Features
+
+**Syntax highlighting**
+
+There is automatic language detection, but sometimes it gets it wrong.  To
+override the language, just add or edit a file extension to the url.
+
+**Line highlighting**
+
+Click on a line number to highlight that line, and click the line number again
+to un-highlight it.  The highlighted lines are saved in the url, so they will
+stay highlighted if you share the link with someone.
+
+**Does not totally break without JavaScript**
+
+No JavaScript is required to use the basic features of pasting code, saving it,
+and copying the link to share. But line highlighting will not work without
+JavaScript.
+
+
+## FAQ
+
+**Are the snippets stored forever?**
+
+NO! They are deleted after one week(ish).
+
+**Is the code available?**
+
+[github project](https://github.com/carc1n0gen/quickpaste)
+
+**Can I use quickpaste from my terminal?**
+
+`cat file-name | curl -H "X-Respondwith: link" -X POST -d "text=$(</dev/stdin)" https://quickpaste.net/`
+
+*Notice: The "X-Respondwith: link" is important. Otherwise you will get a
+redirect response.*
+
+You could even alias the curl part of that command:
+
+`alias quickpaste="curl -H \"X-Respondwith: link\" -X POST -d \"text=\$(</dev/stdin)\" https://quickpaste.net/"`
+
+To make it as simple as:
+
+`cat file-name | quickpaste`
+"""
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
@@ -142,7 +195,12 @@ def index():
             redirect(url_for('view', hexhash=hexhash)), '{}{}\n'.format(
                 request.host_url, hexhash), 200)
 
-    text = get_text(request.args.get('clone'))
+    clone = request.args.get('clone')
+    if clone == 'about':
+        text = about_text
+    else:
+        text = get_text(clone)
+
     return render_template(
         'index.html', text=text, disabled=['clone', 'new', 'raw', 'download'])
 
@@ -150,48 +208,63 @@ def index():
 @app.route('/<string:hexhash>', methods=['GET'])
 @app.route('/<string:hexhash>.<string:extension>', methods=['GET'])
 def view(hexhash, extension=None):
-    text = get_text(hexhash)
+    highlighted = request.args.get('h')
+    if highlighted:
+        highlighted = highlighted.split(',')
+
+    if hexhash == 'about' and extension == 'md':
+        text = about_text
+    else:
+        text = get_text(hexhash)
+
     if text is None:
         raise NotFound()
+
     try:
         lexer = get_lexer_for_filename('foo.{}'.format(extension))
     except ClassNotFound:
         lexer = guess_lexer(text)
-    lines = len(text.splitlines())
+    lines = text.count('\n')
     return render_template(
-        'view.html', hexhash=hexhash, extension=extension,
-        text=highlight(text, lexer, HtmlFormatter()), lines=lines,
-        disabled=['save'])
+        'view.html',
+        hexhash=hexhash,
+        extension=extension,
+        text=highlight(text, lexer, HtmlFormatter()),
+        lines=lines,
+        disabled=['save'], highlighted=highlighted
+    )
 
 
 @app.route('/raw/<string:hexhash>', methods=['GET'])
-def raw(hexhash):
-    text = get_text(hexhash)
+@app.route('/raw/<string:hexhash>.<string:extension>', methods=['GET'])
+def raw(hexhash, extension=None):
+    if hexhash == 'about' and extension == 'md':
+        text = about_text
+    else:
+        text = get_text(hexhash)
+
     if text is None:
         raise NotFound()
 
     return (text, 200, {'Content-type': 'text/plain; charset=utf-8'})
 
 
-
 @app.route('/download/<string:hexhash>', methods=['GET'])
 @app.route('/download/<string:hexhash>.<string:extension>', methods=['GET'])
 def download(hexhash, extension='txt'):
-    text = get_text(hexhash)
+    if hexhash == 'about' and extension == 'md':
+        text = about_text
+    else:
+        text = get_text(hexhash)
+
     if text is None:
         raise NotFound()
+
     res = make_response(text)
     res.headers['Content-Disposition'] = \
         f'attachment; filename={hexhash}.{extension}'
     res.headers['Content-type'] = 'text/plain; charset=utf-8'
     return res
-
-
-@app.route('/about', methods=['GET'])
-def about():
-    return render_template(
-        'about.html', host_url=request.host_url, body_class='about',
-        disabled=['save', 'clone', 'raw', 'download'])
 
 
 @app.cli.command()

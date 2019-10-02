@@ -29,13 +29,13 @@
         {% endif %}
         
         {% if disabled and 'raw' not in disabled %}
-        <a href="/raw/{{ hexhash }}" data-message="View paste as raw text">
+        <a href="/raw/{{ hexhash }}{{ '.' + extension if extension }}" data-message="View paste as raw text">
             <span class="sr-only">View paste as raw text</span>
             <i class="icon-text-width"></i>
         </a>
         {% endif %}
         
-        <a href="/about" data-message="Quickpaste help and info">
+        <a href="/about.md" data-message="Quickpaste help and info">
             <span class="sr-only">Quickpaste help and info</span>
             <i class="icon-help"></i>
         </a>
