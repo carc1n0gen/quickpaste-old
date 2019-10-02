@@ -1,5 +1,6 @@
 import hashlib
-from app import db, limiter
+from app.create_app import limiter
+from app.repositories import db
 
 
 def test_should_return_200(client):
@@ -35,12 +36,13 @@ def test_should_return_400(client):
     assert rv.headers['Content-type'] == 'text/plain; charset=utf-8'
 
 
-def test_should_return_500(client):
-    db.engine.execute('DROP TABLE pastes')
-    # Need to do this to reset migrations history
-    db.engine.execute('DROP TABLE alembic_version')
-    rv = client.post('/', data={'text': 'foo'})
-    assert rv.status_code == 500
+def test_should_return_500(app, client):
+    with app.app_context():
+        db.engine.execute('DROP TABLE pastes')
+        # Need to do this to reset migrations history
+        db.engine.execute('DROP TABLE alembic_version')
+        rv = client.post('/', data={'text': 'foo'})
+        assert rv.status_code == 500
 
 
 def test_should_return_redirect_to_paste(client):

@@ -6,15 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>quickpaste</title>
-    {% assets 'css_all' %}
-    <link rel="stylesheet" href="{{ ASSET_URL }}">
-    {% endassets %}
+    <link rel="stylesheet" href="/static/bundle.css">
 </head>
 <body {% if body_class %}class="{{ body_class }}"{% endif %}>
     {% block content %}{% endblock %}
-    {# {% assets 'js_all' %}
-    <script src="{{ ASSET_URL }}"></script>
-    {% endassets %} #}
     {% block bottom_scripts %}{% endblock %}
     {% if config.GA_ENABLED %}
         {% include 'partials/analytics.html' %}
