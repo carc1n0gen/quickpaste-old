@@ -83,7 +83,7 @@ official [flask deployment page](http://flask.pocoo.org/docs/1.0/deploying/).
 
 **Example running with waitress-serve**:
 
-`PYTHONPATH=/path/to/quickpaste waitress-serve --port=8000 app:app`
+`PYTHONPATH=/path/to/quickpaste waitress-serve --call app.create_app:create_app`
 
 You'll want to configure a daemon of some kind to keep the app running.
 
