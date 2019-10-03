@@ -111,10 +111,11 @@ config.json
 # vscode
 /.vscode
 
-# Flask-Assets cache and bundles
-/static/bundle.css
-/static/bundle.js
-/static/.webassets-cache
+# Compiled Assets
+/static/*
 
 # macOS Shit (I thought these werre gone in sierra and above?
 .DS_Store
+
+# ndoejs shit
+node_modules/

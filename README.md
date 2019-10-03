@@ -30,10 +30,17 @@ Setup
 
 	`pipenv sync`
 
+    `npm install`
+
 4.
 	Run database migrations.
 
 	`pipenv run flask db upgrade head`
+
+5.
+    Compile css/js/assets
+
+    `npm run prod`
 
 Configuration
 -------------
@@ -74,6 +81,10 @@ Running In Development
 
 `FLASK_ENV=development pipenv run flask run`
 
+If you're making css/js changes, you'll want to watch for changes
+
+`npm run watch`
+
 Running In Production
 ---------------------
 
@@ -83,7 +94,7 @@ official [flask deployment page](http://flask.pocoo.org/docs/1.0/deploying/).
 
 **Example running with waitress-serve**:
 
-`PYTHONPATH=/path/to/quickpaste waitress-serve --call app.create_app:create_app`
+`PYTHONPATH=/path/to/quickpaste waitress-serve --port=8001 --call app.create_app:create_app`
 
 You'll want to configure a daemon of some kind to keep the app running.
 
@@ -91,7 +102,8 @@ Updating
 --------
 
 Pull the latest changes from master, or checkout the latest tag, sync
-dependencies, check for new configuration keys, and run migrations
+dependencies, check for new configuration keys, run migrations, and compile
+js/css.
 
 `git fetch`
 
@@ -100,6 +112,8 @@ dependencies, check for new configuration keys, and run migrations
 `pipenv sync`
 
 `pipenv run flask db upgrade head`
+
+`npm install && npm run prod`
 
 Running Cleanup
 ---------------
