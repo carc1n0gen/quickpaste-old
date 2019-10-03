@@ -72,6 +72,10 @@ def create_app():
             500,
             UnknownErrorView.as_view('unknown_error')
         )
+        app.register_error_handler(
+            Exception,
+            UnknownErrorView.as_view('unknown_error_catchall')
+        )
 
     app.cli.add_command(cleanup, 'cleanup')
 

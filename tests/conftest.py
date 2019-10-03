@@ -9,15 +9,12 @@ def app():
     app.config['TESTING'] = True
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://'
     app.config['MAX_PASTE_LENGTH'] = 20
+    app.debug = False
     yield app
 
 
 @pytest.fixture
 def client(app):
-    app = create_app()
-    app.config['TESTING'] = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://'
-    app.config['MAX_PASTE_LENGTH'] = 20
     limiter.enabled = False
     with app.app_context():
         alembic.upgrade('head')

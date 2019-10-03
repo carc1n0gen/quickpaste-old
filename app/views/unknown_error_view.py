@@ -6,7 +6,6 @@ from app.views import BaseView
 
 
 class UnknownErrorView(BaseView):
-    methods = ['GET']
 
     def dispatch_request(self, error):
         tb = traceback.format_exc()

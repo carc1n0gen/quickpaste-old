@@ -3,7 +3,6 @@ from app.views import BaseView
 
 
 class TooLargeView(BaseView):
-    methods = ['GET']
 
     def dispatch_request(self, error):
         return render_template(

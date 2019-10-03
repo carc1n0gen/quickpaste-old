@@ -1,4 +1,5 @@
 from flask import request, abort, render_template
+from werkzeug.exceptions import NotFound
 from pygments import highlight
 from pygments.lexers import guess_lexer, get_lexer_for_filename
 from pygments.formatters import HtmlFormatter
@@ -13,7 +14,7 @@ class PasteView(BaseView):
     def dispatch_request(self, hexhash, extension=None):
         text = paste.get_paste(hexhash)
         if text is None:
-            abort(404)
+            raise NotFound()
 
         if 'raw' in request.endpoint:
             return (text, 200, {'Content-type': 'text/plain; charset=utf-8'})

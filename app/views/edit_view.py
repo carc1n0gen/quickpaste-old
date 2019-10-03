@@ -1,4 +1,5 @@
-from flask import request, current_app, abort, url_for, render_template
+from flask import request, current_app, url_for, render_template
+from werkzeug.exceptions import BadRequest, RequestEntityTooLarge
 from app.views import BaseView
 import app.repositories.paste as paste
 
@@ -12,9 +13,9 @@ class EditView(BaseView):
             text = request.form.get('text')
 
             if text is None or text.strip() == '':
-                abort(400)
+                raise BadRequest()
             elif maxlength is not None and len(text) > maxlength:
-                abort(413)
+                raise RequestEntityTooLarge()
 
             hexhash = paste.insert_paste(text)
             return self.redirect_or_text(

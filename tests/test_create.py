@@ -41,8 +41,8 @@ def test_should_return_500(app, client):
         db.engine.execute('DROP TABLE pastes')
         # Need to do this to reset migrations history
         db.engine.execute('DROP TABLE alembic_version')
-        rv = client.post('/', data={'text': 'foo'})
-        assert rv.status_code == 500
+    rv = client.post('/', data={'text': 'foo'})
+    assert rv.status_code == 500
 
 
 def test_should_return_redirect_to_paste(client):
