@@ -11,37 +11,67 @@
 {% block bottom_scripts %}
 <script>
 (() => {
+    function addLineToParams(params, line) {
+        if (!params.has('h')) {
+            params.set('h', line);
+        } else {
+            const arr = params.get('h').split(',');
+            if (arr.indexOf(line) !== -1) {
+                return;
+            }
+            arr.push(line);
+            params.set('h', arr.join(','));
+        }
+    }
+
+    function removeLineFromParams(params, line) {
+        if (params.has('h')) {
+            params.set(
+                'h',
+                params.get('h').split(',').filter(i => i !== line).join(',')
+            );
+        }
+    }
+
     function clickHandler(e) {
         e.preventDefault();
-        let hash = window.location.hash;
-        const line = e.target.dataset.line;
+
+        const el = e.target;
+        const line = el.dataset.line;
         const params = new URLSearchParams(document.location.search);
+        let hash = window.location.hash;
+
         if (e.shiftKey) {
-            e.target.classList.toggle('highlighted');
-            const h = params.get('h');
-            if (h) {
-                let highlighted = h.split(',');
-                const i = highlighted.indexOf(line);
-                if (i === -1) {
-                    highlighted.push(line);
-                } else {
-                    highlighted = highlighted.filter((_, n) => n !== i);
-                }
-                params.set('h', highlighted.join(','));
-            } else {
-                params.set('h', line);
+            if (hash !== '#' + line) {
+                console.log(line);
+                el.classList.add('highlighted');
+                el.classList.remove('unhighlighted');
+                addLineToParams(params, line);
             }
         } else {
-            if (hash === '#' + line) {
+            if (hash == '#' + line) {
                 hash = '';
-                e.target.classList.remove('highlighted');
+                el.classList.remove('highlighted');
+                el.classList.add('unhighlighted');
+            } else if (el.classList.contains('highlighted')) {
+                el.classList.remove('highlighted');
+                el.classList.add('unhighlighted');
+                removeLineFromParams(params, line);
             } else {
+                const prevEl = document.getElementById(hash.substring(1));
                 hash = '#' + line;
-                e.target.classList.add('highlighted');
-                e.target.scrollIntoView();
+                el.classList.add('highlighted');
+                el.classList.remove('unhighlighted');
+                if (prevEl) {
+                    prevEl.classList.remove('highlighted');
+                    prevEl.classList.add('unhighlighted');
+                }
             }
         }
 
+        if (params.get('h') === '') {
+            params.delete('h');
+        }
         const paramsString = params.toString();
         const newUrl = 
             window.location.protocol +

@@ -22,14 +22,14 @@ override the language, just add or edit a file extension to the url.
 
 **Line highlighting**
 
-Click on a line number to highlight and target that line with the # part of the
-URL.  Click the same line number again to un-highlight/un-target. You can also
-Shift+Click as many lines as you like to highlight but no target them.
+Click on a line number to highlight and target the line with the # part of the
+URL. Shift+Click a line to highlight it without targeting it (This can be done
+to as many lines as you like).  Click on a highlighted line to un-highlight it.
 
 **Does not totally break without JavaScript**
 
 No JavaScript is required to use the basic features of pasting code, saving it,
-copying the link to share and targetting lines. But Shift-Clicking to highlight 
+copying the link to share or targetting lines. But Shift-Clicking to highlight
 lines without targetting will not work.
 
 

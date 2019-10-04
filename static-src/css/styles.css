@@ -209,6 +209,10 @@ pre {
     pointer-events: none;
 }
 
+.line.unhighlighted:target:after {
+    background-color: transparent;
+}
+
 .page {
     padding-bottom: 20px;
     width: 850px;
