@@ -15,21 +15,13 @@
         if (!params.has('h')) {
             params.set('h', line);
         } else {
-            const arr = params.get('h').split(',');
-            if (arr.indexOf(line) !== -1) {
-                return;
-            }
-            arr.push(line);
-            params.set('h', arr.join(','));
+            params.set('h', params.get('h').split(',').concat([line]).join(','));
         }
     }
 
     function removeLineFromParams(params, line) {
         if (params.has('h')) {
-            params.set(
-                'h',
-                params.get('h').split(',').filter(i => i !== line).join(',')
-            );
+            params.set('h',params.get('h').split(',').filter(i => i !== line).join(','));
         }
     }
 
@@ -43,29 +35,19 @@
 
         if (e.shiftKey) {
             if (hash !== '#' + line) {
-                console.log(line);
                 el.classList.add('highlighted');
-                el.classList.remove('unhighlighted');
                 addLineToParams(params, line);
             }
         } else {
-            if (hash == '#' + line) {
+            if (hash === '#' + line) {
                 hash = '';
-                el.classList.remove('highlighted');
-                el.classList.add('unhighlighted');
+                window.location.hash = hash;
             } else if (el.classList.contains('highlighted')) {
                 el.classList.remove('highlighted');
-                el.classList.add('unhighlighted');
                 removeLineFromParams(params, line);
             } else {
-                const prevEl = document.getElementById(hash.substring(1));
                 hash = '#' + line;
-                el.classList.add('highlighted');
-                el.classList.remove('unhighlighted');
-                if (prevEl) {
-                    prevEl.classList.remove('highlighted');
-                    prevEl.classList.add('unhighlighted');
-                }
+                window.location.hash = hash;
             }
         }
 
@@ -73,7 +55,7 @@
             params.delete('h');
         }
         const paramsString = params.toString();
-        const newUrl = 
+        const newUrl =
             window.location.protocol +
             '//' +
             window.location.host +

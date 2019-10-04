@@ -30,7 +30,8 @@ to as many lines as you like).  Click on a highlighted line to un-highlight it.
 
 No JavaScript is required to use the basic features of pasting code, saving it,
 copying the link to share or targetting lines. But Shift-Clicking to highlight
-lines without targetting will not work.
+lines without targetting, and un-highlighting lines (for example if someone
+shared a link with you pre-highlighted) will not work.
 
 
 ## FAQ
@@ -56,5 +57,4 @@ You could even alias the curl part of that command:
 
 To make it as simple as:
 
-`cat file-name | quickpaste`
-"""
+`cat file-name | quickpaste`"""
