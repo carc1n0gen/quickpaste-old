@@ -22,15 +22,15 @@ override the language, just add or edit a file extension to the url.
 
 **Line highlighting**
 
-Click on a line number to highlight that line, and click the line number again
-to un-highlight it.  The highlighted lines are saved in the url, so they will
-stay highlighted if you share the link with someone.
+Click on a line number to highlight and target that line with the # part of the
+URL.  Click the same line number again to un-highlight/un-target. You can also
+Shift+Click as many lines as you like to highlight but no target them.
 
 **Does not totally break without JavaScript**
 
 No JavaScript is required to use the basic features of pasting code, saving it,
-and copying the link to share. But line highlighting will not work without
-JavaScript.
+copying the link to share and targetting lines. But Shift-Clicking to highlight 
+lines without targetting will not work.
 
 
 ## FAQ

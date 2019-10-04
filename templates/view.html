@@ -12,11 +12,12 @@
 <script>
 (() => {
     function clickHandler(e) {
+        e.preventDefault();
+        let hash = window.location.hash;
+        const line = e.target.dataset.line;
         const params = new URLSearchParams(document.location.search);
         if (e.shiftKey) {
-            e.preventDefault();
             e.target.classList.toggle('highlighted');
-            const line = e.target.dataset.line;
             const h = params.get('h');
             if (h) {
                 let highlighted = h.split(',');
@@ -30,6 +31,15 @@
             } else {
                 params.set('h', line);
             }
+        } else {
+            if (hash === '#' + line) {
+                hash = '';
+                e.target.classList.remove('highlighted');
+            } else {
+                hash = '#' + line;
+                e.target.classList.add('highlighted');
+                e.target.scrollIntoView();
+            }
         }
 
         const paramsString = params.toString();
@@ -39,7 +49,7 @@
             window.location.host +
             window.location.pathname +
             (paramsString === '' ? '' : '?' + paramsString) +
-            window.location.hash;
+            hash;
 
         history.replaceState({ path: newUrl }, '', newUrl);
     }
