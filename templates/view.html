@@ -4,7 +4,7 @@
 {{ text | safe }}
 <div class="lines">
     {% for line in range(1, lines + 1) %}
-        <span id="{{ line }}" data-line="{{ line }}" class="line line-{{ line }} {{ 'highlighted' if highlighted and line|string in highlighted }}">{{ line }}</span><br>
+        <a href="#{{ line }}" id="{{ line }}" data-line="{{ line }}" class="line line-{{ line }} {{ 'highlighted' if highlighted and line|string in highlighted }}">{{ line }}</a><br>
     {% endfor %}
 </div>
 {% endblock %}
@@ -12,23 +12,35 @@
 <script>
 (() => {
     function clickHandler(e) {
-        e.target.classList.toggle('highlighted');
-        const line = e.target.dataset.line;
         const params = new URLSearchParams(document.location.search);
-        const h = params.get('h');
-        if (h) {
-            let highlighted = h.split(',');
-            const i = highlighted.indexOf(line);
-            if (i === -1) {
-                highlighted.push(line);
+        if (e.shiftKey) {
+            e.preventDefault();
+            e.target.classList.toggle('highlighted');
+            const line = e.target.dataset.line;
+            const h = params.get('h');
+            if (h) {
+                let highlighted = h.split(',');
+                const i = highlighted.indexOf(line);
+                if (i === -1) {
+                    highlighted.push(line);
+                } else {
+                    highlighted = highlighted.filter((_, n) => n !== i);
+                }
+                params.set('h', highlighted.join(','));
             } else {
-                highlighted = highlighted.filter((_, n) => n !== i);
+                params.set('h', line);
             }
-            params.set('h', highlighted.join(','));
-        } else {
-            params.set('h', line);
         }
-        const newUrl = window.location.protocol + '//' + window.location.host + window.location.pathname + '?' + params.toString();
+
+        const paramsString = params.toString();
+        const newUrl = 
+            window.location.protocol +
+            '//' +
+            window.location.host +
+            window.location.pathname +
+            (paramsString === '' ? '' : '?' + paramsString) +
+            window.location.hash;
+
         history.replaceState({ path: newUrl }, '', newUrl);
     }
 

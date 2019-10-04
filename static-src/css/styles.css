@@ -168,12 +168,15 @@ pre {
     text-align: right;
     font-family: monospace;
     font-size: 16px;
-    color: #999;
     background-color: #4b5162;
     -webkit-user-select: none;    
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.lines a {
+    color: #999;
 }
 
 .line {
@@ -194,6 +197,7 @@ pre {
     cursor: pointer;
 }
 
+.line:target:after,
 .line.highlighted:after {
     /* The actual highlight area isn't clickable */
     position: absolute;
