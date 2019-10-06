@@ -2,181 +2,112 @@
     box-sizing: border-box;
 }
 
-body {
-    margin: 0;
-    padding: 25px 55px 25px 50px;
-    background-color: #383c4a;
-    color: #aaa;
-}
-
-a {
-    color: #447fcf;
-    text-decoration: none;
-}
-
-.about {
-    padding: 25px;
-}
-
-header {
-    position: fixed;
-    top: 0;
-    right: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: #404552;
-    z-index: 1;
-}
-
-header .links {
-    padding: 5px;
-    font-size: 20px;
-}
-
-header button {
-    padding: 0;
-    background-color: transparent;
-    border: none;
-    color: #447fcf;
-    cursor: pointer;
-}
-
-header .links a,
-header .links button {
-    position: relative;
-    display: block;
-    margin: 0 0 0.5em 0;
-    font-size: 32px;
-}
-
-header .links a:before,
-header .links button:before {
-    position: absolute;
-    padding: 5px 5px 5px 5px;
-    display: block;
-    content: attr(data-message);
-    top: 3px;
-    right: -1000px;
-    background-color: #ccc;
-    color: #000;
-    font-size: 16px;
-    line-height: 18px;
-    text-align: right;
-    white-space: nowrap;
-    z-index: 1;
-    width: auto;
-}
-
-header .links a:after,
-header .links button:after {
-    position: absolute;
-    top: 3px;
-    right: -1000px;
-    display: block;
-    width: 0px;
-    height: 0px;
-    content: '';
-    border-top: 14px solid transparent;
-    border-bottom: 14px solid transparent;
-    border-left: 14px solid #ccc;
-}
-
-header .links a:before,
-header .links button:before,
-header .links a:after,
-header .links button:after {
-    opacity: 0;
-    -webkit-transition: opacity .25s ease-in-out;
-    -moz-transition: opacity .25s ease-in-out;
-    -ms-transition: opacity .25s ease-in-out;
-    -o-transition: opacity .25s ease-in-out;
-    transition: opacity .25s ease-in-out;
-}
-
-header .links a:hover:before,
-header .links button:hover:before,
-header .links a:hover:after,
-header .links button:hover:after {
-    opacity: 1;
-}
-
-header .links a:hover:before,
-header .links button:hover:before {
-    right: 58px;
-}
-
-header .links a:hover:after,
-header .links button:hover:after {
-    right: 44px;
-}
-
-header .links .last {
-    margin: 0;
-}
-
-header .disabled {
-    color: #50719b;
-    cursor: default;
-}
-
-.start {
-    position: absolute;
-    top: 25px;
-    left: 25px;
-}
-
 html, body, form {
     height: 100%;
 }
 
-textarea {
+body {
+    margin: 0;
+    background-color: #404040;
+    color: #aaa;
+}
+
+a,
+button {
+    color: #aaa;
+    text-decoration: none;
+    border: none;
+    background-color: transparent;
+}
+
+button {
+    padding: 0;
+}
+
+header {
+    padding: 8px 15px 15px 15px;
     width: 100%;
-    height: 100%;
+    /*height: 59px;*/
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #333333;
+    font-size: 20px;
+    border-bottom: 1px solid #484848;
+}
+
+header h1 {
+    display: inline;
+    margin: 0;
+    font-size: 32px;
+    /*line-height: 55px;*/
+}
+
+header .title {
+    text-decoration: underline;
+    -webkit-text-decoration-color: #447fcf;
+    -moz-text-decoration-color: #447fcf;
+    text-decoration-color: #447fcf;
+    -webkit-text-decoration-thickness: 4px;
+    -moz-text-decoration-thickness: 4px;
+    text-decoration-thickness: 4px;
+    -webkit-text-decoration-width: 4px;
+    -moz-text-decoration-width: 4px;
+    text-decoration-width: 4px;
+}
+
+nav {
+    float: right;
+    margin-top: 8px;
+}
+
+nav a,
+nav button {
+    margin-left: 20px;
+}
+
+form {
+    display: flex;
+    flex-flow: column;
+}
+
+.start {
+    float: left;
+    padding: 10px 10px;
+    width: 30px;
+}
+
+textarea {
+    flex: 1 1 auto;
+    padding: 10px;
     font-family: 'Courier New', Courier, monospace;
     background-color: transparent;
     resize: none;
     font-size: 16px;
     border: none;
     color: #aaa;
-    overflow-y: scroll;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none;  /* IE 10+ */
-}
-
-textarea::-webkit-scrollbar {
-    width: 0;
-    height: 0;
 }
 
 textarea:focus {
     outline: none;
 }
 
-pre {
-    margin: 0;
-    padding: 0;
-    font-size: 16px;
-    font-family: monospace;
-    overflow-y: auto;
-}
-
 .lines {
-    padding: 25px 5px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 45px;
-    text-align: right;
+    padding: 7px;
+    float: left;
+    width: auto;
     font-family: monospace;
+    text-align: right;
     font-size: 16px;
-    background-color: #4b5162;
+    background-color: #404040;
     -webkit-user-select: none;    
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    border-right: 1px solid #484848;
 }
 
 .lines a {
     color: #999;
+    width: 100%;
 }
 
 .line {
@@ -209,87 +140,22 @@ pre {
     pointer-events: none;
 }
 
-.page {
-    padding-bottom: 20px;
-    width: 850px;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-.terminal-command {
-    display: inline-block;
-    padding: 10px;
-    background-color: #4b5162;
-    border-radius: 4px;
-}
-
-.terminal-command:before {
-    content: '$ ';
-}
-
-.notice {
-    display: inline-block;
-    padding: 5px;
-    margin-top: 20px;
-    background-color: #aaa;
-    color: #383c4a;
-    border-radius: 4px;
-    font-style: italic;
-}
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0,0,0,0);
-  border: 0;
+pre {
+    margin: 0;
+    padding: 7px 5px;
+    font-size: 16px;
+    font-family: monospace;
+    overflow-y: auto;
 }
 
 @media screen and (max-width: 768px) {
-    body {
-        padding-top: 40px;
-        padding-right: 10px;
+    nav {
+        float: none;
     }
 
-    header {
-        left: 0;
-        z-index: 1;
-        text-align: center;
-    }
-
-    .start {
-        top: 42px;
-    }
-
-    header .links a,
-    header .links button {
-        margin: 0;
-        font-size: 24px;
-    }
-
-    header .links a:before,
-    header .links button:before,
-    header .links a:after,
-    header .links button:after {
-        display: none;
-    }
-
-    header .links a,
-    header .links button {
-        display: inline;
-    }
-
-    .page {
-        width: 100%;
-    }
-
-    .about {
-        padding: 25px 10px;
-    }
-
-    .lines {
-        padding-top: 40px;
+    nav a,
+    nav button {
+        margin-left: 0;
+        margin-right: 20px;
     }
 }

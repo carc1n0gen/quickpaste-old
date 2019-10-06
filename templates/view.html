@@ -1,12 +1,12 @@
 {% extends 'layouts/layout.html' %}
 {% block content %}
 {% include 'partials/header.html' %}
-{{ text | safe }}
 <div class="lines">
     {% for line in range(1, lines + 1) %}
         <a href="#{{ line }}" id="{{ line }}" data-line="{{ line }}" class="line line-{{ line }} {{ 'highlighted' if highlighted and line|string in highlighted }}">{{ line }}</a><br>
     {% endfor %}
 </div>
+{{ text | safe }}
 {% endblock %}
 {% block bottom_scripts %}
 <script>
@@ -33,8 +33,15 @@
         const params = new URLSearchParams(document.location.search);
         let hash = window.location.hash;
 
-        if (e.shiftKey) {
-            if (hash !== '#' + line) {
+        if (e.metaKey || e.ctrlKey) {
+            if (hash === '#' + line) {
+                el.classList.remove('highlighted');
+                hash = '';
+                window.location.hash = hash;
+            } else if (el.classList.contains('highlighted')) {
+                el.classList.remove('highlighted');
+                removeLineFromParams(params, line);
+            } else if (hash !== '#' + line) {
                 el.classList.add('highlighted');
                 addLineToParams(params, line);
             }

@@ -1,11 +1,21 @@
 import traceback
+from pygments import highlight
 from flask import render_template, current_app, request
 from flask_mail import Message
 from app.create_app import mail
 from app.views import BaseView
 
+text = """
+# Uh Oh!
+
+**Shit really hit the fan.  Some sort of unknown error just happened.**"""
+
 
 class UnknownErrorView(BaseView):
+    def __init__(self):
+        super().__init__()
+        self.text = highlight(text, self.markdown_lexer, self.html_formatter)
+        self.count = text.count('\n') + 1
 
     def dispatch_request(self, error):
         tb = traceback.format_exc()
@@ -20,6 +30,8 @@ class UnknownErrorView(BaseView):
             current_app.logger.error(f'Failed to send error email {tb}')
 
         return render_template(
-            '5xx.html', title='Uh oh', message='Shit really hit the fan',
-            disabled=['clone', 'save'], body_class='about'
+            'view.html',
+            text=self.text,
+            lines=self.count,
+            disabled=['clone', 'save', 'raw', 'download']
         ), 500

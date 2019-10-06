@@ -23,8 +23,9 @@ override the language, just add or edit a file extension to the url.
 **Line highlighting**
 
 Click on a line number to highlight and target the line with the # part of the
-URL. Shift+Click a line to highlight it without targeting it (This can be done
-to as many lines as you like).  Click on a highlighted line to un-highlight it.
+URL. Control+Click (Command+Click on mac) a line to highlight it without
+targeting it (This can be done to as many lines as you like).  Click on a
+highlighted line to un-highlight it.
 
 **Does not totally break without JavaScript**
 

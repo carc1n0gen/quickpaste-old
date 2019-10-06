@@ -1,4 +1,4 @@
-
+import uuid
 from logging.handlers import RotatingFileHandler
 from flask import Flask
 from flask_htmlmin import HTMLMIN
@@ -16,6 +16,8 @@ from app.views import (
     UnknownErrorView,
 )
 from app.commands import cleanup
+
+cache_buster = uuid.uuid4()
 
 
 def create_app():
@@ -78,5 +80,9 @@ def create_app():
         )
 
     app.cli.add_command(cleanup, 'cleanup')
+
+    @app.context_processor
+    def inject_globals():
+        return dict(cache_buster=cache_buster)
 
     return app
