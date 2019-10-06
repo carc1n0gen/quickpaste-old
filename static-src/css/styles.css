@@ -109,6 +109,7 @@ select {
     content: '\025BE';
     top: 0;
     right: 10px;
+    pointer-events: none;
 }
 
 select::-ms-expand {
