@@ -2,12 +2,14 @@
     <a href="/about.md" class="title"><h1>quickpaste</h1></a>
     <nav>
         {% if languages %}
-        <select name="extension" id="extension" aria-label="Code Language">
-            <option value="" disabled selected>select langauge</option>
-            {% for langauge in languages %}
-            <option value="{{ langauge.extension }}">{{ langauge.name }}</option>
-            {% endfor %}
-        </select>
+        <div class="select-wrapper">
+            <select name="extension" id="extension" aria-label="Code Language">
+                <option value="" disabled selected>select langauge</option>
+                {% for langauge in languages %}
+                <option value="{{ langauge.extension }}">{{ langauge.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
         {% endif %}
         {% if disabled and 'new' not in disabled %}
         <a href="/" data-message="Start a new paste">

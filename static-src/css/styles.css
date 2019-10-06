@@ -86,6 +86,35 @@ textarea {
     color: #aaa;
 }
 
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding: 0 5px;
+    border: none;
+    background-color: transparent;
+    color: #aaa;
+    border-bottom: 2px solid #aaa;
+    border-radius: 0;
+}
+
+.select-wrapper {
+    display: inline;
+    position: relative;
+}
+
+.select-wrapper:after {
+    position: absolute;
+    display: block;
+    content: '\025BE';
+    top: 0;
+    right: 10px;
+}
+
+select::-ms-expand {
+    display: none;
+}
+
 textarea:focus {
     outline: none;
 }
