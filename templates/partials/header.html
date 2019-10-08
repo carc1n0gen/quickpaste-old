@@ -4,9 +4,9 @@
         {% if languages %}
         <div class="select-wrapper">
             <select name="extension" id="extension" aria-label="Code Language">
-                <option value="" disabled selected>select langauge</option>
-                {% for langauge in languages %}
-                <option value="{{ langauge.extension }}">{{ langauge.name }}</option>
+                <option value="" disabled selected>select language</option>
+                {% for language in languages %}
+                <option value="{{ language.extension }}">{{ language.name }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -44,8 +44,8 @@
         <a href="/about.md" data-message="Quickpaste help and info">
             help
         </a>
-        <!-- <a href="https://github.com/carc1n0gen/quickpaste" data-message="View the source code" class="last">
-            github
-        </a> -->
+        <a href="/login">
+            login
+        </a>
     </nav>
 </header>
