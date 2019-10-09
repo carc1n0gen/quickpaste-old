@@ -7,3 +7,4 @@ from .not_found_view import NotFoundView
 from .too_large_view import TooLargeView
 from .rate_limit_view import RateLimitView
 from .unknown_error_view import UnknownErrorView
+from .login_view import LoginView

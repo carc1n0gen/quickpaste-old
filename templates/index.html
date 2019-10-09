@@ -2,6 +2,19 @@
 {% block content %}
 <form method="POST" id="form">
     {% include 'partials/header.html' %}
+    <div class="controls">
+        {% if languages %}
+        <div class="select-wrapper">
+            <select name="extension" id="extension" aria-label="Code Language">
+                <option value="" disabled selected>select language</option>
+                {% for language in languages %}
+                <option value="{{ language.extension }}">{{ language.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        {% endif %}
+        <button class="btn btn-primary float-right">save</button>
+    </div>
     <textarea spellcheck="false" name="text" id="text" placeholder="type or paste some code" aria-label="Code box">{{ text if text }}</textarea>
 </form>
 {% endblock %}
@@ -10,7 +23,6 @@
 window.addEventListener('load', function () {
     var text = document.getElementById('text');
     var form = document.getElementById('form');
-
     form.addEventListener('submit', function savePaste(e) {
         e.preventDefault();
         if (text.value && text.value.trim()) {

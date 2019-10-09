@@ -17,16 +17,16 @@ def insert_paste(text):
 
 def get_paste(hexhash):
     if hexhash == 'about':
-        return about_text
+        return about_text, None
 
     try:
         binhash = bytes.fromhex(hexhash)
     except (ValueError, TypeError):
-        return None
+        return None, None
     result = db.engine.execute(
         'SELECT * FROM pastes WHERE hash=?', [binhash])
     item = result.first()
     if item is None:
-        return None
+        return None, None
     result.close()
-    return item[1]
+    return item[1], item[2]

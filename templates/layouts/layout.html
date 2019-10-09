@@ -16,5 +16,18 @@
     {% if config.GA_ENABLED %}
         {% include 'partials/analytics.html' %}
     {% endif %}
+    <script>
+        function stop(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'n' && (e.ctrlKey || e.metaKey)) {
+                stop(e);
+                window.location.pathname = '/';
+            }
+        });
+    </script>
 </body>
 </html>

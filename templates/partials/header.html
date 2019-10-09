@@ -1,49 +1,17 @@
 <header>
     <a href="/about.md" class="title"><h1>quickpaste</h1></a>
     <nav>
-        {% if languages %}
-        <div class="select-wrapper">
-            <select name="extension" id="extension" aria-label="Code Language">
-                <option value="" disabled selected>select language</option>
-                {% for language in languages %}
-                <option value="{{ language.extension }}">{{ language.name }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        {% endif %}
+        <a href="/about.md" data-message="Quickpaste help and info">
+            about
+        </a>
+        <a href="https://github.com/carc1n0gen/quickpaste">
+            github
+        </a>
         {% if disabled and 'new' not in disabled %}
-        <a href="/" data-message="Start a new paste">
+        <a class="btn btn-primary" href="/" data-message="Start a new paste">
             new paste
         </a>
         {% endif %}
-
-        {% if disabled and 'save' not in disabled %}
-        <button type="submit" data-message="Save this paste">
-            save
-        </button>
-        {% endif %}
-
-        {% if disabled and 'download' not in disabled %}
-        <a href="/download/{{ hexhash }}.{{ extension if extension else 'txt' }}" data-message="Download this paste">
-            download
-        </a>
-        {% endif %}
-        
-        {% if disabled and 'clone' not in disabled %}
-        <a href="/?clone={{ hexhash }}" data-message="Clone and edit this paste">
-            clone
-        </a>
-        {% endif %}
-        
-        {% if disabled and 'raw' not in disabled %}
-        <a href="/raw/{{ hexhash }}{{ '.' + extension if extension }}" data-message="View paste as raw text">
-            raw
-        </a>
-        {% endif %}
-        
-        <a href="/about.md" data-message="Quickpaste help and info">
-            help
-        </a>
         <!-- <a href="/login">
             login
         </a> -->

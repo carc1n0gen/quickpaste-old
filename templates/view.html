@@ -1,6 +1,22 @@
 {% extends 'layouts/layout.html' %}
 {% block content %}
 {% include 'partials/header.html' %}
+<div class="controls">
+    {% if days_left %}
+    <div class="delete-indicator">
+        {% if days_left > 1 %}
+            <span>will be deleted in {{ days_left }} days</span>
+        {% else %}
+            <span>will be deleted today</span>
+        {% endif %}
+        <span class="controls-divider"></span>
+    </div>
+    {% endif %}
+    <a href="/download/{{ hexhash }}{{ '.' + extension if extension }}">download</a>
+    <a href="/raw/{{ hexhash }}{{ '.' + extension if extension }}">view raw</a>
+    <!-- <a href="#">copy text</a> -->
+    <a href="/?clone={{ hexhash }}">clone &amp; edit</a>
+</div>
 <div class="lines">
     {% for line in range(1, lines + 1) %}
         <a href="#{{ line }}" id="{{ line }}" data-line="{{ line }}" class="line line-{{ line }} {{ 'highlighted' if highlighted and line|string in highlighted }}">{{ line }}</a><br>

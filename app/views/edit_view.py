@@ -380,7 +380,7 @@ class EditView(BaseView):
                 200
             )
 
-        text = paste.get_paste(request.args.get('clone'))
+        text, _ = paste.get_paste(request.args.get('clone'))
         return render_template(
             'index.html',
             text=text,

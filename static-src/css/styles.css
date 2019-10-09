@@ -14,7 +14,7 @@ body {
 
 a,
 button {
-    color: #aaa;
+    color: #cdcdcd;
     text-decoration: none;
     border: none;
     background-color: transparent;
@@ -31,7 +31,7 @@ header {
     font-family: Arial, Helvetica, sans-serif;
     background-color: #333333;
     font-size: 20px;
-    border-bottom: 1px solid #484848;
+    border-bottom: 1px solid #545353;
 }
 
 header h1 {
@@ -56,7 +56,7 @@ header .title {
 
 nav {
     float: right;
-    margin-top: 8px;
+    margin-top: 10px;
 }
 
 nav a,
@@ -91,25 +91,30 @@ select {
     -moz-appearance: none;
     appearance: none;
     padding: 0 5px;
+    margin-top: 6px;
     border: none;
     background-color: transparent;
     color: #aaa;
-    border-bottom: 2px solid #aaa;
-    border-radius: 0;
+    border-radius: 6px;
 }
 
 .select-wrapper {
+    padding: 5px;
     display: inline;
     position: relative;
+    background-color: #212121;
+    border: 1px solid #545353;
+    border-radius: 6px;
 }
 
 .select-wrapper:after {
     position: absolute;
     display: block;
     content: '\025BE';
-    top: 0;
+    top: 4px;
     right: 10px;
     pointer-events: none;
+    color: #aaa;
 }
 
 select::-ms-expand {
@@ -118,6 +123,34 @@ select::-ms-expand {
 
 textarea:focus {
     outline: none;
+}
+
+.controls {
+    color: #cdcdcd;
+    padding: 7px;
+    border-bottom: 1px solid #545353;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.controls:after {
+    display: table;
+    content: '';
+    clear: both;
+}
+
+.controls a {
+    margin: 0 5px;
+    text-decoration: underline;
+}
+
+.controls-divider {
+    border-right: 4px dotted #545353;
+    margin-right: 10px;
+    padding-left: 10px;
+}
+
+.delete-indicator {
+    display: inline;
 }
 
 .lines {
@@ -132,11 +165,11 @@ textarea:focus {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    border-right: 1px solid #484848;
+    border-right: 1px solid #545353;
 }
 
 .lines a {
-    color: #999;
+    color: #6f6f6f;
     width: 100%;
 }
 
@@ -178,8 +211,32 @@ pre {
     overflow-y: auto;
 }
 
-@media screen and (max-width: 768px) {
+.btn {
+    position: relative;
+    border-radius: 6px;
+    padding: 5px 15px;
+    border: 1px solid transparent;
+}
+
+.btn-primary {
+    background-color: #447fcf;
+    color: #fff;
+    border: 1px solid #67a8ff;
+}
+
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary:focus {
+    background-color: #27518b;
+}
+
+.float-right {
+    float: right;
+}
+
+@media screen and (max-width: 576px) {
     nav {
+        margin-top: 20px;
         float: none;
     }
 
@@ -187,5 +244,9 @@ pre {
     nav button {
         margin-left: 0;
         margin-right: 20px;
+    }
+
+    .delete-indicator {
+        display: none;
     }
 }

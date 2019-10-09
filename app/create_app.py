@@ -14,6 +14,7 @@ from app.views import (
     TooLargeView,
     RateLimitView,
     UnknownErrorView,
+    LoginView
 )
 from app.commands import cleanup
 
@@ -23,6 +24,9 @@ cache_buster = uuid.uuid4()
 def create_app():
     app = Flask('quickpaste')
     app.config.from_json('config.json')
+
+    if app.debug:
+        app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
     if app.config.get('BEHIND_PROXY'):
         # DO NOT DO THIS IN PROD UNLESS YOU SERVE THE APP BEHIND A
@@ -64,6 +68,11 @@ def create_app():
         '/download/<string:hexhash>.<string:extension>',
         view_func=DownloadView.as_view('paste.download.extension')
     )
+
+    # app.add_url_rule(
+    #     '/login',
+    #     view_func=LoginView.as_view('login')
+    # )
 
     app.register_error_handler(400, BadRequestView.as_view('bad_request'))
     app.register_error_handler(404, NotFoundView.as_view('not_found'))
