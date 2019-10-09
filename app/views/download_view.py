@@ -7,7 +7,7 @@ class DownloadView(BaseView):
     methods = ['GET']
 
     def dispatch_request(self, hexhash, extension='txt'):
-        text = paste.get_paste(hexhash)
+        text, _ = paste.get_paste(hexhash)
         if text is None:
             abort(404)
 
