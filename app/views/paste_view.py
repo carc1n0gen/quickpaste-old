@@ -30,9 +30,10 @@ class PasteView(BaseView):
 
         days_left = None
         if timestamp:
+            now = datetime.datetime.now()
             created = datetime.datetime.fromtimestamp(timestamp)
             will_delete_at = created + datetime.timedelta(weeks=1)
-            days_left = (will_delete_at - created).days
+            days_left = (will_delete_at - now).days
         return render_template(
             'view.html',
             hexhash=hexhash,

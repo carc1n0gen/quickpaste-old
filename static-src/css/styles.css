@@ -90,7 +90,7 @@ select {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    padding: 0 5px;
+    padding: 0 20px 0 5px;
     margin-top: 6px;
     border: none;
     background-color: transparent;
