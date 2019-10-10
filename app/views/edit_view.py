@@ -1,5 +1,5 @@
 from flask import request, current_app, url_for, render_template, abort
-from pygments.lexers import get_all_lexers
+from pygments.lexers import get_all_lexers, get_lexer_by_name
 from app.views import BaseView
 import app.repositories.paste as paste
 
@@ -349,7 +349,7 @@ class EditView(BaseView):
         self.languages = sorted(
             [{
                 'name': lexer[0],
-                'extension': lexer[1][0]
+                'alias': lexer[1][0]
             } for lexer in get_all_lexers() if lexer[0] not in blacklist],
             key=lambda i: i['name'].upper()
         )
@@ -358,7 +358,7 @@ class EditView(BaseView):
         if request.method == 'POST':
             maxlength = current_app.config.get('MAX_PASTE_LENGTH')
             text = request.form.get('text')
-            extension = request.form.get('extension')
+            alias = request.form.get('alias')
 
             if text is None or text.strip() == '':
                 abort(400)
@@ -366,7 +366,9 @@ class EditView(BaseView):
                 abort(413)
 
             hexhash = paste.insert_paste(text)
-            if extension:
+            if alias:
+                lexer = get_lexer_by_name(alias)
+                extension = lexer.filenames[0][2:]
                 url = url_for(
                     'paste.view.extension',
                     hexhash=hexhash,
@@ -375,10 +377,7 @@ class EditView(BaseView):
                 )
             else:
                 url = url_for('paste.view', hexhash=hexhash, _external=True)
-            return self.redirect_or_text(
-                url,
-                200
-            )
+            return self.redirect_or_text(url, 200)
 
         text, _ = paste.get_paste(request.args.get('clone'))
         return render_template(
