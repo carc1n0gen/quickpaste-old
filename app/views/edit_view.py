@@ -191,6 +191,7 @@ blacklist = [
     'Literate Haskell',
     'Literate Idris',
     'LiveScript',
+    'Lighttpd configuration file',
     'Logos',
     'Logtalk',
     'MOOCode',
