@@ -47,15 +47,10 @@ NO! They are deleted after one week(ish).
 
 **Can I use quickpaste from my terminal?**
 
-`cat file-name | curl -H "X-Respondwith: link" -X POST -d "text=$(</dev/stdin)" https://quickpaste.net/`
-
-*Notice: The "X-Respondwith: link" is important. Otherwise you will get a
-redirect response.*
-
-You could even alias the curl part of that command:
+Yup:
 
 `alias quickpaste="curl -H \"X-Respondwith: link\" -X POST -d \"text=\$(</dev/stdin)\" https://quickpaste.net/"`
 
-To make it as simple as:
+And then you can simply pipe a file in to the quickpaste alias:
 
 `cat file-name | quickpaste`"""
