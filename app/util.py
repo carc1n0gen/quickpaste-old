@@ -47,7 +47,7 @@ NO! They are deleted after one week(ish).
 
 **Can I use quickpaste from my terminal?**
 
-Yup:
+Yup, with curl.  Here's an example bash alias:
 
 `alias quickpaste="curl -H \"X-Respondwith: link\" -X POST -d \"text=\$(</dev/stdin)\" https://quickpaste.net/"`
 
