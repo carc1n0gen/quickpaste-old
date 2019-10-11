@@ -19,7 +19,7 @@
 </div>
 <div class="lines">
     {% for line in range(1, lines + 1) %}
-        <a href="#{{ line }}" id="{{ line }}" data-line="{{ line }}" class="line line-{{ line }} {{ 'highlighted' if highlighted and line|string in highlighted }}">{{ line }}</a><br>
+        <a title="link to line {{ line }}" href="#{{ line }}" id="{{ line }}" data-line="{{ line }}" class="line line-{{ line }} {{ 'highlighted' if highlighted and line|string in highlighted }}">{{ line }}</a><br>
     {% endfor %}
 </div>
 {{ text | safe }}
