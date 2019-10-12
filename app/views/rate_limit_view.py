@@ -13,6 +13,5 @@ class RateLimitView(BaseView):
         return render_template(
             'view.html',
             text=highlight(text, self.markdown_lexer, self.html_formatter),
-            lines=text.count('\n') + 1,
-            disabled=['clone', 'save', 'raw', 'download']
-        ), 404
+            lines=text.count('\n') + 1
+        ), 429

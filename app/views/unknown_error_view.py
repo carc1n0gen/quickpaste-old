@@ -32,6 +32,5 @@ class UnknownErrorView(BaseView):
         return render_template(
             'view.html',
             text=self.text,
-            lines=self.count,
-            disabled=['clone', 'save', 'raw', 'download']
+            lines=self.count
         ), 500

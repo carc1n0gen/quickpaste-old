@@ -404,6 +404,5 @@ class EditView(BaseView):
         return render_template(
             'index.html',
             text=text,
-            languages=self.languages,
-            disabled=['clone', 'new', 'raw', 'download']
+            languages=self.languages
         )

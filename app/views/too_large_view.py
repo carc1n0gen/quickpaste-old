@@ -14,5 +14,4 @@ Limit: {current_app.config['MAX_PASTE_LENGTH']}"""
             'view.html',
             text=highlight(text, self.markdown_lexer, self.html_formatter),
             lines=text.count('\n') + 1,
-            disabled=['clone', 'save', 'raw', 'download'],
         ), 413

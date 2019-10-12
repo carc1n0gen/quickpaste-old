@@ -11,6 +11,23 @@
     <link rel="stylesheet" href="/static/bundle.css?{{ cache_buster }}">
 </head>
 <body>
+    <header>
+        <a href="/about.md" class="title"><h1>quickpaste</h1></a>
+        <nav>
+            <a href="/about.md" data-message="Quickpaste help and info">
+                about
+            </a>
+            <a href="https://github.com/carc1n0gen/quickpaste">
+                github
+            </a>
+            <a role="button" class="btn btn-primary" href="/" data-message="Start a new paste">
+                new paste
+            </a>
+            <!-- <a href="/login">
+                login
+            </a> -->
+        </nav>
+    </header>
     {% block content %}{% endblock %}
     {% block bottom_scripts %}{% endblock %}
     {% if config.GA_ENABLED %}

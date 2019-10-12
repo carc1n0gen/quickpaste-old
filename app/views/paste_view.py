@@ -40,6 +40,5 @@ class PasteView(BaseView):
             extension=extension,
             text=highlight(text, lexer, self.html_formatter),
             lines=lines,
-            disabled=['save'], highlighted=highlighted,
             days_left=days_left,
         )
