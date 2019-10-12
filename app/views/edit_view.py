@@ -404,5 +404,6 @@ class EditView(BaseView):
         return render_template(
             'index.html',
             text=text,
+            hide_new=True,
             languages=self.languages
         )
