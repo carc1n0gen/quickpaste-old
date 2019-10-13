@@ -246,6 +246,12 @@ pre {
         margin-right: 20px;
     }
 
+    .btn-new {
+        float: right;
+        margin-top: -5px;
+        margin-right: 0;
+    }
+
     .delete-indicator {
         display: none;
     }
