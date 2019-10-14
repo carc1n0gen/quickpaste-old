@@ -153,6 +153,31 @@ textarea:focus {
     display: inline;
 }
 
+.copy-button {
+    position: relative;
+}
+
+.copy-button:after {
+    position: absolute;
+    top: -2px;
+    right: -54px;
+    display: block;
+    content: 'copied!';
+    padding: 3px;
+    font-size: 12px;
+    background-color: transparent;
+    color: transparent;
+    border-radius: 4px;
+    transition: background-color 250ms linear;
+    transition: color 250ms linear;
+    pointer-events: none;
+}
+
+.copy-success:after {
+    background-color: #3b9d33;
+    color: #fff;
+}
+
 .lines {
     padding: 7px;
     float: left;

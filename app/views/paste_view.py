@@ -39,6 +39,7 @@ class PasteView(BaseView):
             hexhash=hexhash,
             extension=extension,
             text=highlight(text, lexer, self.html_formatter),
+            text_raw=text,
             lines=lines,
             days_left=days_left,
         )
