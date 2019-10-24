@@ -4,10 +4,10 @@
     <div class="controls">
         {% if languages %}
         <div class="select-wrapper">
-            <select name="alias" id="alias" aria-label="Code Language">
+            <select name="extension" id="extension" aria-label="Code Language">
                 <option value="" disabled selected>select language</option>
                 {% for language in languages %}
-                <option value="{{ language.alias }}">{{ language.name }}</option>
+                <option value="{{ language.ext }}">{{ language.name }}</option>
                 {% endfor %}
             </select>
         </div>
