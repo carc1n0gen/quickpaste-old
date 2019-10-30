@@ -14,14 +14,13 @@ from app.views import (
     TooLargeView,
     RateLimitView,
     UnknownErrorView,
-    LoginView
+    # LoginView
 )
 from app.commands import cleanup
 
-cache_buster = uuid.uuid4()
-
 
 def create_app():
+    cache_buster = uuid.uuid4()
     app = Flask('quickpaste')
     app.config.from_json('config.json')
 
