@@ -1,5 +1,6 @@
 from flask import request, current_app, url_for, render_template, abort
 from app.views import BaseView
+from app.shortlink import shortlink
 import app.repositories.paste as paste
 
 LANGUAGES = [
@@ -75,16 +76,17 @@ class EditView(BaseView):
             elif maxlength is not None and len(text) > maxlength:
                 abort(413)
 
-            hexhash = paste.insert_paste(text)
+            id = paste.insert_paste(text)
+            sh = shortlink.encode(id)
             if extension:
                 url = url_for(
                     'paste.view.extension',
-                    hexhash=hexhash,
+                    id=sh,
                     extension=extension,
                     _external=True
                 )
             else:
-                url = url_for('paste.view', hexhash=hexhash, _external=True)
+                url = url_for('paste.view', id=sh, _external=True)
             return self.redirect_or_text(url, 200)
 
         text, _ = paste.get_paste(request.args.get('clone'))

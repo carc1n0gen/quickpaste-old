@@ -17,6 +17,7 @@ from app.views import (
     # LoginView
 )
 from app.commands import cleanup
+from app.shortlink import shortlink
 
 
 def create_app():
@@ -41,30 +42,31 @@ def create_app():
     alembic.init_app(app)
     mail.init_app(app)
     limiter.init_app(app)
+    shortlink.init_app(app)
 
     app.add_url_rule('/', view_func=EditView.as_view('paste.edit'))
     app.add_url_rule(
-        '/<string:hexhash>',
+        '/<string:id>',
         view_func=PasteView.as_view('paste.view')
     )
     app.add_url_rule(
-        '/<string:hexhash>.<string:extension>',
+        '/<string:id>.<string:extension>',
         view_func=PasteView.as_view('paste.view.extension')
     )
     app.add_url_rule(
-        '/raw/<string:hexhash>',
+        '/raw/<string:id>',
         view_func=PasteView.as_view('paste.view.raw')
     )
     app.add_url_rule(
-        '/raw/<string:hexhash>.<string:extension>',
+        '/raw/<string:id>.<string:extension>',
         view_func=PasteView.as_view('paste.view.raw.extension')
     )
     app.add_url_rule(
-        '/download/<string:hexhash>',
+        '/download/<string:id>',
         view_func=DownloadView.as_view('paste.download')
     )
     app.add_url_rule(
-        '/download/<string:hexhash>.<string:extension>',
+        '/download/<string:id>.<string:extension>',
         view_func=DownloadView.as_view('paste.download.extension')
     )
 

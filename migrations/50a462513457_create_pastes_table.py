@@ -1,7 +1,6 @@
 """create pastes table
 
 Revision ID: 50a462513457
-Revises: 
 Create Date: 2019-01-17 12:10:06.961637
 
 """
@@ -17,7 +16,8 @@ depends_on = None
 
 
 def upgrade():
-    op.create_table('pastes',
+    op.create_table(
+        'pastes',
         sa.Column('hash', sa.LargeBinary(16)),
         sa.Column('text', sa.Text()),
         sa.Column('timestamp', sa.TIMESTAMP()),

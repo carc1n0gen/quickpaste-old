@@ -12,9 +12,9 @@
         <span class="controls-divider"></span>
     </div>
     {% endif %}
-    <a href="/download/{{ hexhash }}{{ '.' + extension if extension }}">download</a>
-    <a href="/raw/{{ hexhash }}{{ '.' + extension if extension }}">view raw</a>
-    <a href="/?clone={{ hexhash }}">clone &amp; edit</a>
+    <a href="/download/{{ id }}{{ '.' + extension if extension }}">download</a>
+    <a href="/raw/{{ id }}{{ '.' + extension if extension }}">view raw</a>
+    <a href="/?clone={{ id }}">clone &amp; edit</a>
     <a role="button" href="#" id="copy" class="copy-button">copy text</a>
 </div>
 <div class="lines">

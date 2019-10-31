@@ -1,4 +1,5 @@
 import datetime
+from urllib.parse import urlencode
 from flask import request, abort, render_template
 from pygments import highlight
 from pygments.lexers import guess_lexer, get_lexer_for_filename
@@ -10,8 +11,8 @@ from app.repositories import paste
 class PasteView(BaseView):
     methods = ['GET']
 
-    def dispatch_request(self, hexhash, extension=None):
-        text, timestamp = paste.get_paste(hexhash)
+    def dispatch_request(self, id, extension=None):
+        text, timestamp = paste.get_paste(id)
         if text is None:
             abort(404)
 
@@ -34,13 +35,23 @@ class PasteView(BaseView):
             created = datetime.datetime.fromtimestamp(timestamp)
             will_delete_at = created + datetime.timedelta(weeks=1)
             days_left = (will_delete_at - now).days
+
+        if id == 'about':
+            title = 'quickpaste'
+            title_link = '/about.md'
+        else:
+            title = request.host + request.path + urlencode(request.args)
+            title_link = request.url
+
         return render_template(
             'view.html',
-            hexhash=hexhash,
+            id=id,
             extension=extension,
             text=highlight(text, lexer, self.html_formatter),
             text_raw=text,
             lines=lines,
             highlighted=highlighted,
             days_left=days_left,
+            title=title,
+            title_link=title_link
         )

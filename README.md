@@ -62,6 +62,8 @@ edit as needed.  Below is a copy of the latest example config.
     "GA_ENABLED": false,
     "GA_ID": "ENTER YOUR GOOGLE ANALYTICS ID",
 
+    "SHORTLINK_ALPHABET": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+
     "SQLALCHEMY_DATABASE_URI": "sqlite:///data/database.db",
     "SQLALCHEMY_TRACK_MODIFICATIONS": false,
 
