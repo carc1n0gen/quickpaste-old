@@ -27,6 +27,11 @@
 {% block bottom_scripts %}
 <script>
 (() => {
+    // Here lies the hackiest JavaScript I have ever written.  But it works!
+
+    const titleLink = document.getElementById('title-link');
+    const titleLinkSelect = document.getElementById('title-link-select');
+
     function addLineToParams(params, line) {
         if (!params.has('h')) {
             params.set('h', line);
@@ -84,8 +89,16 @@
             window.location.host +
             window.location.pathname +
             (paramsString === '' ? '' : '?' + paramsString) +
-            hash;
+              hash;
 
+        const newTitleText =
+              window.location.host +
+              window.location.pathname +
+              (paramsString === '' ? '' : '?' + paramsString) +
+              hash;
+
+        titleLink.innerHTML = '<h1>' + newTitleText + '</h1>';
+        titleLink.setAttribute('href', newUrl);
         history.replaceState({ path: newUrl }, '', newUrl);
     }
 
@@ -107,6 +120,30 @@
             }, 600);
         }
     });
+
+    titleLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        titleLinkSelect.value = titleLink.getAttribute('href');
+        titleLinkSelect.select();
+        const result = document.execCommand('copy');
+        if (result) {
+            titleLink.classList.add('copy-success');
+            setTimeout(() => {
+                titleLink.classList.remove('copy-success');
+            }, 600);
+        }
+    });
+
+    if (document.location.hash) {
+        titleLink.setAttribute('href', titleLink.getAttribute('href') + document.location.hash);
+        titleLink.innerHTML =
+            '<h1>' +
+            document.location.host +
+            document.location.pathname +
+            document.location.search +
+            document.location.hash +
+            '</h1>';
+    }
 })();
 </script>
 {% endblock %}

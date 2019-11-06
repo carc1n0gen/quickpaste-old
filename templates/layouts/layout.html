@@ -13,7 +13,15 @@
 <body>
     <header>
         {% if title and title_link %}
-            <a href="{{ title_link }}" class="title"><h1>{{ title }}</h1></a>
+            <textarea id="title-link-select" aria-hidden="true" tabindex="-1" style="position:absolute;left:-10000px;">{{ title_link }}</textarea>
+            <a href="{{ title_link }}" class="title" id="title-link">
+                <h1>{{ title }}</h1>
+                {#% if title != 'quickpaste' %}
+                <span class="copy-url">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M7.03 2.6a3 3 0 0 1 5.94 0L15 3v1h1a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6c0-1.1.9-2 2-2h1V3l2.03-.4zM5 6H4v12h12V6h-1v1H5V6zm5-2a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/></svg>
+                </span>
+                {% endif %#}
+            </a>
         {% else %}
             <a href="/about.md" class="title"><h1>quickpaste</h1></a>
         {% endif %}
