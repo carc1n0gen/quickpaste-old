@@ -92,7 +92,7 @@ Running In Production
 
 Use a proper wsgi container.  I like to use waitress with nginx reverse proxy
 in front of it, but that's totally personal preference.  More info at the
-official [flask deployment page](http://flask.pocoo.org/docs/1.0/deploying/).
+official [flask deployment page](https://flask.palletsprojects.com/en/1.1.x/deploying/).
 
 **Example running with waitress-serve**:
 

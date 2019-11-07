@@ -7,7 +7,9 @@
             <select name="extension" id="extension" aria-label="Code Language">
                 <option value="" disabled selected>select language</option>
                 {% for language in languages %}
-                <option value="{{ language.ext }}">{{ language.name }}</option>
+                <option value="{{ language.ext }}" {% if lang and lang == language.ext %}selected{% endif %}>
+                    {{ language.name }}
+                </option>
                 {% endfor %}
             </select>
         </div>

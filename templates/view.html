@@ -14,7 +14,7 @@
     {% endif %}
     <a href="/download/{{ id }}{{ '.' + extension if extension }}">download</a>
     <a href="/raw/{{ id }}{{ '.' + extension if extension }}">view raw</a>
-    <a href="/?clone={{ id }}">clone &amp; edit</a>
+    <a href="/?clone={{ id }}{{ '&lang=' + extension if extension }}">clone &amp; edit</a>
     <a role="button" href="#" id="copy" class="copy-button">copy text</a>
 </div>
 <div class="lines">

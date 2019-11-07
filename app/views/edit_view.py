@@ -90,9 +90,11 @@ class EditView(BaseView):
             return self.redirect_or_text(url, 200)
 
         text, _ = paste.get_paste(request.args.get('clone'))
+        lang = request.args.get('lang')
         return render_template(
             'index.html',
             text=text,
             hide_new=True,
             languages=LANGUAGES,
+            lang=lang,
         )
