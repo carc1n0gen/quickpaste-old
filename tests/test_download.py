@@ -1,4 +1,5 @@
 import hashlib
+from app.create_app import shortlink
 
 
 def test_should_return_404_html(client):
@@ -21,3 +22,12 @@ def test_should_return_200_with_attachment(client):
     assert rv.headers.get('Content-Disposition') == \
         f'attachment; filename={hash.hexdigest()}.txt'
     assert rv.data == text
+
+
+def test_should_return_200_with_attachment_shorter(client):
+    text = 'wow there bud'
+    id = shortlink.encode(1)
+    client.post('/', data={'text': text})
+    rv = client.get(f'http://localhost/download/{id}')
+    assert rv.headers.get('Content-Disposition') == \
+        f'attachment; filename={id}.txt'

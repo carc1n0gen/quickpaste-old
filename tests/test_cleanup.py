@@ -10,7 +10,7 @@ def test_should_cleanup_old_pastes(app, client):
         hash = hashlib.md5(text.encode('utf-8'))
         week_ago_and_one_day = datetime.now() - timedelta(weeks=1, days=1)
         db.engine.execute(
-            "INSERT INTO pastes VALUES (?, ?, ?)",
+            "INSERT INTO pastes (hash, text, timestamp) VALUES (?, ?, ?)",
             [hash.digest(), text, week_ago_and_one_day.timestamp()]
         )
 

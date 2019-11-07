@@ -42,3 +42,5 @@ def test_raw_should_return_200(client):
     assert rv.status_code == 200
     assert rv.headers['Content-type'] == 'text/plain; charset=utf-8'
     assert rv.data == text.encode('utf-8')
+
+# TODO: add a test for the new shorter links

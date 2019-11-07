@@ -56,7 +56,7 @@ edit as needed.  Below is a copy of the latest example config.
     "LOG_LEVEL": "INFO",
 
     "MAX_PASTE_LENGTH": 10240,
-    "MINIFY_PAGE": true,
+    "MINIFY_HTML": true,
     "RATELIMIT_DEFAULT": "2 per second",
 
     "GA_ENABLED": false,
