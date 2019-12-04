@@ -1,1 +1,1 @@
-from .cleanup import cleanup
+from .cleanup import cleanup_factory

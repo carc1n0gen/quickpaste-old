@@ -16,7 +16,7 @@ from app.views import (
     UnknownErrorView,
     # LoginView
 )
-from app.commands import cleanup
+from app.commands import cleanup_factory
 from app.shortlink import shortlink
 
 
@@ -89,7 +89,7 @@ def create_app():
             UnknownErrorView.as_view('unknown_error_catchall')
         )
 
-    app.cli.add_command(cleanup, 'cleanup')
+    app.cli.add_command(cleanup_factory(app), 'cleanup')
 
     @app.context_processor
     def inject_globals():
