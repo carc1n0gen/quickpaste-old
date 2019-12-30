@@ -27,8 +27,9 @@ class UnknownErrorView(BaseView):
                 html=render_template('email/error.html.jinja', tb=tb)
             ))
         except Exception:
-            current_app.logger.error(f'Failed to send error email {tb}')
+            pass  # Ignore, we're going to log it anyway
 
+        current_app.logger.error(f'Unknown error: {tb}')
         return render_template(
             'view.html',
             text=self.text,

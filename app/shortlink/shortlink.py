@@ -6,7 +6,7 @@ DEFAULT_ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWX
 class ShortLink:
     def __init__(self, alphabet=DEFAULT_ALPHABET):
         if len(alphabet) < 2:
-            raise ValueError('aphabet must contain at least two characters.')
+            raise ValueError('alphabet must contain at least two characters.')
         self.alphabet = alphabet
         self.base = len(alphabet)
 
