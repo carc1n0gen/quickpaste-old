@@ -29,7 +29,10 @@ class UnknownErrorView(BaseView):
         except Exception:
             pass  # Ignore, we're going to log it anyway
 
-        current_app.logger.error(f'Unknown error: {tb}')
+        current_app.logger.error(
+            f'Unknown error at endpoint: {request.full_path}'
+        )
+        current_app.logger.error(f'Traceback: {tb}')
         return render_template(
             'view.html',
             text=self.text,
