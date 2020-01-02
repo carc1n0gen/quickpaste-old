@@ -1,4 +1,3 @@
-from flask import _request_ctx_stack
 from datetime import datetime, timedelta
 import click
 from app.repositories import db

@@ -1,7 +1,7 @@
 import hashlib
 from datetime import datetime, timedelta
 from app.repositories import db
-from app.commands import cleanup
+from app.commands import cleanup_factory
 
 
 def test_should_cleanup_old_pastes(app, client):
@@ -15,7 +15,8 @@ def test_should_cleanup_old_pastes(app, client):
         )
 
         runner = app.test_cli_runner()
-        runner.invoke(cleanup)
+        command = cleanup_factory(app)
+        runner.invoke(command)
 
         result = db.engine.execute('SELECT count(timestamp) FROM pastes')
         assert result.scalar() == 0

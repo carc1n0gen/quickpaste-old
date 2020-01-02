@@ -2,7 +2,6 @@ import time
 import hashlib
 from app.util import about_text
 from app.repositories import db
-from app.shortlink import shortlink
 
 
 def insert_paste(text):
@@ -27,33 +26,20 @@ def insert_paste(text):
 
 
 def get_paste(id):
-    if id == 'about':
-        return about_text, None
-    int_id = None
-
     try:
-        binhash = bytes.fromhex(id)
-    except (ValueError, TypeError):
-        try:
-            # TODO: Once I no longer need to support hexhash lookups, move this
-            # decode outside the repository.
-            int_id = shortlink.decode(id)
-        except (ValueError, TypeError):
-            return None, None
+        if id == 'about':
+            return about_text, None
 
-    if int_id:
         result = db.engine.execute(
             'SELECT text, timestamp FROM pastes WHERE id=?',
-            [int_id]
-        )
-    else:
-        result = db.engine.execute(
-            'SELECT text, timestamp FROM pastes WHERE hash=?',
-            [binhash]
+            [id]
         )
 
-    item = result.first()
-    result.close()
-    if item is None:
+        item = result.first()
+        result.close()
+        if item is None:
+            return None, None
+        return item[0], item[1]
+
+    except (ValueError, TypeError, OverflowError):
         return None, None
-    return item[0], item[1]

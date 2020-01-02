@@ -6,13 +6,20 @@ from pygments.lexers import guess_lexer, get_lexer_for_filename
 from pygments.util import ClassNotFound
 from app.views import BaseView
 from app.repositories import paste
+from app.shortlink import shortlink
 
 
 class PasteView(BaseView):
     methods = ['GET']
 
     def dispatch_request(self, id, extension=None):
-        text, timestamp = paste.get_paste(id)
+        if id == 'about':
+            # TODO: Refactor, this is weird and feels wrong,
+            int_id = id
+        else:
+            int_id = shortlink.decode(id)
+
+        text, timestamp = paste.get_paste(int_id)
         if text is None:
             abort(404)
 

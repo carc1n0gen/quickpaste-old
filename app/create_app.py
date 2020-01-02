@@ -89,6 +89,7 @@ def create_app():
             UnknownErrorView.as_view('unknown_error_catchall')
         )
 
+    # Custom cli commands
     app.cli.add_command(cleanup_factory(app), 'cleanup')
 
     @app.context_processor

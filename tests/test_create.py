@@ -1,4 +1,3 @@
-import hashlib
 from app.create_app import limiter, shortlink
 from app.repositories import db
 
@@ -46,7 +45,6 @@ def test_should_return_500(app, client):
 
 
 def test_should_return_redirect_to_paste(client):
-    hash = hashlib.md5(b'hello_world')
     rv = client.post('/', data={'text': 'hello_world'})
     assert rv.status_code == 302
     assert rv.headers['Location'] == 'http://localhost/{}'.format(

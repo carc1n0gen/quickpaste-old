@@ -1,13 +1,15 @@
 from flask import make_response, abort
 from app.views import BaseView
 from app.repositories import paste
+from app.shortlink import shortlink
 
 
 class DownloadView(BaseView):
     methods = ['GET']
 
     def dispatch_request(self, id, extension='txt'):
-        text, _ = paste.get_paste(id)
+        int_id = shortlink.decode(id)
+        text, _ = paste.get_paste(int_id)
         if text is None:
             abort(404)
 
