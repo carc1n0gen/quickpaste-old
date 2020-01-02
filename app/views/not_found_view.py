@@ -1,5 +1,5 @@
 from pygments import highlight
-from flask import render_template
+from flask import render_template, current_app
 from app.views import BaseView
 
 text = """
@@ -15,6 +15,7 @@ class NotFoundView(BaseView):
         self.count = text.count('\n') + 1
 
     def dispatch_request(self, error):
+        current_app.logger.info('Not found for some reason.')
         return render_template(
             'view.html',
             text=self.text,

@@ -1,12 +1,13 @@
 import datetime
 from urllib.parse import urlencode
-from flask import request, abort, render_template
+from flask import request, abort, render_template, current_app
 from pygments import highlight
 from pygments.lexers import guess_lexer, get_lexer_for_filename
 from pygments.util import ClassNotFound
 from app.views import BaseView
 from app.repositories import paste
 from app.shortlink import shortlink
+from app.util import about_text
 
 
 class PasteView(BaseView):
@@ -14,12 +15,16 @@ class PasteView(BaseView):
 
     def dispatch_request(self, id, extension=None):
         if id == 'about':
-            # TODO: Refactor, this is weird and feels wrong,
-            int_id = id
+            text = about_text
+            timestamp = None
         else:
-            int_id = shortlink.decode(id)
+            try:
+                int_id = shortlink.decode(id)
+            except ValueError:
+                current_app.logger.info('Invalid shortlink found.')
+                abort(404)
+            text, timestamp = paste.get_paste(int_id)
 
-        text, timestamp = paste.get_paste(int_id)
         if text is None:
             abort(404)
 

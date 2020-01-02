@@ -1,6 +1,5 @@
 import time
 import hashlib
-from app.util import about_text
 from app.repositories import db
 
 
@@ -27,9 +26,6 @@ def insert_paste(text):
 
 def get_paste(id):
     try:
-        if id == 'about':
-            return about_text, None
-
         result = db.engine.execute(
             'SELECT text, timestamp FROM pastes WHERE id=?',
             [id]
@@ -41,5 +37,5 @@ def get_paste(id):
             return None, None
         return item[0], item[1]
 
-    except (ValueError, TypeError, OverflowError):
+    except (OverflowError):
         return None, None
