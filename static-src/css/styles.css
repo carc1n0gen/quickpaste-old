@@ -285,6 +285,10 @@ pre {
 }
 
 @media screen and (max-width: 576px) {
+    header {
+        text-align: center;
+    }
+
     nav {
         margin-top: 20px;
         float: none;
@@ -294,6 +298,10 @@ pre {
     nav button {
         margin-left: 0;
         margin-right: 20px;
+    }
+
+    .controls {
+        display: none;
     }
 
     .btn-new {
