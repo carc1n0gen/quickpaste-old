@@ -89,8 +89,12 @@ class EditView(BaseView):
                 url = url_for('paste.view', id=sh, _external=True)
             return self.redirect_or_text(url, 200)
 
-        text, _ = paste.get_paste(shortlink.decode(request.args.get('clone')))
-        lang = request.args.get('lang')
+        clone = request.args.get('clone')
+        text = None
+        lang = None
+        if clone:
+            text, _ = paste.get_paste(shortlink.decode(clone))
+            lang = request.args.get('lang')
         return render_template(
             'index.html',
             text=text,
