@@ -296,8 +296,8 @@ pre {
 
     nav a,
     nav button {
-        margin-left: 0;
-        margin-right: 20px;
+        margin-left: 10px;
+        margin-right: 10px;
     }
 
     .controls {
