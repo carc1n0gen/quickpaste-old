@@ -1,7 +1,7 @@
 {% extends 'layouts/layout.html' %}
 {% block content %}
 <textarea id="raw" aria-hidden="true" tabindex="-1" style="position:absolute;left:-10000px;">{{ text_raw }}</textarea>
-<div class="controls">
+<div class="controls controls-view">
     {% if days_left %}
     <div class="delete-indicator">
         {% if days_left > 1 %}
