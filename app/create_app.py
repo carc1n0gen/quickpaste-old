@@ -1,8 +1,7 @@
 import uuid
-import traceback
 from logging.handlers import RotatingFileHandler
-from flask import Flask, g, request, url_for
-# from werkzeug.contrib.fixers import ProxyFix
+from flask import Flask, g
+from werkzeug.middleware.proxy_fix import ProxyFix
 from app.util import mail, limiter, configure_mongo
 from app.errorhandlers import setup_handlers
 
@@ -15,10 +14,10 @@ def create_app():
     if app.debug:
         app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
-    # if app.config.get('BEHIND_PROXY'):
-    #     # DO NOT DO THIS IN PROD UNLESS YOU SERVE THE APP BEHIND A
-    #     # REVERSE PROXY!
-    #     app.wsgi_app = ProxyFix(app.wsgi_app)
+    if app.config.get('BEHIND_PROXY'):
+        # DO NOT DO THIS IN PROD UNLESS YOU SERVE THE APP BEHIND A
+        # REVERSE PROXY!
+        app.wsgi_app = ProxyFix(app.wsgi_app)
 
     handler = RotatingFileHandler(app.config['LOG_FILE'], maxBytes=1024 * 1024)
     app.logger.setLevel(app.config['LOG_LEVEL'])
@@ -35,11 +34,9 @@ def create_app():
     app.register_blueprint(edit_bp)
     app.register_blueprint(view_bp)
 
-
     @app.context_processor
     def inject_globals():
         return dict(cache_buster=cache_buster)
-
 
     @app.teardown_appcontext
     def teardown(err_or_request):
@@ -47,9 +44,7 @@ def create_app():
         if mongo:
             mongo.close()
 
-
     with app.app_context():
         configure_mongo(app)
-
 
     return app

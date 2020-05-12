@@ -1,8 +1,7 @@
-import bson
 from datetime import datetime
 from flask import current_app
 from app.util import get_random_string
-from . import get_mongo, insert_one, find_one
+from . import insert_one, find_one
 
 
 def insert_paste(text: str) -> str:
@@ -19,4 +18,3 @@ def get_paste(id):
     if doc is None:
         return None, None
     return doc['text'], doc['created_at']
-

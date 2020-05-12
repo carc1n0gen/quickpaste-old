@@ -1,5 +1,4 @@
 import random
-import secrets
 import functools
 import pymongo
 from flask import render_template, request, redirect, current_app
@@ -60,6 +59,8 @@ And then you can simply pipe a file in to the quickpaste alias:
 
 
 ALPHABET = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890_-'
+
+
 def get_random_string(length):
     alphabet = current_app.config.get('LINK_ALPHABET', ALPHABET)
     r = random.SystemRandom()

@@ -1,4 +1,4 @@
-from flask import Blueprint, current_app, request, abort, url_for, flash
+from flask import Blueprint, current_app, request, abort, url_for
 from app.repositories import paste
 from app.util import templated, text_or_redirect, about_text
 

@@ -4,7 +4,7 @@ from pygments.formatters import HtmlFormatter
 from pygments.lexers import MarkdownLexer
 from flask import url_for, render_template, request
 from flask_mail import Message
-from app.util import mail, templated, text_or_redirect
+from app.util import mail, text_or_redirect
 
 
 unknown_error_text = """# Uh Oh!
@@ -24,19 +24,17 @@ def setup_handlers(app):
         return dict(
             status=400,
             message='400 missing text',
-            url=url_for('edit.edit',
-            _external=True)
+            url=url_for('edit.edit', _external=True)
         )
-
 
     @app.errorhandler(404)
     def not_found(ex):
-        return render_template('view/view.html',
+        return render_template(
+            'view/view.html',
             text=highlight(not_found_text, MarkdownLexer(), HtmlFormatter()),
             lines=not_found_text.count('\n') + 1,
             status=404
         )
-
 
     @app.errorhandler(413)
     def too_large(ex):
@@ -49,7 +47,6 @@ Limit: {app.config['MAX_PASTE_LENGTH']}"""
             text=highlight(text, MarkdownLexer(), HtmlFormatter()),
             lines=text.count('\n') + 1,
         ), 413
-
 
     @app.errorhandler(429)
     def rate_limit(ex):
@@ -79,7 +76,8 @@ Limit: {app.config['MAX_PASTE_LENGTH']}"""
                 pass  # Ignore, we're going to log it anyway
 
             app.logger.exception(f'Unknown error at endpoint: {request.full_path}')
-            return render_template('view/view.html',
+            return render_template(
+                'view/view.html',
                 text=highlight(unknown_error_text, MarkdownLexer(), HtmlFormatter()),
                 lines=unknown_error_text.count('\n') + 1
             ), 500

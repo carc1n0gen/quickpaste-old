@@ -5,14 +5,11 @@ name = "pypi"
 
 [packages]
 flask = "*"
-flask-htmlmin = "*"
 waitress = "*"
 flask-limiter = "*"
 pygments = "*"
-flask-sqlalchemy = "*"
-flask-alembic = "*"
 flask-mail = "*"
-pymongo = "*"
+pymongo = "~=3.5.1"
 
 [dev-packages]
 flake8 = "*"

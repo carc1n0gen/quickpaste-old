@@ -1,4 +1,3 @@
-import math
 from urllib.parse import urlencode
 from datetime import datetime, timedelta
 from pygments import highlight
@@ -33,7 +32,6 @@ def view(id, extension=None):
         lexer = get_lexer_for_filename('foo.{}'.format(extension))
     except ClassNotFound:
         lexer = guess_lexer(text)
-
 
     if id == 'about':
         title = 'quickpaste'
