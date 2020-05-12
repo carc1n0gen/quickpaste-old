@@ -51,7 +51,7 @@ NO! They are deleted after one week(ish).
 
 Yup, with curl.  Here's an example bash alias:
 
-`alias quickpaste="curl -H \"X-Respondwith: link\" -X POST -d \"text=\$(</dev/stdin)\" https://quickpaste.net/"`
+`alias quickpaste="curl -H \\"X-Respondwith: link\\" -X POST -d \\"text=\\$(</dev/stdin)\\" https://quickpaste.net/"`
 
 And then you can simply pipe a file in to the quickpaste alias:
 
@@ -106,7 +106,11 @@ def text_or_redirect(f):
             message = ctx.get('message')
             url = ctx.get('url')
             if accept == 'text/plain':
-                return message or url, status, {'Content-type': 'text/plain; charset=utf-8'}
+                if message:
+                    text = message
+                else:
+                    text = url
+                return text + '\n', status, {'Content-type': 'text/plain; charset=utf-8'}
             return redirect(url)
 
         return f(*args, **kwargs)

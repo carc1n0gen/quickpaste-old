@@ -80,7 +80,7 @@ def edit():
             abort(413)
 
         id = paste.insert_paste(text)
-        return dict(url=url_for('view.view', id=id, extension=extension))
+        return dict(url=url_for('view.view', id=id, extension=extension, _external=True))
 
     clone = request.args.get('clone')
     if clone == 'about':
