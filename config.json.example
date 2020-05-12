@@ -11,11 +11,6 @@
     "GA_ENABLED": false,
     "GA_ID": "ENTER YOUR GOOGLE ANALYTICS ID",
 
-    "SHORTLINK_ALPHABET": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-
-    "SQLALCHEMY_DATABASE_URI": "sqlite:///data/database.db",
-    "SQLALCHEMY_TRACK_MODIFICATIONS": false,
-
     "MAIL_SERVER": "smtp.example.com",
     "MAIL_PORT": 25,
     "MAIL_USE_TLS": false,
@@ -23,5 +18,8 @@
     "MAIL_USERNAME": "username",
     "MAIL_PASSWORD": "password",
     "MAIL_DEFAULT_SENDER": "sender <sender@example.com>",
-    "MAIL_RECIPIENT": "recipient@example.com"
+    "MAIL_RECIPIENT": "recipient@example.com",
+
+    "MONGO_HOST": "127.0.0.1",
+    "MONGO_PORT": 27017
 }

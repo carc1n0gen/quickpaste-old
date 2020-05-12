@@ -1,7 +1,9 @@
-from flask import request, current_app, url_for, render_template, abort
-from app.views import BaseView
-from app.shortlink import shortlink
-import app.repositories.paste as paste
+from flask import Blueprint, current_app, request, abort, url_for, flash
+from app.repositories import paste
+from app.util import templated, text_or_redirect, about_text
+
+edit_bp = Blueprint('edit', __name__)
+
 
 LANGUAGES = [
     {'name': 'Ada', 'ext': 'ada'},
@@ -47,6 +49,7 @@ LANGUAGES = [
     {'name': 'OCaml', 'ext': 'ml'},
     {'name': 'Perl', 'ext': 'pl'},
     {'name': 'PHP', 'ext': 'php'},
+    {'name': 'Plain Text', 'ext': 'txt'},
     {'name': 'Python', 'ext': 'py'},
     {'name': 'Ruby', 'ext': 'rb'},
     {'name': 'Rust', 'ext': 'rs'},
@@ -62,43 +65,33 @@ LANGUAGES = [
 ]
 
 
-class EditView(BaseView):
-    methods = ['GET', 'POST']
+@edit_bp.route('/', methods=['GET', 'POST'])
+@templated()
+@text_or_redirect
+def edit():
+    if request.method == 'POST':
+        maxlength = current_app.config.get('MAX_PASTE_LENGTH')
+        text = request.form.get('text')
+        extension = request.form.get('extension')
 
-    def dispatch_request(self):
-        if request.method == 'POST':
-            maxlength = current_app.config.get('MAX_PASTE_LENGTH')
-            text = request.form.get('text')
-            extension = request.form.get('extension')
+        if text is None or text.strip() == '':
+            abort(400)
+        elif maxlength is not None and len(text) > maxlength:
+            abort(413)
 
-            if text is None or text.strip() == '':
-                abort(400)
-            elif maxlength is not None and len(text) > maxlength:
-                abort(413)
+        id = paste.insert_paste(text)
+        return dict(url=url_for('view.view', id=id, extension=extension))
 
-            id = paste.insert_paste(text)
-            sh = shortlink.encode(id)
-            if extension:
-                url = url_for(
-                    'paste.view.extension',
-                    id=sh,
-                    extension=extension,
-                    _external=True
-                )
-            else:
-                url = url_for('paste.view', id=sh, _external=True)
-            return self.redirect_or_text(url, 200)
-
-        clone = request.args.get('clone')
+    clone = request.args.get('clone')
+    if clone == 'about':
+        text = about_text
+    elif clone is not None:
+        text = paste.get_paste(clone)[0]
+    else:
         text = None
-        lang = None
-        if clone:
-            text, _ = paste.get_paste(shortlink.decode(clone))
-            lang = request.args.get('lang')
-        return render_template(
-            'index.html',
-            text=text,
-            hide_new=True,
-            languages=LANGUAGES,
-            lang=lang,
-        )
+    return dict(
+        text=text,
+        hide_new=True,
+        languages=LANGUAGES,
+        lang=request.args.get('lang')
+    )

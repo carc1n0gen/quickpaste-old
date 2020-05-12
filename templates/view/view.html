@@ -36,13 +36,13 @@
         if (!params.has('h')) {
             params.set('h', line);
         } else {
-            params.set('h', params.get('h').split(',').concat([line]).join(','));
+            params.set('h', params.get('h').split(' ').concat([line]).join(' '));
         }
     }
 
     function removeLineFromParams(params, line) {
         if (params.has('h')) {
-            params.set('h',params.get('h').split(',').filter(i => i !== line).join(','));
+            params.set('h',params.get('h').split(' ').filter(i => i !== line).join(' '));
         }
     }
 

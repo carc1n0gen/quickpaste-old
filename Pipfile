@@ -12,6 +12,7 @@ pygments = "*"
 flask-sqlalchemy = "*"
 flask-alembic = "*"
 flask-mail = "*"
+pymongo = "*"
 
 [dev-packages]
 flake8 = "*"
