@@ -10,7 +10,7 @@
     <title>quickpaste</title>
     <link rel="stylesheet" href="/static/bundle.css?{{ cache_buster }}">
 </head>
-<body>
+<body {% if body_class %}class="{{ body_class }}"{% endif %}>
     <header>
         {% if title and title_link %}
             <textarea id="title-link-select" aria-hidden="true" tabindex="-1" style="position:absolute;left:-10000px;">{{ title_link }}</textarea>

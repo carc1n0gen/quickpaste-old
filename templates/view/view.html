@@ -36,13 +36,13 @@
         if (!params.has('h')) {
             params.set('h', line);
         } else {
-            params.set('h', params.get('h').split(',').concat([line]).join(','));
+            params.set('h', params.get('h').split(' ').concat([line]).join(' '));
         }
     }
 
     function removeLineFromParams(params, line) {
         if (params.has('h')) {
-            params.set('h',params.get('h').split(',').filter(i => i !== line).join(','));
+            params.set('h',params.get('h').split(' ').filter(i => i !== line).join(' '));
         }
     }
 
@@ -92,7 +92,7 @@
               hash;
 
         const newTitleText =
-              window.location.host +
+            //   window.location.host +
               window.location.pathname +
               (paramsString === '' ? '' : '?' + paramsString) +
               hash;
@@ -138,7 +138,7 @@
         titleLink.setAttribute('href', titleLink.getAttribute('href') + document.location.hash);
         titleLink.innerHTML =
             '<h1>' +
-            document.location.host +
+            // document.location.host +
             document.location.pathname +
             document.location.search +
             document.location.hash +
