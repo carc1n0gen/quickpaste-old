@@ -93,5 +93,6 @@ def edit():
         text=text,
         hide_new=True,
         languages=LANGUAGES,
-        lang=request.args.get('lang')
+        lang=request.args.get('lang'),
+        body_class='edit-height-fix'
     )

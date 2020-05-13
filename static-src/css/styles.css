@@ -2,14 +2,20 @@
     box-sizing: border-box;
 }
 
-html, body, form {
+/* html, body, form {
     height: 100%;
-}
+} */
 
 body {
     margin: 0;
     background-color: #404040;
     color: #aaa;
+}
+
+.edit-height-fix {
+    min-height: 100vh;
+    display: flex;
+    flex-flow: column;
 }
 
 a,
@@ -90,6 +96,7 @@ nav button {
 }
 
 form {
+    flex: 1;
     display: flex;
     flex-flow: column;
 }
