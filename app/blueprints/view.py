@@ -36,7 +36,7 @@ def view(id, extension=None):
     if id == 'about':
         title = 'quickpaste'
     else:
-        title = f'{request.host}{request.path}{urlencode(request.args)}'
+        title = f'{request.path}{urlencode(request.args)}'
 
     seconds = current_app.config.get('PASTE_EXPIRE_AFTER_SECONDS', 604800)
     now = datetime.utcnow()

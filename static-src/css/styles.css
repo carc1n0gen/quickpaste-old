@@ -252,7 +252,7 @@ textarea:focus {
 .line.highlighted:after {
     /* The actual highlight area isn't clickable */
     position: absolute;
-    left: -5px;
+    left: -22px;
     content: '';
     width: 100vw;
     height: 100%;
