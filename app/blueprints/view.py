@@ -34,7 +34,7 @@ def view(id, extension=None):
         lexer = guess_lexer(text)
 
     if id == 'about':
-        title = 'quickpaste'
+        title = '/about.md'
     else:
         title = f'{request.path}{urlencode(request.args)}'
 
