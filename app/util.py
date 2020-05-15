@@ -122,11 +122,10 @@ def configure_mongo(app):
     db_name = app.config.get('MONGO_DATABASE', 'quickpaste')
     db = mongo[db_name]
     pastes = db['pastes']
-    seconds = app.config.get('PASTE_EXPIRE_AFTER_SECONDS', 604800)
 
     try:
         pastes.drop_index('paste_ttl')
     except pymongo.errors.OperationFailure:
         pass
 
-    pastes.create_index('creataed_at', expireAfterSeconds=seconds, name='paste_ttl')
+    pastes.create_index('delete_at', expireAfterSeconds=0, name='paste_ttl')
