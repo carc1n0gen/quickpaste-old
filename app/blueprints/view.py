@@ -35,13 +35,13 @@ def view(id, extension=None):
 
     if id == 'about':
         title = '/about.md'
+        days_left = None
     else:
         title = f'{request.path}{urlencode(request.args)}'
-
-    seconds = current_app.config.get('PASTE_EXPIRE_AFTER_SECONDS', 604800)
-    now = datetime.utcnow()
-    delete_time = datetime.utcnow() + timedelta(seconds=seconds)
-    days_left = (delete_time - now).days
+        seconds = current_app.config.get('PASTE_EXPIRE_AFTER_SECONDS', 604800)
+        now = datetime.utcnow()
+        delete_time = datetime.utcnow() + timedelta(seconds=seconds)
+        days_left = (delete_time - now).days
 
     return dict(
         id=id,
