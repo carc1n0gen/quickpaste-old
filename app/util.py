@@ -51,7 +51,7 @@ NO! They are deleted after one week(ish).
 
 Yup, with curl.  Here's an example bash alias:
 
-`alias quickpaste="curl -H \\"X-Respondwith: link\\" -X POST -d \\"text=\\$(</dev/stdin)\\" https://quickpaste.net/"`
+`alias quickpaste="curl -H \\"Accept: text/plain\\" -X POST -d \\"text=\\$(</dev/stdin)\\" https://quickpaste.net/"`
 
 And then you can simply pipe a file in to the quickpaste alias:
 
