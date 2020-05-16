@@ -84,13 +84,13 @@ def edit():
 
     clone = request.args.get('clone')
     if clone == 'about':
-        text = about_text
+        doc = {'text': about_text}
     elif clone is not None:
-        text = paste.get_paste(clone)[0]
+        doc = paste.get_paste(clone)
     else:
-        text = None
+        doc = {'text': None}
     return dict(
-        text=text,
+        text=doc['text'],
         hide_new=True,
         languages=LANGUAGES,
         lang=request.args.get('lang'),
