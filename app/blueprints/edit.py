@@ -85,10 +85,12 @@ def edit():
     clone = request.args.get('clone')
     if clone == 'about':
         doc = {'text': about_text}
-    elif clone is not None:
-        doc = paste.get_paste(clone)
     else:
+        doc = paste.get_paste(clone)
+
+    if doc is None:
         doc = {'text': None}
+
     return dict(
         text=doc['text'],
         hide_new=True,
