@@ -1,11 +1,10 @@
-import random
 import functools
 import pymongo
-from flask import render_template, request, redirect, current_app
+from flask import render_template, request, redirect
 from flask_mail import Mail
-from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from app.repositories import get_mongo
+from flask_limiter import Limiter
+from app.repositories import get_db
 
 mail = Mail()
 limiter = Limiter(key_func=get_remote_address)
@@ -58,17 +57,6 @@ And then you can simply pipe a file in to the quickpaste alias:
 `cat file-name | quickpaste`"""
 
 
-ALPHABET = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890_-'
-
-
-def get_random_string(length):
-    alphabet = current_app.config.get('LINK_ALPHABET', ALPHABET)
-    r = random.SystemRandom()
-    alphabet_len = len(alphabet)
-    s = [alphabet[r.randrange(alphabet_len)] for i in range(length)]
-    return ''.join(s)
-
-
 def templated(template=None):
     def decorator(f):
         @functools.wraps(f)
@@ -118,9 +106,7 @@ def text_or_redirect(f):
 
 
 def configure_mongo(app):
-    mongo = get_mongo()
-    db_name = app.config.get('MONGO_DATABASE', 'quickpaste')
-    db = mongo[db_name]
+    db = get_db()
     pastes = db['pastes']
 
     try:

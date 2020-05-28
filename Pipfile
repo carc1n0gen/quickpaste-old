@@ -9,7 +9,8 @@ waitress = "*"
 flask-limiter = "*"
 pygments = "*"
 flask-mail = "*"
-pymongo = "~=3.5.1"
+pymongo = "*"
+flask-wtf = "*"
 
 [dev-packages]
 flake8 = "*"
