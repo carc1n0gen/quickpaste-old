@@ -61,6 +61,9 @@ edit as needed.  Below is a copy of the latest example config.
     "MAX_PASTE_LENGTH": 10240,
     "MINIFY_HTML": true,
     "RATELIMIT_DEFAULT": "2 per second",
+    "LINK_ALPHABET": "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890_-",
+    "PASTE_ID_LENGTH": 7,
+    "PASTE_EXPIRE_AFTER_SECONDS": 604800,
 
     "GA_ENABLED": false,
     "GA_ID": "ENTER YOUR GOOGLE ANALYTICS ID",
@@ -75,7 +78,8 @@ edit as needed.  Below is a copy of the latest example config.
     "MAIL_RECIPIENT": "recipient@example.com",
 
     "MONGO_HOST": "127.0.0.1",
-    "MONGO_PORT": 27017
+    "MONGO_PORT": 27017,
+    "MONGO_DATABASE": "quickpaste"
 }
 ``` 
 
