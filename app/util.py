@@ -1,14 +1,15 @@
+import functools
+import pymongo
+from flask import render_template, request, redirect
 from flask_mail import Mail
-from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from flask_alembic import Alembic
+from flask_limiter import Limiter
+from app.repositories import get_db
 
 mail = Mail()
-alembic = Alembic()
 limiter = Limiter(key_func=get_remote_address)
 
-about_text = """
-# Quickpaste
+about_text = """# Quickpaste
 
 A dead simple code sharing tool.
 
@@ -43,14 +44,64 @@ NO! They are deleted after one week(ish).
 
 **Is the code available?**
 
-[github project](https://github.com/carc1n0gen/quickpaste)
+[github project](https://github.com/carc1n0gen/quickpaste)"""
 
-**Can I use quickpaste from my terminal?**
 
-Yup, with curl.  Here's an example bash alias:
+def templated(template=None):
+    def decorator(f):
+        @functools.wraps(f)
+        def decorated_function(*args, **kwargs):
+            template_name = template
+            if template_name is None:
+                template_name = request.endpoint.replace('.', '/') + '.html'
 
-`alias quickpaste="curl -H \"X-Respondwith: link\" -X POST -d \"text=\$(</dev/stdin)\" https://quickpaste.net/"`
+            ctx = f(*args, **kwargs)
+            if ctx is None:
+                ctx = {}
+            elif not isinstance(ctx, dict):
+                # Either something other than a dict was returned by the view
+                # function, another decorator has modified the return type, or
+                # maybe the view function returned a reidrect or something.
+                # In any of these cases, just return what we got.
+                return ctx
 
-And then you can simply pipe a file in to the quickpaste alias:
+            status = ctx.get('status', 200)
+            return render_template(template_name, **ctx), status
+        return decorated_function
+    return decorator
 
-`cat file-name | quickpaste`"""
+
+def text_or_redirect(f):
+    @functools.wraps(f)
+    def decorated_function(*args, **kwargs):
+        if request.method == 'POST':
+            ctx = f(*args, **kwargs)
+            if not isinstance(ctx, dict):
+                return ctx
+
+            accept = request.headers.get('Accept')
+            status = ctx.get('status', 200)
+            message = ctx.get('message')
+            url = ctx.get('url')
+            if accept == 'text/plain':
+                if message:
+                    text = message
+                else:
+                    text = url
+                return text + '\n', status, {'Content-type': 'text/plain; charset=utf-8'}
+            return redirect(url)
+
+        return f(*args, **kwargs)
+    return decorated_function
+
+
+def configure_mongo(app):
+    db = get_db()
+    pastes = db['pastes']
+
+    try:
+        pastes.drop_index('paste_ttl')
+    except pymongo.errors.OperationFailure:
+        pass
+
+    pastes.create_index('delete_at', expireAfterSeconds=0, name='paste_ttl')

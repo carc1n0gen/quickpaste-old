@@ -5,19 +5,17 @@ name = "pypi"
 
 [packages]
 flask = "*"
-flask-htmlmin = "*"
 waitress = "*"
 flask-limiter = "*"
 pygments = "*"
-flask-sqlalchemy = "*"
-flask-alembic = "*"
 flask-mail = "*"
+flask-wtf = "*"
+pymongo = "*"
 
 [dev-packages]
 flake8 = "*"
 autopep8 = "*"
 pytest = "*"
-v = {editable = true,version = "*"}
 coverage = "*"
 pytest-cov = "*"
 python-dotenv = "*"

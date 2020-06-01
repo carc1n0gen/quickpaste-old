@@ -8,7 +8,7 @@ Requirements
 
 * python 3.7 (_May work on earlier versions but is totally untested_)
 * [pipenv](https://pipenv.readthedocs.io/en/latest/) is used for dependency management.
-* A database supported by [SQLAlchemy](https://docs.sqlalchemy.org/en/latest/core/engines.html#supported-databases)
+* MongoDB
 
 
 Setup
@@ -46,10 +46,13 @@ Configuration
 -------------
 
 Copy the `config.json.example` file to `config.json` in the same directory, and
-edit as needed.  Below is a copy of the latest example config.
+edit as needed.  Below is a copy of the latest example config. 
+
+*Remember to change the SECRET_KEY!*
 
 ```json
 {
+    "SECRET_KEY": "change me",
     "BEHIND_PROXY": false,
 
     "LOG_FILE": "./data/app.log",
@@ -58,14 +61,12 @@ edit as needed.  Below is a copy of the latest example config.
     "MAX_PASTE_LENGTH": 10240,
     "MINIFY_HTML": true,
     "RATELIMIT_DEFAULT": "2 per second",
+    "LINK_ALPHABET": "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890_-",
+    "PASTE_ID_LENGTH": 7,
+    "PASTE_EXPIRE_AFTER_SECONDS": 604800,
 
     "GA_ENABLED": false,
     "GA_ID": "ENTER YOUR GOOGLE ANALYTICS ID",
-
-    "SHORTLINK_ALPHABET": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-
-    "SQLALCHEMY_DATABASE_URI": "sqlite:///data/database.db",
-    "SQLALCHEMY_TRACK_MODIFICATIONS": false,
 
     "MAIL_SERVER": "smtp.example.com",
     "MAIL_PORT": 25,
@@ -74,7 +75,11 @@ edit as needed.  Below is a copy of the latest example config.
     "MAIL_USERNAME": "username",
     "MAIL_PASSWORD": "password",
     "MAIL_DEFAULT_SENDER": "sender <sender@example.com>",
-    "MAIL_RECIPIENT": "recipient@example.com"
+    "MAIL_RECIPIENT": "recipient@example.com",
+
+    "MONGO_HOST": "127.0.0.1",
+    "MONGO_PORT": 27017,
+    "MONGO_DATABASE": "quickpaste"
 }
 ``` 
 
@@ -104,8 +109,7 @@ Updating
 --------
 
 Pull the latest changes from master, or checkout the latest tag, sync
-dependencies, check for new configuration keys, run migrations, and compile
-js/css.
+dependencies, check for new configuration keys, and compile js/css.
 
 `git fetch`
 
@@ -113,26 +117,14 @@ js/css.
 
 `pipenv sync`
 
-`pipenv run flask db upgrade head`
-
 `npm install && npm run prod`
-
-Running Cleanup
----------------
-
-There is a built in cleanup command to delete pastes that are older than one
-week.
-
-`pipenv run flask cleanup`
-
-You will need to configure something like a cron to run that.
 
 Random Things
 -------------
 
 **How long are pastes on official [quickpaste](https://quickpaste.net/) kept?**
 
-The built in script that deletes week old pastes is run once a day.
+They are deleted after 7 days(ish).
 
 **Why do I need to configure an email sender?**
 
