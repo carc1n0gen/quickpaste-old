@@ -8,7 +8,7 @@ Requirements
 
 * python 3.7 (_May work on earlier versions but is totally untested_)
 * [pipenv](https://pipenv.readthedocs.io/en/latest/) is used for dependency management.
-* A database supported by [SQLAlchemy](https://docs.sqlalchemy.org/en/latest/core/engines.html#supported-databases)
+* MongoDB
 
 
 Setup
@@ -46,10 +46,13 @@ Configuration
 -------------
 
 Copy the `config.json.example` file to `config.json` in the same directory, and
-edit as needed.  Below is a copy of the latest example config.
+edit as needed.  Below is a copy of the latest example config. 
+
+*Remember to change the SECRET_KEY!*
 
 ```json
 {
+    "SECRET_KEY": "change me",
     "BEHIND_PROXY": false,
 
     "LOG_FILE": "./data/app.log",
@@ -62,11 +65,6 @@ edit as needed.  Below is a copy of the latest example config.
     "GA_ENABLED": false,
     "GA_ID": "ENTER YOUR GOOGLE ANALYTICS ID",
 
-    "SHORTLINK_ALPHABET": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-
-    "SQLALCHEMY_DATABASE_URI": "sqlite:///data/database.db",
-    "SQLALCHEMY_TRACK_MODIFICATIONS": false,
-
     "MAIL_SERVER": "smtp.example.com",
     "MAIL_PORT": 25,
     "MAIL_USE_TLS": false,
@@ -74,7 +72,10 @@ edit as needed.  Below is a copy of the latest example config.
     "MAIL_USERNAME": "username",
     "MAIL_PASSWORD": "password",
     "MAIL_DEFAULT_SENDER": "sender <sender@example.com>",
-    "MAIL_RECIPIENT": "recipient@example.com"
+    "MAIL_RECIPIENT": "recipient@example.com",
+
+    "MONGO_HOST": "127.0.0.1",
+    "MONGO_PORT": 27017
 }
 ``` 
 
