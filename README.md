@@ -104,8 +104,7 @@ Updating
 --------
 
 Pull the latest changes from master, or checkout the latest tag, sync
-dependencies, check for new configuration keys, run migrations, and compile
-js/css.
+dependencies, check for new configuration keys, and compile js/css.
 
 `git fetch`
 
@@ -113,19 +112,7 @@ js/css.
 
 `pipenv sync`
 
-`pipenv run flask db upgrade head`
-
 `npm install && npm run prod`
-
-Running Cleanup
----------------
-
-There is a built in cleanup command to delete pastes that are older than one
-week.
-
-`pipenv run flask cleanup`
-
-You will need to configure something like a cron to run that.
 
 Random Things
 -------------
