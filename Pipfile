@@ -9,14 +9,13 @@ waitress = "*"
 flask-limiter = "*"
 pygments = "*"
 flask-mail = "*"
-pymongo = "*"
 flask-wtf = "*"
+pymongo = "*"
 
 [dev-packages]
 flake8 = "*"
 autopep8 = "*"
 pytest = "*"
-v = {editable = true,version = "*"}
 coverage = "*"
 pytest-cov = "*"
 python-dotenv = "*"
