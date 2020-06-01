@@ -44,17 +44,7 @@ NO! They are deleted after one week(ish).
 
 **Is the code available?**
 
-[github project](https://github.com/carc1n0gen/quickpaste)
-
-**Can I use quickpaste from my terminal?**
-
-Yup, with curl.  Here's an example bash alias:
-
-`alias quickpaste="curl -H \\"Accept: text/plain\\" -X POST -d \\"text=\\$(</dev/stdin)\\" https://quickpaste.net/"`
-
-And then you can simply pipe a file in to the quickpaste alias:
-
-`cat file-name | quickpaste`"""
+[github project](https://github.com/carc1n0gen/quickpaste)"""
 
 
 def templated(template=None):

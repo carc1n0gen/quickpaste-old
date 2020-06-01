@@ -1,23 +1,40 @@
 {% extends 'layouts/layout.html' %}
 {% block content %}
 <form method="POST" id="form">
+    {{ form.csrf_token }}
     <div class="controls">
         {% if languages %}
         <div class="select-wrapper">
             <select name="extension" id="extension" aria-label="Code Language">
-                <option value="" disabled selected>select language</option>
-                {% for language in languages %}
-                <option value="{{ language.ext }}" {% if lang and lang == language.ext %}selected{% endif %}>
-                    {{ language.name }}
-                </option>
+                {% for option in form.extension %}
+                    {% if loop.first %}
+                        <option value="" disabled selected>select language</option>
+                    {% else %}
+                        {{ option }}
+                    {% endif %}
                 {% endfor %}
             </select>
         </div>
         {% endif %}
         <button class="btn btn-primary float-right">save</button>
     </div>
-    <textarea spellcheck="false" name="text" id="text" placeholder="type or paste some code" aria-label="Code box">{{ text if text }}</textarea>
+    {{ form.text(spellcheck=False, placeholder='type or paste some code') }}
 </form>
+{% if form.errors %}
+<div class="alert alert-warning alert-dismissable alert-autohide alert-toast fade-in" id="error-messages">
+    <button class="alert-close" type="button" data-target="#error-messages">
+        <span class="sr-only">close alert</span>
+        <span aria-hidden="true">×</span>
+    </button>
+    <ul>
+        {% for field, errors in form.errors.items() %}
+            {% for error in errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
 {% endblock %}
 {% block bottom_scripts %}
 <script>
@@ -29,6 +46,31 @@ window.addEventListener('load', function () {
         if (text.value && text.value.trim()) {
             form && form.submit();
         }
+    });
+
+    document.querySelectorAll('.alert-autohide').forEach((el) => {
+        setTimeout(() => {
+            el.classList.add('fade-out-start');
+        }, 5000);
+        setTimeout(() => {
+            el.remove();
+        }, 7000);
+    });
+
+    document.querySelectorAll('.fade-in').forEach((el) => {
+        el.classList.add('fade-in-start');
+    });
+
+    document.querySelectorAll('.alert-close').forEach((el) => {
+        el.addEventListener('click', (event) => {
+            const target = document.querySelector(el.dataset.target);
+            if (target) {
+                target.classList.add('fade-out-start');
+                setTimeout(() => {
+                    target.remove();
+                }, 2000);
+            }
+        });
     });
 });
 </script>
