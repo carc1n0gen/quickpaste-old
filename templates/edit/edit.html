@@ -5,18 +5,10 @@
     <div class="controls">
         {% if languages %}
         <div class="select-wrapper">
-            <select name="extension" id="extension" aria-label="Code Language">
-                {% for option in form.extension %}
-                    {% if loop.first %}
-                        <option value="" disabled selected>select language</option>
-                    {% else %}
-                        {{ option }}
-                    {% endif %}
-                {% endfor %}
-            </select>
+            {{ form.extension(aria_label='Programming Language') }}
         </div>
         {% endif %}
-        <button class="btn btn-primary float-right">save</button>
+        <button class="btn btn-primary float-right"><span aria-hidden="true">save</span><span class="sr-only">save snippet</span></button>
     </div>
     {{ form.text(spellcheck='false', placeholder='type or paste some code') }}
 </form>
