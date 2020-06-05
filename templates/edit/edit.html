@@ -18,7 +18,7 @@
         {% endif %}
         <button class="btn btn-primary float-right">save</button>
     </div>
-    {{ form.text(spellcheck=False, placeholder='type or paste some code') }}
+    {{ form.text(spellcheck='false', placeholder='type or paste some code') }}
 </form>
 {% if form.errors %}
 <div class="alert alert-warning alert-dismissable alert-autohide alert-toast fade-in" id="error-messages">
