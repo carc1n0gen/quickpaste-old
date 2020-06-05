@@ -87,8 +87,6 @@ def edit():
         return redirect(url_for('view.view', id=id, extension=extension, _external=True))
 
     clone = request.args.get('clone')
-    lang = request.args.get('lang')
-
     if clone == 'about':
         doc = {'text': about_text}
     else:
@@ -96,12 +94,12 @@ def edit():
 
     if doc is not None and form.text.data is None:
         form.text.data = doc['text']
-        form.extension.data = lang
 
     return render_template(
         'edit/edit.html',
         hide_new=True,
         languages=LANGUAGES,
+        lang=request.args.get('lang'),
         form=form,
         body_class='edit-height-fix',
     )
