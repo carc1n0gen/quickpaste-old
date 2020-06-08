@@ -9,7 +9,7 @@ edit_bp = Blueprint('edit', __name__)
 
 
 LANGUAGES = [
-    (None, 'auto-detect language'),
+    ('', 'auto-detect language'),
     ('ada', 'Ada'),
     ('sh', 'Bash'),
     ('c', 'C'),
@@ -82,7 +82,7 @@ def edit():
     form = EditForm()
     if form.validate_on_submit():
         text = form.text.data
-        extension = form.extension.data
+        extension = form.extension.data or None
         id = paste.insert_paste(text)
         return redirect(url_for('view.view', id=id, extension=extension, _external=True))
 
