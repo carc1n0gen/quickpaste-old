@@ -1,6 +1,10 @@
 import functools
 import pymongo
-from flask import render_template, request, redirect
+from pygments import highlight as pygment_highlight
+from pygments.formatters import HtmlFormatter
+from pygments.lexers import guess_lexer, get_lexer_for_filename
+from pygments.util import ClassNotFound
+from flask import current_app, render_template, request, redirect
 from flask_mail import Mail
 from flask_limiter.util import get_remote_address
 from flask_limiter import Limiter
@@ -105,3 +109,12 @@ def configure_mongo(app):
         pass
 
     pastes.create_index('delete_at', expireAfterSeconds=0, name='paste_ttl')
+
+
+def highlight(text, extension=None):
+    try:
+        lexer = get_lexer_for_filename('foo.{}'.format(extension))
+    except ClassNotFound:
+        lexer = guess_lexer(text)
+
+    return pygment_highlight(text, lexer, HtmlFormatter())

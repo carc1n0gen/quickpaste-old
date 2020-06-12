@@ -1,10 +1,6 @@
 from urllib.parse import urlencode
-from pygments import highlight
-from pygments.formatters import HtmlFormatter
-from pygments.lexers import guess_lexer, get_lexer_for_filename
-from pygments.util import ClassNotFound
 from flask import Blueprint, abort, make_response, request
-from app.util import templated, about_text
+from app.util import templated, about_text, highlight
 from app.repositories import paste
 
 
@@ -27,11 +23,6 @@ def view(id, extension=None):
     if highlighted:
         highlighted = highlighted.split(' ')
 
-    try:
-        lexer = get_lexer_for_filename('foo.{}'.format(extension))
-    except ClassNotFound:
-        lexer = guess_lexer(doc['text'])
-
     if id == 'about':
         title = '/about.md'
         days_left = None
@@ -44,7 +35,7 @@ def view(id, extension=None):
 
     return dict(
         id=id,
-        text=highlight(doc['text'], lexer, HtmlFormatter()),
+        text=highlight(doc['text'], extension),
         text_raw=doc['text'],
         days_left=days_left,
         extension=extension,

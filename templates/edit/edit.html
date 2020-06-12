@@ -1,6 +1,6 @@
 {% extends 'layouts/layout.html' %}
 {% block content %}
-<form method="POST" id="form">
+<form method="POST" id="form" class="{{ 'rich-editor-enabled' if config['RICH_EDITOR_ENABLED'] else '' }}">
     {{ form.csrf_token }}
     <div class="controls">
         {% if languages %}
@@ -8,9 +8,28 @@
             {{ form.extension(aria_label='Programming Language') }}
         </div>
         {% endif %}
+        <div class="select-wrapper indent-control rich-disabled">
+            <label for="indent">Indentation:</label>
+            <select class="indent">
+                <optgroup label="Spaces">
+                    <option value="spaces-2">2 spaces</option>
+                    <option value="spaces-4">4 spaces</option>
+                    <option value="spaces-8">8 spaces</option>
+                </optgroup>
+                <optgroup label="Tabs">
+                    <option value="tabs-2">Tabs (2 spaces)</option>
+                    <option value="tabs-4">Tabs (4 spaces)</option>
+                    <option value="tabs-8">Tabs (8 spaces)</option>
+                </optgroup>
+            </select>
+        </div>
         <button class="btn btn-primary float-right"><span aria-hidden="true">save</span><span class="sr-only">save snippet</span></button>
     </div>
-    {{ form.text(spellcheck='false', placeholder='type or paste some code') }}
+    <div class="editor-container">
+        <div class="lines"></div>
+        {{ form.text(spellcheck='false', placeholder='type or paste some code') }}
+        <div class="editor rich-disabled" id="editor" contenteditable spellcheck="false">{{ text|default('', true) }}</div>
+    </div>
 </form>
 {% if form.errors %}
 <div class="alert alert-warning alert-dismissable alert-autohide alert-toast fade-in" id="error-messages">
@@ -29,16 +48,14 @@
 {% endif %}
 {% endblock %}
 {% block bottom_scripts %}
+<script src="/static/bundle.js?{{ cache_buster }}"></script>
 <script>
 window.addEventListener('load', function () {
-    var text = document.getElementById('text');
-    var form = document.getElementById('form');
-    form.addEventListener('submit', function savePaste(e) {
-        e.preventDefault();
-        if (text.value && text.value.trim()) {
-            form && form.submit();
-        }
-    });
+    form = document.querySelector('.rich-editor-enabled');
+    if(form) {
+        editor = new RichEditor(form);
+    }
+
 
     document.querySelectorAll('.alert-autohide').forEach((el) => {
         setTimeout(() => {

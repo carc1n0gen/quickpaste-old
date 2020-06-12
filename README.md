@@ -64,6 +64,7 @@ edit as needed.  Below is a copy of the latest example config.
     "LINK_ALPHABET": "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890_-",
     "PASTE_ID_LENGTH": 7,
     "PASTE_EXPIRE_AFTER_SECONDS": 604800,
+    "RICH_EDITOR_ENABLED": false,
 
     "GA_ENABLED": false,
     "GA_ID": "ENTER YOUR GOOGLE ANALYTICS ID",

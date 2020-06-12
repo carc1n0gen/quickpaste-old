@@ -3,7 +3,7 @@ from flask_wtf import FlaskForm
 from wtforms import ValidationError, TextAreaField, SelectField
 from wtforms.validators import DataRequired
 from app.repositories import paste
-from app.util import about_text
+from app.util import about_text, highlight
 
 edit_bp = Blueprint('edit', __name__)
 
@@ -93,14 +93,24 @@ def edit():
     else:
         doc = paste.get_paste(clone)
 
+    text = ""
     if doc is not None and form.text.data is None:
         form.text.data = doc['text']
         form.extension.data = lang
+        text = highlight(doc['text'], request.args.get('lang'))
 
     return render_template(
         'edit/edit.html',
         hide_new=True,
         languages=LANGUAGES,
         form=form,
+        text=text,
         body_class='edit-height-fix',
     )
+
+
+@edit_bp.route('/highlight', methods=['POST'])
+def live_highlight():
+    text = request.form.get('text')
+    lang = request.form.get('lang')
+    return highlight(text, lang)
