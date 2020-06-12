@@ -79,8 +79,6 @@ class RichEditor {
             // Timer is necessary because we need the paste event to finish and 
             // update the value of the editor
             window.setTimeout(() => {
-                // Required for insertNewLine() to work properly
-                this.editor.innerHTML = this.editor.innerText;
                 this.textarea.value = this.editor.innerText;
                 this.detectIndentation();
                 this.lineNumbers();
