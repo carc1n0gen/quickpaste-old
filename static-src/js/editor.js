@@ -25,7 +25,7 @@ class RichEditor {
         this.editor.classList.remove('rich-disabled');
         this.form.querySelector('.indent-control').classList.remove('rich-disabled');
         this.textarea.classList.add('rich-disabled');
-        this.editor.innerHTML = this.editor.innerText; // Turn contents of div from plain text to HTML
+        this.editor.innerHTML = this.editor.innerText || this.textarea.placeholder; // Turn contents of div from plain text to HTML
         this.lineNumbers(); // Initialize line numbers based on initial contents
         this.detectIndentation(); // Set the indent control and editor to correct indentation
         this.adjustCaret = 0; // In some situations we need to adjust +/- where the caret should end up
@@ -46,6 +46,23 @@ class RichEditor {
 
         // Trigger a highlight request if selected language changes
         this.form.extension.addEventListener('change', this.highlight.bind(this));
+
+        /*
+         * Add focus and blur listeners to simulate placeholder
+         * Actually placeholder text is controlled by textarea attribute
+         */
+        this.editor.addEventListener('blur', e => {
+            if(this.editor.innerText.trim() == '') {
+                this.editor.innerText = this.textarea.placeholder;
+                this.lineNumbers();
+            }
+        })
+
+        this.editor.addEventListener('focus', e => {
+            if(this.editor.innerText.trim() == this.textarea.placeholder) {
+                this.editor.innerText = "";
+            }
+        });
 
         this.editor.addEventListener('keydown', e => {
             this.lineNumbers();
