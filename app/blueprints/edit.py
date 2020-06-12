@@ -1,4 +1,4 @@
-from flask import Blueprint, current_app, request, url_for, render_template, redirect
+from flask import Blueprint, current_app, jsonify, request, url_for, render_template, redirect
 from flask_wtf import FlaskForm
 from wtforms import ValidationError, TextAreaField, SelectField
 from wtforms.validators import DataRequired
@@ -111,6 +111,9 @@ def edit():
 
 @edit_bp.route('/highlight', methods=['POST'])
 def live_highlight():
-    text = request.form.get('text')
-    lang = request.form.get('lang')
-    return highlight(text, lang)
+    form = EditForm()
+    if form.validate_on_submit():
+        result = highlight(form.text.data, form.extension.data)
+        return jsonify(extension=form.extension.data, data=result)
+    else:
+        return jsonify(form.errors), 400

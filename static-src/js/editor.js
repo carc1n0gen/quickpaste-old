@@ -82,9 +82,10 @@ class RichEditor {
                 // Required for insertNewLine() to work properly
                 this.editor.innerHTML = this.editor.innerText;
                 this.textarea.value = this.editor.innerText;
+                this.detectIndentation();
+                this.lineNumbers();
+                this.highlight();
             }, 100);
-            window.setTimeout(this.detectIndentation.bind(this), 100);
-            window.setTimeout(this.lineNumbers.bind(this), 100);
         });
 
         // Autoformat code when indentation style changes
@@ -152,9 +153,9 @@ class RichEditor {
 
     // Dispatch a request to app for syntax highlighting
     async highlightRequest() {
-        const data = new FormData();
-        data.append('text', this.editor.innerText);
-        data.append('lang', this.lang);
+        const data = new FormData(this.form);
+        data.set('text', this.editor.innerText); // Need to override this to avoid losing last character
+        data.set('extension', this.lang); // Need to override this to avoid blank extension
         const response = await fetch('/highlight', {
             method: 'POST',
             mode: 'same-origin',
@@ -162,7 +163,7 @@ class RichEditor {
             credentials: 'same-origin',
             body: data
           });
-        return response.text();
+        return response.json();
     }
 
     // Wrapper to deal with async syntax highlight request and consequences
@@ -175,11 +176,16 @@ class RichEditor {
         if(this.editor.innerText.trim() != '') {
             console.log("Caret adjust:" + this.adjustCaret);
             this.highlightRequest().then(data => {
-                // Save cursor position and restore it after replacing editor's innerHTML
-                const restoreCaret = this.saveCaretPosition();
-                this.editor.innerHTML = data;
-                restoreCaret(this.adjustCaret);
-                this.adjustCaret = 0;
+                if(data.data) {
+                    // Save cursor position and restore it after replacing editor's innerHTML
+                    const restoreCaret = this.saveCaretPosition();
+                    this.editor.innerHTML = data.data;
+                    restoreCaret(this.adjustCaret);
+                    this.adjustCaret = 0;
+                } else {
+                    // Todo (maybe): use alert toasts to communicate error to end user
+                    console.log(data);
+                }
             });
         }
     }
