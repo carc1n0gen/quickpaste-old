@@ -89,9 +89,8 @@ class RichEditor {
 
         // Autoformat code when indentation style changes
         this.indentControl.addEventListener('change', e => {
-            let old_size = this.indentation.size;
-            let type, size;
-            [type, size] = this.indentControl.value.split('-');
+            const old_size = this.indentation.size;
+            const [type, size] = this.indentControl.value.split('-');
 
             if(type == 'spaces') {
                 // Replace old blocks of spaces with new blocks
@@ -136,12 +135,12 @@ class RichEditor {
             'type': 'spaces'
         };
 
-        const matches = this.editor.innerText.match(/^[ \t]+/gm);
-        if(matches) {
-            if(matches[0].match(/^\t/gm)) {
+        const [match] = this.editor.innerText.match(/^[ \t]+/gm) || [];
+        if(match) {
+            if(match.match(/^\t/gm)) {
                 this.indentation.type = 'tabs';
-            } else if([2, 4, 8].includes(matches[0].length)) {
-                this.indentation.size = matches[0].length;
+            } else if([2, 4, 8].includes(match.length)) {
+                this.indentation.size = match.length;
             } else {
                 console.log("Could not detect indenting. Defaulting to 2 spaces.");
             }
