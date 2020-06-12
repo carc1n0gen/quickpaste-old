@@ -54,11 +54,11 @@ class RichEditor {
             // Check if keypress was just navigating rather than mutating contents
             const noInsert = [
                 "AltLeft", "AltRight", "ArrowDown", "ArrowRight", "ArrowLeft", 
-                "ArrowUp", "CapsLock", "ControlLeft", "ControlRight", "End", 
+                "ArrowUp", "CapsLock", "Control", "ControlLeft", "ControlRight", "End", 
                 "Enter", "Escape", "Home", "OSLeft", "OSRight", "PageDown", 
                 "PageUp", "ShiftLeft", "ShiftRight", "Tab"
             ];
-            if(!noInsert.includes(e.key)) {
+            if(!(noInsert.includes(e.key) || e.altKey || e.ctrlKey || e.metaKey)) {
                 // Only send the request if the user has stopped typing for 1 second.
                 window.clearTimeout(this.highlightTimer);
                 this.highlightTimer = window.setTimeout(this.highlight.bind(this), 1000);
