@@ -17,12 +17,16 @@
     <a href="/?clone={{ id }}{{ '&lang=' + extension if extension }}">clone &amp; edit</a>
     <a role="button" href="#" id="copy" class="copy-button">copy text</a>
 </div>
-<div class="lines">
-    {% for line in range(1, lines + 1) %}
-        <a title="link to line {{ line }}" href="#{{ line }}" id="{{ line }}" data-line="{{ line }}" class="line line-{{ line }} {{ 'highlighted' if highlighted and line|string in highlighted }}">{{ line }}</a><br>
-    {% endfor %}
+<div class="paste-container">
+    <div class="lines">
+        {% for line in range(1, lines + 1) %}
+            <a title="link to line {{ line }}" href="#{{ line }}" id="{{ line }}" data-line="{{ line }}" class="line line-{{ line }} {{ 'highlighted' if highlighted and line|string in highlighted }}">{{ line }}</a><br>
+        {% endfor %}
+    </div>
+    <div class="paste">
+        {{ text | safe }}
+    </div>
 </div>
-{{ text | safe }}
 {% endblock %}
 {% block bottom_scripts %}
 <script>

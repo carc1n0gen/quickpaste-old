@@ -28,6 +28,7 @@ button {
 }
 
 button {
+    cursor: pointer;
     padding: 0;
 }
 
@@ -112,15 +113,44 @@ form {
     width: 30px;
 }
 
-textarea {
+.rich-disabled {
+    display: none !important;
+}
+
+.editor-container,
+.paste-container {
+    display: flex;
     flex: 1 1 auto;
-    padding: 10px;
-    font-family: 'Courier New', Courier, monospace;
+}
+
+.editor, .paste, textarea {
+    flex: 1 1 auto;
+    padding: 10px 5px;
+}
+
+.editor, textarea {
+    font-family: monospace;
     background-color: transparent;
     resize: none;
     font-size: 16px;
     border: none;
-    color: #aaa;
+    outline: 0;
+    color: #d0d0d0;
+}
+
+.editor {
+    tab-size: 2;
+    -moz-tab-size: 2;
+    white-space: pre-wrap;
+}
+
+.paste {
+    display: flex;
+}
+
+.paste .highlight {
+    flex: 1 1 auto;
+    align-self: stretch;
 }
 
 select {
@@ -158,7 +188,7 @@ select::-ms-expand {
     display: none;
 }
 
-textarea:focus {
+textarea:focus, .editor:focus {
     outline: none;
 }
 
@@ -216,9 +246,9 @@ textarea:focus {
 }
 
 .lines {
-    padding: 7px;
-    float: left;
-    width: auto;
+    padding: 10px;
+    /*float: left;*/
+    width: 3em;
     font-family: monospace;
     text-align: right;
     font-size: 16px;
@@ -230,14 +260,11 @@ textarea:focus {
     border-right: 1px solid #545353;
 }
 
-.lines a {
-    color: #6f6f6f;
-    width: 100%;
-}
-
 .line {
+    color: #6f6f6f;
     position: relative;
     display: inline-block;
+    text-align: right;
     width: 100%;
 }
 
@@ -267,10 +294,10 @@ textarea:focus {
 
 pre {
     margin: 0;
-    padding: 7px 5px;
     font-size: 16px;
     font-family: monospace;
-    overflow-y: auto;
+    /*overflow-y: auto;*/
+    min-height: 100%;
 }
 
 .btn {
