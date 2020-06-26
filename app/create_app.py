@@ -4,6 +4,7 @@ from flask import Flask, g
 from werkzeug.middleware.proxy_fix import ProxyFix
 from app.util import mail, limiter, configure_mongo
 from app.errorhandlers import setup_handlers
+from app.cli import create_cli
 
 
 def create_app():
@@ -46,5 +47,7 @@ def create_app():
 
     with app.app_context():
         configure_mongo(app)
+
+    create_cli(app)
 
     return app
