@@ -3,7 +3,7 @@ from pymongo import MongoClient
 from flask import g, current_app
 
 
-def get_db() -> MongoClient:
+def get_db():
     if 'mongo' not in g:
         g.mongo = MongoClient(
             current_app.config.get('MONGO_HOST', '127.0.0.1'),
