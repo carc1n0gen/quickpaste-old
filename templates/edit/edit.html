@@ -26,7 +26,9 @@
         <button class="btn btn-primary float-right"><span aria-hidden="true">save</span><span class="sr-only">save snippet</span></button>
     </div>
     <div class="editor-container">
+        {% if config.RICH_EDITOR_ENABLED %}
         <div class="lines"></div>
+        {% endif %}
         {{ form.text(spellcheck='false', placeholder='type or paste some code') }}
         <div class="editor rich-disabled" id="editor" contenteditable spellcheck="false">{{ text|default('', true) }}</div>
     </div>
