@@ -136,6 +136,7 @@ form {
     border: none;
     outline: 0;
     color: #d0d0d0;
+    white-space: pre;
 }
 
 .editor {
@@ -146,6 +147,8 @@ form {
 
 .paste {
     display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 
 .paste .highlight {
