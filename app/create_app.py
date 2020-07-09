@@ -1,17 +1,26 @@
 import uuid
+from logging import Formatter
 from logging.handlers import RotatingFileHandler
 from flask import Flask, g
 from werkzeug.middleware.proxy_fix import ProxyFix
 from app.util import mail, limiter, configure_mongo
 from app.errorhandlers import setup_handlers
+from app.logging import init_logging, LOG_FORMAT
 from app.cli import create_cli
 from app.views import PasteEdit, LiveHighlight, PasteShow, PasteRaw, PasteDownload
 
 
 def create_app():
+    init_logging()
     cache_buster = uuid.uuid4()
     app = Flask('quickpaste')
     app.config.from_json('config.json')
+    handler = RotatingFileHandler(app.config['LOG_FILE'], maxBytes=1024 * 1024)
+    handler.setFormatter(Formatter(LOG_FORMAT))
+    app.logger.addHandler(handler)
+    app.logger.setLevel(app.config['LOG_LEVEL'])
+    mail.init_app(app)
+    limiter.init_app(app)
 
     if app.debug:
         app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -21,15 +30,7 @@ def create_app():
         # REVERSE PROXY!
         app.wsgi_app = ProxyFix(app.wsgi_app)
 
-    handler = RotatingFileHandler(app.config['LOG_FILE'], maxBytes=1024 * 1024)
-    app.logger.setLevel(app.config['LOG_LEVEL'])
-    app.logger.addHandler(handler)
-
-    mail.init_app(app)
-    limiter.init_app(app)
-
     setup_handlers(app)
-
     app.add_url_rule('/', view_func=PasteEdit.as_view('paste.edit'))
     app.add_url_rule('/highlight', view_func=LiveHighlight.as_view('paste.highlight'))
     app.add_url_rule('/<string:id>', view_func=PasteShow.as_view('paste.show'))
@@ -54,4 +55,5 @@ def create_app():
 
     create_cli(app)
 
+    app.logger.info('Go!')
     return app
