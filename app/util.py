@@ -4,7 +4,7 @@ from pygments import highlight as pygment_highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import guess_lexer, get_lexer_for_filename
 from pygments.util import ClassNotFound
-from flask import render_template, request, redirect
+from flask import request, redirect
 from flask_mail import Mail
 from flask_limiter.util import get_remote_address
 from flask_limiter import Limiter
@@ -107,30 +107,6 @@ NO! They are deleted after one week(ish).
 **Is the code available?**
 
 [github project](https://github.com/carc1n0gen/quickpaste)"""
-
-
-def templated(template=None):
-    def decorator(f):
-        @functools.wraps(f)
-        def decorated_function(*args, **kwargs):
-            template_name = template
-            if template_name is None:
-                template_name = request.endpoint.replace('.', '/') + '.html'
-
-            ctx = f(*args, **kwargs)
-            if ctx is None:
-                ctx = {}
-            elif not isinstance(ctx, dict):
-                # Either something other than a dict was returned by the view
-                # function, another decorator has modified the return type, or
-                # maybe the view function returned a reidrect or something.
-                # In any of these cases, just return what we got.
-                return ctx
-
-            status = ctx.get('status', 200)
-            return render_template(template_name, **ctx), status
-        return decorated_function
-    return decorator
 
 
 def text_or_redirect(f):
