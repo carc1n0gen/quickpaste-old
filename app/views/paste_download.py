@@ -17,7 +17,6 @@ class PasteDownload(View):
             abort(404)
 
         res = make_response(doc['text'])
-        res.headers['Content-Disposition'] = \
-            f'attachment; filename={id}.{extension}'
+        res.headers['Content-Disposition'] = f'attachment; filename={id}.{extension}'
         res.headers['Content-type'] = 'text/plain; charset=utf-8'
         return res
