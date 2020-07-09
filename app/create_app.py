@@ -5,6 +5,7 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 from app.util import mail, limiter, configure_mongo
 from app.errorhandlers import setup_handlers
 from app.cli import create_cli
+from app.views import PasteEdit, LiveHighlight, PasteShow, PasteRaw, PasteDownload
 
 
 def create_app():
@@ -29,11 +30,14 @@ def create_app():
 
     setup_handlers(app)
 
-    from app.blueprints.edit import edit_bp
-    from app.blueprints.view import view_bp
-
-    app.register_blueprint(edit_bp)
-    app.register_blueprint(view_bp)
+    app.add_url_rule('/', view_func=PasteEdit.as_view('paste.edit'))
+    app.add_url_rule('/highlight', view_func=LiveHighlight.as_view('paste.highlight'))
+    app.add_url_rule('/<string:id>', view_func=PasteShow.as_view('paste.show'))
+    app.add_url_rule('/<string:id>.<string:extension>', 'paste.show')
+    app.add_url_rule('/raw/<string:id>', view_func=PasteRaw.as_view('paste.raw'))
+    app.add_url_rule('/raw/<string:id>.<string:extension>', 'paste.raw')
+    app.add_url_rule('/download/<string:id>', view_func=PasteDownload.as_view('paste.download'))
+    app.add_url_rule('/download/<string:id>.<string:extension>', 'paste.download')
 
     @app.context_processor
     def inject_globals():

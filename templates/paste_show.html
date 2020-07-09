@@ -15,7 +15,13 @@
     <a href="/download/{{ id }}{{ '.' + extension if extension }}">download</a>
     <a href="/raw/{{ id }}{{ '.' + extension if extension }}">view raw</a>
     <a href="/?clone={{ id }}{{ '&lang=' + extension if extension }}">clone &amp; edit</a>
-    <a role="button" href="#" id="copy" class="copy-button">copy text</a>
+    <button type="button" class="copy-button btn btn-link" id="copy">copy text</button>
+    {% if id in session.created_ids %}
+    <form method="POST" class="inline">
+        <input type="hidden" name="_method" value="DELETE">
+        <button type="submit" class=" btn btn-link">delete text</button>
+    </form>
+    {% endif %}
 </div>
 <div class="paste-container">
     <div class="lines">
