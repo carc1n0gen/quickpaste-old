@@ -3,6 +3,7 @@ from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import MarkdownLexer
 from flask import url_for, render_template, request
+from flask_wtf.csrf import CSRFError
 from flask_mail import Message
 from app.util import mail, text_or_redirect
 
@@ -20,6 +21,10 @@ rate_limit_text = """# Too Many Requests
 
 **Limit: {}**"""
 
+csrf_message = """# Bad Request
+
+**{}**"""
+
 
 def setup_handlers(app):
     @app.errorhandler(400)
@@ -30,6 +35,14 @@ def setup_handlers(app):
             message='400 missing text',
             url=url_for('paste.edit', _external=True)
         )
+
+    @app.errorhandler(CSRFError)
+    def missing_csrf(e):
+        return render_template(
+            'paste_show.html',
+            text=highlight(csrf_message.format(e.description), MarkdownLexer(), HtmlFormatter()),
+            lines=csrf_message.count('\n') + 1
+        ), 400
 
     @app.errorhandler(404)
     def not_found(ex):

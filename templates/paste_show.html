@@ -18,6 +18,7 @@
     <button type="button" class="copy-button btn btn-link" id="copy">copy text</button>
     {% if id in session.created_ids %}
     <form action="{{ url_for('paste.delete', id=id, extension=extension) }}" method="POST" class="inline">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
         <button type="submit" class=" btn btn-link">delete</button>
     </form>
     {% endif %}

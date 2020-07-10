@@ -2,6 +2,7 @@ import uuid
 from logging import Formatter
 from logging.handlers import RotatingFileHandler
 from flask import Flask, g
+from flask_wtf.csrf import CSRFProtect
 from werkzeug.middleware.proxy_fix import ProxyFix
 from app.util import mail, limiter, configure_mongo
 from app.errorhandlers import setup_handlers
@@ -19,6 +20,7 @@ def create_app():
     handler.setFormatter(Formatter(LOG_FORMAT))
     app.logger.addHandler(handler)
     app.logger.setLevel(app.config['LOG_LEVEL'])
+    CSRFProtect(app)
     mail.init_app(app)
     limiter.init_app(app)
 
