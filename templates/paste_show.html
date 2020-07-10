@@ -12,10 +12,16 @@
         <span class="controls-divider"></span>
     </div>
     {% endif %}
-    <a href="/download/{{ id }}{{ '.' + extension if extension }}">download</a>
-    <a href="/raw/{{ id }}{{ '.' + extension if extension }}">view raw</a>
-    <a href="/?clone={{ id }}{{ '&lang=' + extension if extension }}">clone &amp; edit</a>
-    <a role="button" href="#" id="copy" class="copy-button">copy text</a>
+    <a href="{{ url_for('paste.download', id=id, extension=extension) }}">download</a>
+    <a href="{{ url_for('paste.raw', id=id, extension=extension) }}">view raw</a>
+    <a href="{{ url_for('paste.edit', clone=id, lang=extension) }}">clone &amp; edit</a>
+    <button type="button" class="copy-button btn btn-link" id="copy">copy text</button>
+    {% if id in session.created_ids %}
+    <form action="{{ url_for('paste.delete', id=id, extension=extension) }}" method="POST" class="inline">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <button type="submit" class=" btn btn-link">delete</button>
+    </form>
+    {% endif %}
 </div>
 <div class="paste-container">
     <div class="lines">

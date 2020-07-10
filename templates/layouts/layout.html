@@ -37,28 +37,17 @@
                 new paste
             </a>
             {% endif %}
-            <!-- <a href="/login">
+            {#<!-- <a href="/login">
                 login
-            </a> -->
+            </a> -->#}
         </nav>
     </header>
     {% block content %}{% endblock %}
+    {% include 'partials/alerts.html' %}
+    <script src="/static/bundle.js?{{ cache_buster }}"></script>
     {% block bottom_scripts %}{% endblock %}
     {% if config.GA_ENABLED %}
         {% include 'partials/analytics.html' %}
     {% endif %}
-    <script>
-        function stop(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'n' && (e.ctrlKey || e.metaKey)) {
-                stop(e);
-                window.location.pathname = '/';
-            }
-        });
-    </script>
 </body>
 </html>

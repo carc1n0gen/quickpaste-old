@@ -1,7 +1,7 @@
 from typing import Callable
 from datetime import datetime, timedelta
 from flask import current_app
-from . import insert_one, find_one, make_id
+from . import insert_one, find_one, delete_one, make_id
 
 
 def insert_paste(text: str, make_id_fn: Callable = make_id) -> str:
@@ -20,3 +20,7 @@ def insert_paste(text: str, make_id_fn: Callable = make_id) -> str:
 
 def get_paste(id):
     return find_one('pastes', {'_id': id})
+
+
+def delete_paste(id):
+    return delete_one('pastes', {'_id': id})

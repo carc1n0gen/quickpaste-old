@@ -1,6 +1,10 @@
 let mix = require('laravel-mix');
 
-mix.scripts(['static-src/js/editor.js'], 'static/bundle.js');
+mix.scripts([
+    'static-src/js/toast.js',
+    'static-src/js/editor.js'
+], 'static/bundle.js');
+
 mix.styles([
     'static-src/css/normalize.css',
     'static-src/css/highlight.css',

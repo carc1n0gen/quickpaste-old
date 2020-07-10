@@ -37,3 +37,8 @@ def insert_one(collection: str, d: dict):
 def find_one(collection: str, d: dict):
     db = get_db()
     return db[collection].find_one(d)
+
+
+def delete_one(collection: str, d: dict):
+    db = get_db()
+    return db[collection].delete_one(d)

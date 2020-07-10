@@ -1,0 +1,46 @@
+{% if form is defined and form.errors %}
+<div class="alert alert-warning alert-dismissable alert-autohide alert-toast fade-in" id="error-messages">
+    <button class="alert-close" type="button" data-target="#error-messages">
+        <span class="sr-only">close alert</span>
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <ul>
+        {% for field, errors in form.errors.items() %}
+        {% for error in errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+        {% endfor %}
+    </ul>
+</div>
+{% else %}
+{% with errors = get_flashed_messages(category_filter=["error"]) %}
+    {% if errors %}
+    <div class="alert alert-warning alert-dismissable alert-autohide alert-toast fade-in" id="error-messages">
+        <button class="alert-close" type="button" data-target="#error-messages">
+            <span class="sr-only">close alert</span>
+            <span aria-hidden="true">×</span>
+        </button>
+        <ul>
+            {% for error in errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+{% endwith %}
+{% with messages = get_flashed_messages(category_filter=["success"]) %}
+    {% if messages %}
+    <div class="alert alert-success alert-dismissable alert-autohide alert-toast fade-in" id="success-messages">
+        <button class="alert-close" type="button" data-target="#success-messages">
+            <span class="sr-only">close alert</span>
+            <span aria-hidden="true">×</span>
+        </button>
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+{% endwith %}
+{% endif %}
