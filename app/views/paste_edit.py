@@ -1,4 +1,4 @@
-from flask import request, redirect, url_for, render_template
+from flask import request, redirect, url_for, render_template, session
 from flask.views import View
 from app.forms import EditForm
 from app.repositories import paste
@@ -41,4 +41,7 @@ class PasteEdit(View):
         text = form.text.data
         extension = form.extension.data or None
         id = paste.insert_paste(text)
+        created_ids = session.get('created_ids', [])
+        created_ids.append(id)
+        session['created_ids'] = created_ids
         return redirect(url_for('paste.show', id=id, extension=extension, _external=True))

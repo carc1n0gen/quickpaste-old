@@ -1,4 +1,3 @@
-{% from 'macros/errors.html' import errors with context %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,7 +43,7 @@
         </nav>
     </header>
     {% block content %}{% endblock %}
-    {{ errors() }}
+    {% include 'partials/alerts.html' %}
     <script src="/static/bundle.js?{{ cache_buster }}"></script>
     {% block bottom_scripts %}{% endblock %}
     {% if config.GA_ENABLED %}

@@ -228,6 +228,7 @@ textarea:focus, .editor:focus {
 }
 
 .copy-button:after {
+    z-index: 1;
     position: absolute;
     top: -2px;
     right: -54px;
@@ -299,7 +300,6 @@ pre {
     margin: 0;
     font-size: 16px;
     font-family: monospace;
-    /*overflow-y: auto;*/
     min-height: 100%;
 }
 
@@ -320,6 +320,12 @@ pre {
 .btn-primary:active,
 .btn-primary:focus {
     background-color: #27518b;
+}
+
+.btn-link {
+    padding: 0;
+    margin: 0 5px;
+    text-decoration: underline;
 }
 
 .float-right {
@@ -351,6 +357,12 @@ pre {
     border-color: #ffe595;
 }
 
+.alert-success {
+    background-color: #a9f7a2;
+    color: #2a5926;
+    border-color: #83d77c;
+}
+
 .alert-close {
     position: absolute;
     padding: 15px 15px 0 0;
@@ -374,6 +386,10 @@ pre {
   overflow: hidden;
   clip: rect(0,0,0,0);
   border: 0;
+}
+
+.inline {
+    display: inline;
 }
 
 .fade-in {

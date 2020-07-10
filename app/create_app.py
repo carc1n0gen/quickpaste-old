@@ -7,7 +7,7 @@ from app.util import mail, limiter, configure_mongo
 from app.errorhandlers import setup_handlers
 from app.logging import init_logging, LOG_FORMAT
 from app.cli import create_cli
-from app.views import PasteEdit, LiveHighlight, PasteShow, PasteRaw, PasteDownload
+from app.views import PasteEdit, LiveHighlight, PasteShow, PasteRaw, PasteDownload, PasteDelete
 
 
 def create_app():
@@ -39,6 +39,8 @@ def create_app():
     app.add_url_rule('/raw/<string:id>.<string:extension>', 'paste.raw')
     app.add_url_rule('/download/<string:id>', view_func=PasteDownload.as_view('paste.download'))
     app.add_url_rule('/download/<string:id>.<string:extension>', 'paste.download')
+    app.add_url_rule('/<string:id>/delete', view_func=PasteDelete.as_view('paste.delete'))
+    app.add_url_rule('/<string:id>.<string:extension>/delete', 'paste.delete')
 
     @app.context_processor
     def inject_globals():
