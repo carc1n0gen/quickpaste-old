@@ -58,9 +58,9 @@ parser = OptionParser()
 parser.add_option('-l', '--lang', dest='lang', default='txt', help='the file extension for the language')
 (options, args) = parser.parse_args()
 
-QUICKPATE_HOST = os.getenv('QUICKPATE_HOST', 'https://quickpaste.net')
+QUICKPASTE_HOST = os.getenv('QUICKPASTE_HOST', 'https://quickpaste.net')
 
-with request.urlopen(QUICKPATE_HOST) as response:
+with request.urlopen(QUICKPASTE_HOST) as response:
     cookie_string = response.headers['Set-Cookie']
     csrf_token = response.headers['CSRF_TOKEN']
 
@@ -76,5 +76,5 @@ data = parse.urlencode({
 
 opener = request.build_opener()
 opener.addheaders = [('Cookie', cookie_string), ('Accept', 'text/plain')]
-with opener.open(QUICKPATE_HOST, data=data) as response:
+with opener.open(QUICKPASTE_HOST, data=data) as response:
     print(response.read().decode('utf-8'))"""
