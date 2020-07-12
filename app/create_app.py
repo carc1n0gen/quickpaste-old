@@ -4,7 +4,7 @@ from logging.handlers import RotatingFileHandler
 from flask import Flask, g
 from flask_wtf.csrf import CSRFProtect
 from werkzeug.middleware.proxy_fix import ProxyFix
-from app.util import mail, limiter, configure_mongo
+from app.util import mail, limiter
 from app.errorhandlers import setup_handlers
 from app.logging import init_logging, LOG_FORMAT
 from app.cli import create_cli
@@ -44,6 +44,12 @@ def create_app():
     app.add_url_rule('/<string:id>/delete', view_func=PasteDelete.as_view('paste.delete'))
     app.add_url_rule('/<string:id>.<string:extension>/delete', 'paste.delete')
 
+    @app.after_request
+    def after_request_func(response):
+        if 'csrf_token' in g:
+            response.headers['CSRF_TOKEN'] = g.csrf_token
+        return response
+
     @app.context_processor
     def inject_globals():
         return dict(cache_buster=cache_buster)
@@ -54,10 +60,6 @@ def create_app():
         if mongo:
             mongo.close()
 
-    with app.app_context():
-        configure_mongo(app)
-
     create_cli(app)
 
-    app.logger.info('Go!')
     return app

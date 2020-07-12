@@ -2,17 +2,14 @@ from urllib.parse import urlencode
 from flask import request, abort, render_template
 from flask.views import View
 from app.repositories import paste
-from app.util import about_text, highlight
+from app.util import highlight
 
 
 class PasteShow(View):
     methods = ['GET']
 
     def dispatch_request(self, id, extension=None):
-        if id == 'about':
-            doc = {'text': about_text}
-        else:
-            doc = paste.get_paste(id)
+        doc = paste.get_paste(id)
 
         if doc is None:
             abort(404)
@@ -21,10 +18,7 @@ class PasteShow(View):
         if highlighted:
             highlighted = highlighted.split(' ')
 
-        if id == 'about':
-            title = '/about.md'
-            days_left = None
-        elif doc['delete_at'] is None:
+        if doc['delete_at'] is None:
             title = f'{request.path}{urlencode(request.args)}'
             days_left = None
         else:

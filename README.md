@@ -6,8 +6,8 @@ A dead simple code snippet sharing tool.
 Requirements
 ------------
 
-* python 3.7 (_May work on earlier versions but is totally untested_)
-* [pipenv](https://pipenv.readthedocs.io/en/latest/) is used for dependency management.
+* python 3.8 (_May work on earlier versions but is totally untested_)
+* [pipenv](https://pipenv.readthedocs.io/en/latest/) is used for dependency and venv management
 * MongoDB
 
 
@@ -15,8 +15,8 @@ Setup
 -----
 
 1.
-	Clone the repo somewhere.  Master *should* always be stable but you can
-	checkout the latest tag from [releases](https://github.com/carc1n0gen/quickpaste/releases) if you wish.
+	Clone the repo somewhere.  Stable *should* always be stable but you can
+	checkout the latest tag from [releases](https://github.com/carc1n0gen/quickpaste/releases) if you wish. (Note: the default branch is `develop`, so make sure you switch to `stable`)
 
 	`git clone https://github.com/carc1n0gen/quickpaste.git`
 
@@ -33,14 +33,19 @@ Setup
     `npm install`
 
 4.
-	Run database migrations.
+	Initialize the database.
 
-	`pipenv run flask db upgrade head`
+	`pipenv run flask init-db`
 
 5.
     Compile css/js/assets
 
     `npm run prod`
+
+6.
+    Run
+
+    `pipenv run flask run`
 
 Configuration
 -------------
@@ -109,7 +114,7 @@ You'll want to configure a daemon of some kind to keep the app running.
 Updating
 --------
 
-Pull the latest changes from master, or checkout the latest tag, sync
+Pull the latest changes from stable, or checkout the latest tag, sync
 dependencies, check for new configuration keys, and compile js/css.
 
 `git fetch`
@@ -117,6 +122,8 @@ dependencies, check for new configuration keys, and compile js/css.
 `git pull` or `git checkout <version>`
 
 `pipenv sync`
+
+`pipenv run flask init-db`
 
 `npm install && npm run prod`
 
