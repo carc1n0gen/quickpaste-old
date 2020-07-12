@@ -1,10 +1,54 @@
 import click
+import pymongo
 from datetime import datetime, timezone
 from flask.json import dump, load
 from app.repositories import get_db
+from app.permanent_pastes import about_text, cli_text
+
+
+def configure_delete_index():
+    db = get_db()
+    pastes = db['pastes']
+
+    try:
+        pastes.drop_index('paste_ttl')
+    except pymongo.errors.OperationFailure:
+        pass
+
+    pastes.create_index('delete_at', expireAfterSeconds=0, name='paste_ttl')
+
+
+def create_or_update_permanent_pastes():
+    db = get_db()
+    db['pastes'].update_one(
+        {'_id': 'about'},
+        {'$set': {
+            '_id': 'about',
+            'text': about_text,
+            'created_at': datetime.utcnow(),
+            'delete_at': None
+        }},
+        upsert=True
+    )
+
+    db['pastes'].update_one(
+        {'_id': 'cli'},
+        {'$set': {
+            '_id': 'cli',
+            'text': cli_text,
+            'created_at': datetime.utcnow(),
+            'delete_at': None
+        }},
+        upsert=True
+    )
 
 
 def create_cli(app):
+    @app.cli.command(help='Initialize or update system db settings.')
+    def init_db():
+        configure_delete_index()
+        create_or_update_permanent_pastes()
+
     @app.cli.command(help='Export the database to json files.')
     @click.option('--output', help='Path to output file.')
     def export_db(output):

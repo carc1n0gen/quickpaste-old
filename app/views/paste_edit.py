@@ -2,7 +2,7 @@ from flask import request, redirect, url_for, render_template, session
 from flask.views import View
 from app.forms import EditForm
 from app.repositories import paste
-from app.util import about_text, highlight, LANGUAGES
+from app.util import highlight, LANGUAGES
 
 
 class PasteEdit(View):
@@ -17,10 +17,7 @@ class PasteEdit(View):
     def get(self, form):
         clone = request.args.get('clone')
         lang = request.args.get('lang')
-        if clone == 'about':
-            doc = {'text': about_text}
-        else:
-            doc = paste.get_paste(clone)
+        doc = paste.get_paste(clone)
 
         text = ""
         if doc is not None and form.text.data is None:
@@ -44,4 +41,7 @@ class PasteEdit(View):
         created_ids = session.get('created_ids', [])
         created_ids.append(id)
         session['created_ids'] = created_ids
+        accept = request.headers.get('Accept')
+        if accept == 'text/plain':
+            return url_for('paste.show', id=id, extension=extension, _external=True), 200, {'Content-Type': 'text/plain'}
         return redirect(url_for('paste.show', id=id, extension=extension, _external=True))
