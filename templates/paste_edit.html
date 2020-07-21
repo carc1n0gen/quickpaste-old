@@ -2,6 +2,7 @@
 {% block content %}
 <form method="POST" id="form" class="edit-form {{ 'rich-editor-enabled' if config['RICH_EDITOR_ENABLED'] else '' }}">
     {{ form.csrf_token }}
+    {{ form.id }}
     <div class="controls">
         {% if languages %}
         <div class="select-wrapper">

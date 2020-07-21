@@ -1,21 +1,33 @@
-from typing import Callable
 from datetime import datetime, timedelta
 from flask import current_app
-from . import insert_one, find_one, delete_one, make_id
+from . import update_one, find_one, delete_one, make_id
 
 
-def insert_paste(text: str, make_id_fn: Callable = make_id) -> str:
+def upsert_paste(updates: dict):
     paste_life_in_seconds = current_app.config.get(
         'PASTE_EXPIRE_AFTER_SECONDS', 604800
     )
-    created_at = datetime.utcnow()
+    created_at = updated_at = datetime.utcnow()
     delete_at = created_at + timedelta(seconds=paste_life_in_seconds)
-    return insert_one('pastes', {
-        '_id': make_id_fn(),
-        'text': text,
+
+    defaults = {
+        '_id': make_id(),
         'created_at': created_at,
         'delete_at': delete_at
-    })
+    }
+
+    merged = {**defaults, **updates, 'updated_at': updated_at}
+    update_one(
+        'pastes',
+        {
+            '_id': merged['_id']
+        },
+        {
+            '$set': merged
+        },
+        upsert=True
+    )
+    return merged['_id']
 
 
 def get_paste(id):

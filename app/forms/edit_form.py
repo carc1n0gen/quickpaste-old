@@ -1,11 +1,12 @@
 from flask import current_app
 from flask_wtf import FlaskForm
-from wtforms import ValidationError, TextAreaField, SelectField
+from wtforms import ValidationError, TextAreaField, SelectField, HiddenField
 from wtforms.validators import DataRequired
 from app.util import LANGUAGES
 
 
 class EditForm(FlaskForm):
+    id = HiddenField()
     text = TextAreaField('Code', [DataRequired()])
     extension = SelectField('Language', choices=LANGUAGES)
 
