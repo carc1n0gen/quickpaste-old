@@ -1,8 +1,9 @@
-from flask import request, redirect, url_for, render_template, session
+from flask import request, redirect, url_for, render_template, session, flash
 from flask.views import View
 from app.forms import EditForm
 from app.repositories import paste
 from app.util import highlight, LANGUAGES
+from app.helpers import abort_if
 
 
 class PasteEdit(View):
@@ -15,14 +16,25 @@ class PasteEdit(View):
         return self.get(form)
 
     def get(self, form):
-        clone = request.args.get('clone')
         lang = request.args.get('lang')
-        doc = paste.get_paste(clone)
+        edit = request.args.get('edit')
+        if edit and edit not in session.get('created_ids', []):
+            flash(f'You don\'t have permission to edit this paste [{id}].', category='error')
+            return redirect(url_for('paste.show', id=edit, extension=lang))
+
+        clone = request.args.get('clone')
+
+        if edit:
+            doc = paste.get_paste(edit)
+            abort_if(doc is None, 404)
+        else:
+            doc = paste.get_paste(clone)
 
         text = ""
         if doc is not None and form.text.data is None:
             form.text.data = doc['text']
             form.extension.data = lang
+            form.id.data = edit if edit else None
             text = highlight(doc['text'], request.args.get('lang'))
 
         return render_template(
@@ -35,13 +47,28 @@ class PasteEdit(View):
         )
 
     def post(self, form):
+        id = form.id.data
         text = form.text.data
         extension = form.extension.data or None
-        id = paste.insert_paste(text)
+
+        if id:
+            doc = paste.get_paste(id)
+            abort_if(doc is None, 404)
+            doc['text'] = text
+        else:
+            doc = {
+                'text': text
+            }
+
+        upserted_id = paste.upsert_paste(doc)
         created_ids = session.get('created_ids', [])
-        created_ids.append(id)
+
+        if upserted_id not in created_ids:
+            created_ids.append(upserted_id)
+
         session['created_ids'] = created_ids
+
         accept = request.headers.get('Accept')
         if accept == 'text/plain':
-            return url_for('paste.show', id=id, extension=extension, _external=True), 200, {'Content-Type': 'text/plain'}
-        return redirect(url_for('paste.show', id=id, extension=extension, _external=True))
+            return url_for('paste.show', id=upserted_id, extension=extension, _external=True), 200, {'Content-Type': 'text/plain'}
+        return redirect(url_for('paste.show', id=upserted_id, extension=extension, _external=True))

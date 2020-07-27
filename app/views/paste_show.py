@@ -1,8 +1,9 @@
 from urllib.parse import urlencode
-from flask import request, abort, render_template
+from flask import request, render_template
 from flask.views import View
 from app.repositories import paste
 from app.util import highlight
+from app.helpers import abort_if
 
 
 class PasteShow(View):
@@ -10,10 +11,7 @@ class PasteShow(View):
 
     def dispatch_request(self, id, extension=None):
         doc = paste.get_paste(id)
-
-        if doc is None:
-            abort(404)
-
+        abort_if(doc is None, 404)
         highlighted = request.args.get('h')
         if highlighted:
             highlighted = highlighted.split(' ')

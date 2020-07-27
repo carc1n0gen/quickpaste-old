@@ -29,9 +29,9 @@ def make_id():
     return get_random_string(length, alphabet)
 
 
-def insert_one(collection: str, d: dict):
+def update_one(collection: str, query: dict, updates: dict, upsert=False):
     db = get_db()
-    return db[collection].insert_one(d).inserted_id
+    return db[collection].update_one(query, updates, upsert=upsert)
 
 
 def find_one(collection: str, d: dict):

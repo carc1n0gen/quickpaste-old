@@ -1,6 +1,7 @@
-from flask import abort, make_response
+from flask import make_response
 from flask.views import View
 from app.repositories import paste
+from app.helpers import abort_if
 
 
 class PasteDownload(View):
@@ -8,8 +9,7 @@ class PasteDownload(View):
 
     def dispatch_request(self, id, extension='txt'):
         doc = paste.get_paste(id)
-        if doc is None:
-            abort(404)
+        abort_if(doc is None, 404)
 
         res = make_response(doc['text'])
         res.headers['Content-Disposition'] = f'attachment; filename={id}.{extension}'
