@@ -1,7 +1,7 @@
 import functools
 from pygments import highlight as pygment_highlight
 from pygments.formatters import HtmlFormatter
-from pygments.lexers import guess_lexer, get_lexer_for_filename
+from pygments.lexers import get_lexer_for_filename, TextLexer, _iter_lexerclasses
 from pygments.util import ClassNotFound
 from flask import request, redirect
 from flask_mail import Mail
@@ -95,10 +95,27 @@ def text_or_redirect(f):
     return decorated_function
 
 
+def find_best_lexer(text, min_confidence=0.85):
+    current_best_confidence = 0.0
+    current_best_lexer = None
+    for lexer in _iter_lexerclasses():
+        confidence = lexer.analyse_text(text)
+        if confidence == 1.0:
+            return lexer
+        elif confidence > current_best_confidence:
+            current_best_confidence = confidence
+            current_best_lexer = lexer
+
+    if current_best_confidence >= min_confidence:
+        return current_best_lexer()
+    else:
+        return TextLexer()
+
+
 def highlight(text, extension=None):
     try:
         lexer = get_lexer_for_filename('foo.{}'.format(extension))
     except ClassNotFound:
-        lexer = guess_lexer(text)
+        lexer = find_best_lexer(text)
 
     return pygment_highlight(text, lexer, HtmlFormatter())
