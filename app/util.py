@@ -96,12 +96,19 @@ def text_or_redirect(f):
 
 
 def find_best_lexer(text, min_confidence=0.85):
+    """
+    Like the built in pygments guess_lexer, except has a minimum confidence
+    level.  If that is not met, it falls back to plain text to avoid bad
+    highlighting.
+
+    :returns: Lexer instance
+    """
     current_best_confidence = 0.0
     current_best_lexer = None
     for lexer in _iter_lexerclasses():
         confidence = lexer.analyse_text(text)
         if confidence == 1.0:
-            return lexer
+            return lexer()
         elif confidence > current_best_confidence:
             current_best_confidence = confidence
             current_best_lexer = lexer
