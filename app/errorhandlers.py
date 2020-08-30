@@ -50,8 +50,7 @@ def setup_handlers(app):
             'paste_show.html',
             text=highlight(not_found_text, MarkdownLexer(), HtmlFormatter()),
             lines=not_found_text.count('\n') + 1,
-            status=404
-        )
+        ), 404
 
     @app.errorhandler(429)
     def rate_limit(ex):
