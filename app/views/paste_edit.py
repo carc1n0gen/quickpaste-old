@@ -27,8 +27,11 @@ class PasteEdit(View):
         if edit:
             doc = paste.get_paste(edit)
             abort_if(doc is None, 404)
-        else:
+        elif clone:
             doc = paste.get_paste(clone)
+            abort_if(doc is None, 404)
+        else:
+            doc = None
 
         text = ""
         if doc is not None and form.text.data is None:
