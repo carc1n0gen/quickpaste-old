@@ -19,7 +19,7 @@ class PasteEdit(View):
         lang = request.args.get('lang')
         edit = request.args.get('edit')
         if edit and edit not in session.get('created_ids', []):
-            flash(f'You don\'t have permission to edit this paste [{id}].', category='error')
+            flash(f'You don\'t have permission to edit this paste [{edit}].', category='error')
             return redirect(url_for('paste.show', id=edit, extension=lang))
 
         clone = request.args.get('clone')
