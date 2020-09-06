@@ -1,6 +1,7 @@
 from flask import session, flash, redirect, url_for
 from flask.views import View
 from app.repositories import paste
+from app.helpers import abort_if
 
 
 class PasteDelete(View):
@@ -8,7 +9,8 @@ class PasteDelete(View):
 
     def dispatch_request(self, id, extension=None):
         if id in session.get('created_ids', []):
-            paste.delete_paste(id)
+            result = paste.delete_paste(id)
+            abort_if(result.deleted_count != 1, 404)
             flash('Paste has been deleted.', category='success')
             return redirect(url_for('paste.edit'))
 
