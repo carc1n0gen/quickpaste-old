@@ -1,6 +1,6 @@
 from flask import session
 from app.repositories import paste
-from .mocks import mock_get_paste, mock_get_paste_factory, mock_upsert
+from .mocks import mock_get_paste_factory
 
 
 def test_should_return_200(client):
@@ -9,16 +9,12 @@ def test_should_return_200(client):
 
 
 def test_should_prefil_text_when_clone_id_exists(client, monkeypatch):
-    monkeypatch.setattr(paste, 'get_paste', mock_get_paste)
-
     response = client.get('/?clone=abcd')
     assert response.status_code == 200
     assert b'The cow goes mooooooo.' in response.data
 
 
 def test_should_404_when_clone_id_is_not_found(client, monkeypatch):
-    monkeypatch.setattr(paste, 'get_paste', mock_get_paste)
-
     response = client.get('/?clone=1234')
     assert response.status_code == 404
 
@@ -59,8 +55,6 @@ def test_should_update_existing_paste(client, monkeypatch):
 
 
 def test_should_prefill_text_when_edit_id_exists(client, monkeypatch):
-    monkeypatch.setattr(paste, 'get_paste', mock_get_paste)
-
     with client.session_transaction() as sess:
         sess['created_ids'] = ['abcd']
 
@@ -70,8 +64,6 @@ def test_should_prefill_text_when_edit_id_exists(client, monkeypatch):
 
 
 def test_should_404_when_edit_id_is_not_found(client, monkeypatch):
-    monkeypatch.setattr(paste, 'get_paste', mock_get_paste)
-
     with client.session_transaction() as sess:
         sess['created_ids'] = ['1234']
 
@@ -80,7 +72,7 @@ def test_should_404_when_edit_id_is_not_found(client, monkeypatch):
 
 
 def test_should_redirect_to_show(client, monkeypatch):
-    monkeypatch.setattr(paste, 'upsert_paste', mock_upsert)
+    monkeypatch.setattr(paste, 'make_id', lambda: 'zyxw')
 
     with client as c:
         response = c.post('/', data={'text': 'Do you like pancakes?', 'extension': ''})
@@ -89,16 +81,16 @@ def test_should_redirect_to_show(client, monkeypatch):
         assert session.get('created_ids') == ['zyxw']
 
 
-def test_should_rerender_edit(client):
-    response = client.post('/')
-    assert response.status_code == 200
-    assert b'This field is required' in response.data
-
-
 def test_should_return_plain_text(client, monkeypatch):
-    monkeypatch.setattr(paste, 'upsert_paste', mock_upsert)
+    monkeypatch.setattr(paste, 'make_id', lambda: 'zyxw')
 
     response = client.post('/', data={'text': 'stuff and things', 'extension': ''}, headers={'Accept': 'text/plain'})
     assert response.status_code == 200
     assert response.data == b'http://localhost/zyxw'
     assert response.headers['Content-Type'] == 'text/plain'
+
+
+def test_should_rerender_edit(client):
+    response = client.post('/')
+    assert response.status_code == 200
+    assert b'This field is required' in response.data
