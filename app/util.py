@@ -1,9 +1,7 @@
-import functools
 from pygments import highlight as pygment_highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_lexer_for_filename, TextLexer, _iter_lexerclasses
 from pygments.util import ClassNotFound
-from flask import request, redirect
 from flask_mail import Mail
 from flask_limiter.util import get_remote_address
 from flask_limiter import Limiter
@@ -69,30 +67,6 @@ LANGUAGES = [
     ('xml', 'XML'),
     ('yaml', 'YAML', ),
 ]
-
-
-def text_or_redirect(f):
-    @functools.wraps(f)
-    def decorated_function(*args, **kwargs):
-        if request.method == 'POST':
-            ctx = f(*args, **kwargs)
-            if not isinstance(ctx, dict):
-                return ctx
-
-            accept = request.headers.get('Accept')
-            status = ctx.get('status', 200)
-            message = ctx.get('message')
-            url = ctx.get('url')
-            if accept == 'text/plain':
-                if message:
-                    text = message
-                else:
-                    text = url
-                return text + '\n', status, {'Content-type': 'text/plain; charset=utf-8'}
-            return redirect(url)
-
-        return f(*args, **kwargs)
-    return decorated_function
 
 
 def find_best_lexer(text, min_confidence=0.85):

@@ -2,10 +2,10 @@ import traceback
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import MarkdownLexer
-from flask import url_for, render_template, request
+from flask import url_for, render_template, request, redirect
 from flask_wtf.csrf import CSRFError
 from flask_mail import Message
-from app.util import mail, text_or_redirect
+from app.util import mail
 
 
 unknown_error_text = """# Uh Oh!
@@ -28,13 +28,10 @@ csrf_message = """# Bad Request
 
 def setup_handlers(app):
     @app.errorhandler(400)
-    @text_or_redirect
     def bad_request(ex):
-        return dict(
-            status=400,
-            message='400 missing text',
-            url=url_for('paste.edit', _external=True)
-        )
+        if request.headers.get('Accept'):
+            return '400 missing text', 400, {'Content-type': 'text/plain; charset=utf-8'}
+        return redirect(url_for('paste.edit', _external=True))
 
     @app.errorhandler(CSRFError)
     def missing_csrf(e):
