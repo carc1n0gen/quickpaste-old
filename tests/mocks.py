@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from unittest.mock import Mock
+from app.repositories import make_id
 
 
 def mock_get_paste_factory(id, content_list):
@@ -16,6 +17,22 @@ def mock_get_paste_factory(id, content_list):
 
 
 class MockMongoCollection:
+    def find(self):
+        return [
+            {
+                '_id': make_id(),
+                'created_at': datetime.utcnow(),
+                'delete_at': datetime.utcnow() + timedelta(days=7),
+                'text': 'Bork bork I am doggo'
+            },
+            {
+                '_id': make_id(),
+                'created_at': datetime.utcnow(),
+                'delete_at': datetime.utcnow() + timedelta(days=7),
+                'text': 'Mooooooooo!'
+            }
+        ]
+
     def find_one(self, query):
         id = query['_id']
         if id == 'abcd':
@@ -32,6 +49,9 @@ class MockMongoCollection:
                 'delete_at': None,
                 'text': 'The about page.'
             }
+
+    def insert_many(self, docs):
+        pass
 
     def update_one(self, query, updates, upsert=False):
         ret = Mock()
@@ -58,6 +78,12 @@ class MockMongoCollection:
             ret.deleted_count = 0
 
         return ret
+
+    def create_index(self, field_name, expireAfterSeconds, name):
+        pass
+
+    def drop_index(self, field_name):
+        pass
 
 
 class MockMongoDatabase:

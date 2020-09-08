@@ -64,6 +64,7 @@ def create_cli(app):
 
         with open(output, 'w') as f:
             dump(pastes, f)
+        print(f'Exported database to {output}')
 
     @app.cli.command(help='Import json files to the database.')
     @click.option('--input', help='Path to input file.')
@@ -83,3 +84,4 @@ def create_cli(app):
                 )
             } for paste in load(f)]
             db['pastes'].insert_many(pastes)
+        print(f'Imported data from {input}')
