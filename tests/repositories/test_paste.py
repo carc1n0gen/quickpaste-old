@@ -3,7 +3,7 @@ from app.repositories import paste
 from ..mocks import MockMongoClient
 
 
-def test_get_paste_happy_path(app, monkeypatch):
+def test_should_return_data_when_in_db(app, monkeypatch):
     monkeypatch.setattr(repositories, 'MongoClient', MockMongoClient)
 
     with app.app_context():
@@ -12,7 +12,7 @@ def test_get_paste_happy_path(app, monkeypatch):
         assert doc['_id'] == 'abcd'
 
 
-def test_get_paste_sad_path(app, monkeypatch):
+def test_should_return_none_when_not_in_db(app, monkeypatch):
     monkeypatch.setattr(repositories, 'MongoClient', MockMongoClient)
 
     with app.app_context():

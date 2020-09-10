@@ -8,7 +8,7 @@ def test_should_return_200(client):
     assert response.status_code == 200
 
 
-def test_should_prefil_text_when_clone_id_exists(client, monkeypatch):
+def test_should_prefill_text_when_clone_id_exists(client, monkeypatch):
     response = client.get('/?clone=abcd')
     assert response.status_code == 200
     assert b'The cow goes mooooooo.' in response.data
@@ -71,7 +71,7 @@ def test_should_404_when_edit_id_is_not_found(client, monkeypatch):
     assert response.status_code == 404
 
 
-def test_should_redirect_to_show(client, monkeypatch):
+def test_should_redirect_to_show_when_create_success(client, monkeypatch):
     monkeypatch.setattr(paste, 'make_id', lambda: 'zyxw')
 
     with client as c:
@@ -81,7 +81,7 @@ def test_should_redirect_to_show(client, monkeypatch):
         assert session.get('created_ids') == ['zyxw']
 
 
-def test_should_return_plain_text(client, monkeypatch):
+def test_should_return_plain_text_when_accept_plain_text(client, monkeypatch):
     monkeypatch.setattr(paste, 'make_id', lambda: 'zyxw')
 
     response = client.post('/', data={'text': 'stuff and things', 'extension': ''}, headers={'Accept': 'text/plain'})
@@ -90,7 +90,7 @@ def test_should_return_plain_text(client, monkeypatch):
     assert response.headers['Content-Type'] == 'text/plain'
 
 
-def test_should_rerender_edit(client):
+def test_should_rerender_edit_when_missing_fields(client):
     response = client.post('/')
     assert response.status_code == 200
     assert b'This field is required' in response.data
