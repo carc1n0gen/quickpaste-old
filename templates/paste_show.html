@@ -2,12 +2,17 @@
 {% block content %}
 <textarea id="raw" aria-hidden="true" tabindex="-1" style="position:absolute;left:-10000px;">{{ text_raw }}</textarea>
 <div class="controls controls-view">
-    {% if days_left %}
+    {{ time_left }}
+    {% if seconds_left %}
+    {% set days_left = (seconds_left / 86400) | round(method='ceil') | int %}
+    {% set hours_left = (seconds_left / 3600) | round(method='ceil') | int %}
     <div class="delete-indicator">
         {% if days_left > 1 %}
-            <span>will be deleted in {{ days_left }} days</span>
+            <span>will be deleted in {{ days_left }} days.</span>
+        {% elif hours_left > 1 %}
+            <span>will be deleted in {{ hours_left }} hours.</span>
         {% else %}
-            <span>will be deleted today</span>
+            <span>will be deleted within the hour.</span>
         {% endif %}
         <span class="controls-divider"></span>
     </div>

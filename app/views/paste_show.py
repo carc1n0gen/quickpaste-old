@@ -1,3 +1,4 @@
+from datetime import datetime
 from urllib.parse import urlencode
 from flask import request, render_template
 from flask.views import View
@@ -18,17 +19,17 @@ class PasteShow(View):
 
         if doc['delete_at'] is None:
             title = f'{request.path}{urlencode(request.args)}'
-            days_left = None
+            seconds_left = None
         else:
             title = f'{request.path}{urlencode(request.args)}'
-            days_left = (doc['delete_at'] - doc['created_at']).days
+            seconds_left = (doc['delete_at'] - datetime.utcnow()).total_seconds()
 
         return render_template(
             'paste_show.html',
             id=id,
             text=highlight(doc['text'], extension),
             text_raw=doc['text'],
-            days_left=days_left,
+            seconds_left=seconds_left,
             extension=extension,
             lines=doc['text'].count('\n') + 1,
             highlighted=highlighted,

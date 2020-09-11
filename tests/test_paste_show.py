@@ -1,9 +1,20 @@
 
-def test_should_render_show_when_paste_found(client, monkeypatch):
-    response = client.get('/abcd')
+def test_should_show_time_left_in_days(client):
+    response = client.get('/days')
     assert response.status_code == 200
-    assert b'The cow goes mooooooo.' in response.data
-    assert b'will be deleted in' in response.data
+    assert b'will be deleted in 5 days' in response.data
+
+
+def test_should_show_time_left_in_hours(client):
+    response = client.get('/hours')
+    assert response.status_code == 200
+    assert b'will be deleted in 3 hours' in response.data
+
+
+def test_should_show_time_left_within_the_hour(client):
+    response = client.get('/sooooon')
+    assert response.status_code == 200
+    assert b'will be deleted within the hour' in response.data
 
 
 def test_should_404_when_paste_not_found(client, monkeypatch):

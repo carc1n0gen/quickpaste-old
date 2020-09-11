@@ -49,6 +49,27 @@ class MockMongoCollection:
                 'delete_at': None,
                 'text': 'The about page.'
             }
+        elif id == 'days':
+            return {
+                '_id': id,
+                'created_at': datetime.utcnow(),
+                'delete_at': datetime.utcnow() + timedelta(days=5),
+                'text': 'She sells sea shells by the sea shore.'
+            }
+        elif id == 'hours':
+            return {
+                '_id': id,
+                'created_at': datetime.utcnow(),
+                'delete_at': datetime.utcnow() + timedelta(hours=3),
+                'text': 'Peter Piper picked a peck of pickled peppers.'
+            }
+        elif id == 'sooooon':
+            return {
+                '_id': id,
+                'created_at': datetime.utcnow(),
+                'delete_at': datetime.utcnow() + timedelta(minutes=40),
+                'text': 'That\'s a spicy meat ball!'
+            }
 
     def insert_many(self, docs):
         pass

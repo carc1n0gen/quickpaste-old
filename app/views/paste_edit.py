@@ -1,3 +1,5 @@
+import math
+from datetime import datetime, timedelta
 from flask import request, redirect, url_for, render_template, session, flash
 from flask.views import View
 from app.forms import EditForm
@@ -33,12 +35,17 @@ class PasteEdit(View):
         else:
             doc = None
 
-        text = ""
+        text = ''
+        delete_after = '7'
         if doc is not None and form.text.data is None:
             form.text.data = doc['text']
+            form.delete_after.data = str(math.ceil((doc['delete_at'] - datetime.utcnow()).total_seconds() / 86400))
             form.extension.data = lang
             form.id.data = edit if edit else None
             text = highlight(doc['text'], request.args.get('lang'))
+        else:
+            form.text.data = text
+            form.delete_after.data = delete_after
 
         return render_template(
             'paste_edit.html',
@@ -52,15 +59,18 @@ class PasteEdit(View):
     def post(self, form):
         id = form.id.data
         text = form.text.data
+        delete_after_days = int(form.delete_after.data)
         extension = form.extension.data or None
 
         if id:
             doc = paste.get_paste(id)
             abort_if(doc is None, 404)
             doc['text'] = text
+            doc['delete_at'] = doc['created_at'] + timedelta(days=delete_after_days)
         else:
             doc = {
-                'text': text
+                'text': text,
+                'delete_at': datetime.utcnow() + timedelta(days=delete_after_days)
             }
 
         upserted_id = paste.upsert_paste(doc)
