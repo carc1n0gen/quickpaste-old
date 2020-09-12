@@ -51,7 +51,7 @@ def create_cli(app):
 
     @app.cli.command(help='Export the database to json files.')
     @click.option('--output', help='Path to output file.')
-    def export_db(output):
+    def export_db(output='output.json'):
         db = get_db()
         cursor = db['pastes'].find()
 
@@ -68,7 +68,7 @@ def create_cli(app):
 
     @app.cli.command(help='Import json files to the database.')
     @click.option('--input', help='Path to input file.')
-    def import_db(input):
+    def import_db(input='output.json'):
         db = get_db()
         with open(input, 'r') as f:
             pastes = [{
