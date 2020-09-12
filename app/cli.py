@@ -59,7 +59,7 @@ def create_cli(app):
             '_id': item['_id'],
             'text': item['text'],
             'created_at': item['created_at'].timestamp(),
-            'delete_at': item['delete_at'].timestamp()
+            'delete_at': item['delete_at'].timestamp() if item['delete_at'] else None
         } for item in cursor]
 
         with open(output, 'w') as f:
@@ -81,7 +81,7 @@ def create_cli(app):
                 'delete_at': datetime.fromtimestamp(
                     paste['delete_at'],
                     tz=timezone.utc
-                )
+                ) if paste['delete_at'] else None
             } for paste in load(f)]
             db['pastes'].insert_many(pastes)
         print(f'Imported data from {input}')
