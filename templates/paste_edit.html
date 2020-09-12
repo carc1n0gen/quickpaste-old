@@ -6,9 +6,14 @@
     <div class="controls">
         {% if languages %}
         <div class="select-wrapper">
+            {{ form.extension.label }}
             {{ form.extension(aria_label='Programming Language') }}
         </div>
         {% endif %}
+        <div class="select-wrapper">
+            {{ form.delete_after.label }}
+            {{ form.delete_after(aria_label='Delete after this many days') }}
+        </div>
         <div class="select-wrapper indent-control rich-disabled">
             <label for="indent" class="sr-only">Indentation</label>
             <select class="indent">

@@ -7,7 +7,8 @@ def get_db():
     if 'mongo' not in g:
         g.mongo = MongoClient(
             current_app.config.get('MONGO_HOST', '127.0.0.1'),
-            current_app.config.get('MONGO_PORT', 27017)
+            current_app.config.get('MONGO_PORT', 27017),
+            serverSelectionTimeoutMS=5000
         )
         g.db = g.mongo[current_app.config.get('MONGO_DATABASE', 'quickpaste')]
     return g.db
