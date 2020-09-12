@@ -45,7 +45,7 @@ NO! They are deleted after one week(ish).
 
 cli_text = """#!/usr/bin/env python3
 #
-# Usage: cat <filename> | quickpaste [-l|--lang <lang>]
+# Usage: cat <filename> | quickpaste [-l|--lang <lang>][-d|--delete-after <days>]
 # (lang is the file extension for the language)
 #
 
@@ -56,6 +56,7 @@ from optparse import OptionParser
 
 parser = OptionParser()
 parser.add_option('-l', '--lang', dest='lang', default='txt', help='the file extension for the language')
+parser.add_option('-d', '--delete-after', dest='delete_after', default='7', help='Number of days until paste deletes (in days, between 1 - 7)')
 (options, args) = parser.parse_args()
 
 QUICKPASTE_HOST = os.getenv('QUICKPASTE_HOST', 'https://quickpaste.net')
@@ -66,12 +67,13 @@ with request.urlopen(QUICKPASTE_HOST) as response:
 
 text = ''
 for line in sys.stdin:
-    text  = text + line
+    text = text + line
 
 data = parse.urlencode({
     'csrf_token': csrf_token,
     'text': text,
-    'extension': options.lang
+    'extension': options.lang,
+    'delete_after': options.delete_after
 }).encode()
 
 opener = request.build_opener()
