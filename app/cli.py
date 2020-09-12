@@ -50,8 +50,8 @@ def create_cli(app):
         create_or_update_permanent_pastes()
 
     @app.cli.command(help='Export the database to json files.')
-    @click.option('--output', help='Path to output file.')
-    def export_db(output='output.json'):
+    @click.option('--output', default='output.json', help='Path to output file.')
+    def export_db(output):
         db = get_db()
         cursor = db['pastes'].find()
 
@@ -67,8 +67,8 @@ def create_cli(app):
         print(f'Exported database to {output}')
 
     @app.cli.command(help='Import json files to the database.')
-    @click.option('--input', help='Path to input file.')
-    def import_db(input='output.json'):
+    @click.option('--input', default='output.json', help='Path to input file.')
+    def import_db(input):
         db = get_db()
         with open(input, 'r') as f:
             pastes = [{
