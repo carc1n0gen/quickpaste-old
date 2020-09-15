@@ -39,7 +39,10 @@ class PasteEdit(View):
         delete_after = '7'
         if doc is not None and form.text.data is None:
             form.text.data = doc['text']
-            form.delete_after.data = str(math.ceil((doc['delete_at'] - datetime.utcnow()).total_seconds() / 86400))
+            if doc['delete_at']:
+                form.delete_after.data = str(math.ceil((doc['delete_at'] - datetime.utcnow()).total_seconds() / 86400))
+            else:
+                form.delete_after.data = delete_after
             form.extension.data = lang
             form.id.data = edit if edit else None
             text = highlight(doc['text'], request.args.get('lang'))
