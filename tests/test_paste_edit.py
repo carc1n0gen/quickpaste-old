@@ -8,24 +8,30 @@ def test_should_return_200(client):
     assert response.status_code == 200
 
 
-def test_should_prefill_text_when_clone_id_exists(client, monkeypatch):
+def test_should_prefill_text_when_clone_id_exists(client):
     response = client.get('/?clone=abcd')
     assert response.status_code == 200
     assert b'The cow goes mooooooo.' in response.data
 
 
-def test_should_404_when_clone_id_is_not_found(client, monkeypatch):
+def test_should_prefill_text_when_cloning_permanent_paste(client):
+    response = client.get('/?clone=about')
+    assert response.status_code == 200
+    assert b'The about page.' in response.data
+
+
+def test_should_404_when_clone_id_is_not_found(client):
     response = client.get('/?clone=1234')
     assert response.status_code == 404
 
 
-def test_should_redirect_when_edit_id_not_in_session_get(client, monkeypatch):
+def test_should_redirect_when_edit_id_not_in_session_get(client):
     response = client.get('/?edit=abcd')
     assert response.status_code == 302
     assert response.headers['Location'] == 'http://localhost/abcd'
 
 
-def test_should_redirect_when_edit_id_not_in_session_post(client, monkeypatch):
+def test_should_redirect_when_edit_id_not_in_session_post(client):
     response = client.post('/?edit=abcd')
     assert response.status_code == 302
     assert response.headers['Location'] == 'http://localhost/abcd'

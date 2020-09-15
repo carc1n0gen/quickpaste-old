@@ -1,10 +1,11 @@
 from unittest.mock import patch, mock_open
 
 
-def test_should_exit_with_error_when_requried_parameters_missing(app):
-    runner = app.test_cli_runner()
-    result = runner.invoke(args=['export-db'])
-    assert result.exit_code == 1
+# TODO: revisit this since there are no required parameters anymore
+# def test_should_exit_with_error_when_requried_parameters_missing(app):
+#     runner = app.test_cli_runner()
+#     result = runner.invoke(args=['export-db'])
+#     assert result.exit_code == 1
 
 
 def test_should_exit_normally_when_required_parameters_passed(app):
