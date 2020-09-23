@@ -1,8 +1,9 @@
+import threading
 import traceback
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import MarkdownLexer
-from flask import url_for, render_template, request, redirect
+from flask import url_for, render_template, request, redirect, copy_current_request_context
 from flask_wtf.csrf import CSRFError
 from flask_mail import Message
 from app.util import mail
@@ -62,18 +63,24 @@ def setup_handlers(app):
         @app.errorhandler(500)
         @app.errorhandler(Exception)
         def unknown_error(ex):
-            tb = traceback.format_exc()
-            try:
-                mail.send(Message(
-                    subject=f'Error From {request.host_url}',
-                    recipients=[app.config['MAIL_RECIPIENT']],
-                    body=render_template('email/error.txt.jinja', tb=tb),
-                    html=render_template('email/error.html.jinja', tb=tb)
-                ))
-            except Exception:
-                pass  # Ignore, we're going to log it anyway
+            @copy_current_request_context
+            def send_message(message):
+                try:
+                    mail.send(message)
+                except Exception:
+                    pass  # Ignore, we're going to log it anyway
 
-            app.logger.exception(f'Unknown error at endpoint: {request.full_path}')
+            tb = traceback.format_exc()
+            message = Message(
+                subject=f'Error From {request.host_url}',
+                recipients=[app.config['MAIL_RECIPIENT']],
+                body=render_template('email/error.txt.jinja', tb=tb),
+                html=render_template('email/error.html.jinja', tb=tb)
+            )
+            thread = threading.Thread(target=send_message, args=(message,))
+            thread.start()
+
+            app.logger.exception(f'Unknown error at endpoint: {request.method} {request.full_path}')
             return render_template(
                 'paste_show.html',
                 text=highlight(unknown_error_text, MarkdownLexer(), HtmlFormatter()),
