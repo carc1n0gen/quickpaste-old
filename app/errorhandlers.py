@@ -18,6 +18,10 @@ not_found_text = """# Not Found
 
 **There doesn't seem to be anything here.**"""
 
+method_not_allowed_text = """# Method Not Allowed
+
+**You can't do that here.**"""
+
 rate_limit_text = """# Too Many Requests
 
 **Limit: {}**"""
@@ -49,6 +53,14 @@ def setup_handlers(app):
             text=highlight(not_found_text, MarkdownLexer(), HtmlFormatter()),
             lines=not_found_text.count('\n') + 1,
         ), 404
+
+    @app.errorhandler(405)
+    def method_not_allowed(ex):
+        return render_template(
+            'paste_show.html',
+            text=highlight(method_not_allowed_text, MarkdownLexer(), HtmlFormatter()),
+            lines=method_not_allowed_text.count('\n') + 1,
+        ), 405
 
     @app.errorhandler(429)
     def rate_limit(ex):
