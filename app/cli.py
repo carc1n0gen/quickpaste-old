@@ -1,7 +1,7 @@
 import click
 import pymongo
 from datetime import datetime, timezone
-from flask.json import dump, load
+from flask.json import dumps, loads
 from app.repositories import database
 from app.permanent_pastes import about_text, cli_text
 
@@ -47,27 +47,23 @@ def create_cli(app):
         configure_delete_index()
         create_or_update_permanent_pastes()
 
-    @app.cli.command(help='Export the database to json files.')
-    @click.option('--output', default='output.json', help='Path to output file.')
-    def export_db(output):
+    @app.cli.command(help='Dump the database as json lines to stdout.')
+    def export_db():
         cursor = database['pastes'].find()
+        for item in cursor:
+            print(dumps({
+                '_id': item['_id'],
+                'text': item['text'],
+                'created_at': item['created_at'].timestamp(),
+                'delete_at': item['delete_at'].timestamp() if item['delete_at'] else None
+            }))
 
-        pastes = [{
-            '_id': item['_id'],
-            'text': item['text'],
-            'created_at': item['created_at'].timestamp(),
-            'delete_at': item['delete_at'].timestamp() if item['delete_at'] else None
-        } for item in cursor]
-
-        with open(output, 'w') as f:
-            dump(pastes, f)
-        print(f'Exported database to {output}')
-
-    @app.cli.command(help='Import json files to the database.')
-    @click.option('--input', default='output.json', help='Path to input file.')
-    def import_db(input):
-        with open(input, 'r') as f:
-            pastes = [{
+    @app.cli.command(help='Read json lines from stdin.')
+    def import_db():
+        stdin = click.get_text_stream('stdin')
+        while line := stdin.readline():
+            paste = loads(line)
+            database['pastes'].insert_one({
                 '_id': paste['_id'],
                 'text': paste['text'],
                 'created_at': datetime.fromtimestamp(
@@ -78,6 +74,4 @@ def create_cli(app):
                     paste['delete_at'],
                     tz=timezone.utc
                 ) if paste['delete_at'] else None
-            } for paste in load(f)]
-            database['pastes'].insert_many(pastes)
-        print(f'Imported data from {input}')
+            })
