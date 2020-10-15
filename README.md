@@ -117,15 +117,22 @@ Updating
 Pull the latest changes from stable, or checkout the latest tag, sync
 dependencies, check for new configuration keys, and compile js/css.
 
-`git fetch`
+1. `git fetch`
 
-`git pull` or `git checkout <version>`
+2. `git pull` or `git checkout <version>`
 
-`pipenv sync`
+3. `pipenv sync`
 
-`pipenv run flask init-db`
+4. `pipenv run flask init-db`
 
-`npm install && npm run prod`
+5. `npm install && npm run prod`
+
+6. restart the app
+
+Contributing
+------------
+
+The `stable` branch is like the "master" branch, but pull request should not be made against `stable`.  Make pull requests against the `develop` branch.  I merge `develop` in to `stable` as I see fit.
 
 CLI
 ---
