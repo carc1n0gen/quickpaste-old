@@ -14,13 +14,15 @@ def get_mongo_client():
     return g.mongo_client
 
 
+mongo_client = LocalProxy(get_mongo_client)
+
+
 def get_database():
     if 'database' not in g:
         g.database = mongo_client[current_app.config.get('MONGO_DATABASE', 'quickpaste')]
     return g.database
 
 
-mongo_client = LocalProxy(get_mongo_client)
 database = LocalProxy(get_database)
 
 
