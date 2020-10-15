@@ -127,12 +127,19 @@ dependencies, check for new configuration keys, and compile js/css.
 
 `npm install && npm run prod`
 
+CLI
+---
+
+There are a few cli commands used for administrating a quickpaste instance
+
+`flask init-db` - For creating/updating indexes and permanent pastes
+
+`flask export-db` - Dumps the database as json lines to stdout
+
+`flask import-db` - Imports json lines from stdin to the database
+
 Random Things
 -------------
-
-**How long are pastes on official [quickpaste](https://quickpaste.net/) kept?**
-
-They are deleted after 7 days(ish).
 
 **Why do I need to configure an email sender?**
 
