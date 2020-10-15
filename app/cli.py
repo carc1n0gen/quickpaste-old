@@ -2,13 +2,12 @@ import click
 import pymongo
 from datetime import datetime, timezone
 from flask.json import dump, load
-from app.repositories import get_db
+from app.repositories import database
 from app.permanent_pastes import about_text, cli_text
 
 
 def configure_delete_index():
-    db = get_db()
-    pastes = db['pastes']
+    pastes = database['pastes']
 
     try:
         pastes.drop_index('paste_ttl')
@@ -19,8 +18,7 @@ def configure_delete_index():
 
 
 def create_or_update_permanent_pastes():
-    db = get_db()
-    db['pastes'].update_one(
+    database['pastes'].update_one(
         {'_id': 'about'},
         {'$set': {
             '_id': 'about',
@@ -31,7 +29,7 @@ def create_or_update_permanent_pastes():
         upsert=True
     )
 
-    db['pastes'].update_one(
+    database['pastes'].update_one(
         {'_id': 'cli'},
         {'$set': {
             '_id': 'cli',
@@ -52,8 +50,7 @@ def create_cli(app):
     @app.cli.command(help='Export the database to json files.')
     @click.option('--output', default='output.json', help='Path to output file.')
     def export_db(output):
-        db = get_db()
-        cursor = db['pastes'].find()
+        cursor = database['pastes'].find()
 
         pastes = [{
             '_id': item['_id'],
@@ -69,7 +66,6 @@ def create_cli(app):
     @app.cli.command(help='Import json files to the database.')
     @click.option('--input', default='output.json', help='Path to input file.')
     def import_db(input):
-        db = get_db()
         with open(input, 'r') as f:
             pastes = [{
                 '_id': paste['_id'],
@@ -83,5 +79,5 @@ def create_cli(app):
                     tz=timezone.utc
                 ) if paste['delete_at'] else None
             } for paste in load(f)]
-            db['pastes'].insert_many(pastes)
+            database['pastes'].insert_many(pastes)
         print(f'Imported data from {input}')

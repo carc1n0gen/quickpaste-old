@@ -56,9 +56,9 @@ def create_app():
 
     @app.teardown_appcontext
     def teardown(err_or_request):
-        mongo = g.pop('mongo', None)
-        if mongo:
-            mongo.close()
+        mongo_client = g.pop('mongo_client', None)
+        if mongo_client:
+            mongo_client.close()
 
     create_cli(app)
 
