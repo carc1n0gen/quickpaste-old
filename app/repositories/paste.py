@@ -1,5 +1,4 @@
-from datetime import datetime  # , timedelta
-# from flask import current_app
+from datetime import datetime
 from . import update_one, find_one, delete_one, make_id
 
 
