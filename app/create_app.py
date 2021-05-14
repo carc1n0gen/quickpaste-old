@@ -43,7 +43,9 @@ def create_app():
     app.add_url_rule('/download/<string:id>', view_func=PasteDownload.as_view('paste.download'))
     app.add_url_rule('/download/<string:id>.<string:extension>', 'paste.download')
     app.add_url_rule('/<string:id>/delete', view_func=PasteDelete.as_view('paste.delete'))
-    app.add_url_rule('/<string:id>.<string:extension>/delete', 'paste.delete')
+    # For some reason the extension version of the delete route never works, and the extension ends up
+    # being part of the id which messes things up.
+    # app.add_url_rule('/<string:id>.<string:extension>/delete', 'paste.delete')
 
     @app.after_request
     def after_request_func(response):
