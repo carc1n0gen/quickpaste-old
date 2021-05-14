@@ -1,4 +1,5 @@
 import uuid
+import json
 from logging import Formatter
 from logging.handlers import RotatingFileHandler
 from flask import Flask, g
@@ -15,7 +16,7 @@ def create_app():
     init_logging()
     cache_buster = uuid.uuid4()
     app = Flask('quickpaste')
-    app.config.from_json('config.json')
+    app.config.from_file('config.json', json.load)
     handler = RotatingFileHandler(app.config['LOG_FILE'], maxBytes=1024 * 1024)
     handler.setFormatter(Formatter(LOG_FORMAT))
     app.logger.addHandler(handler)
