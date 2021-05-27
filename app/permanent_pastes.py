@@ -34,10 +34,6 @@ Just download it, rename it to `quickpaste`, mark it as executable, and put it s
 
 ## FAQ
 
-**Are the snippets stored forever?**
-
-NO! They are deleted after one week(ish).
-
 **Is the code available?**
 
 [github project](https://github.com/carc1n0gen/quickpaste)"""

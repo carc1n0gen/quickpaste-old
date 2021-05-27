@@ -1,17 +1,29 @@
 import random
+from werkzeug.local import LocalProxy
 from pymongo import MongoClient
 from flask import g, current_app
 
 
-def get_db():
-    if 'mongo' not in g:
-        g.mongo = MongoClient(
+def get_mongo_client():
+    if 'mongo_client' not in g:
+        g.mongo_client = MongoClient(
             current_app.config.get('MONGO_HOST', '127.0.0.1'),
             current_app.config.get('MONGO_PORT', 27017),
             serverSelectionTimeoutMS=5000
         )
-        g.db = g.mongo[current_app.config.get('MONGO_DATABASE', 'quickpaste')]
-    return g.db
+    return g.mongo_client
+
+
+mongo_client = LocalProxy(get_mongo_client)
+
+
+def get_database():
+    if 'database' not in g:
+        g.database = mongo_client[current_app.config.get('MONGO_DATABASE', 'quickpaste')]
+    return g.database
+
+
+database = LocalProxy(get_database)
 
 
 def get_random_string(length, alphabet):
@@ -31,15 +43,12 @@ def make_id():
 
 
 def update_one(collection: str, query: dict, updates: dict, upsert=False):
-    db = get_db()
-    return db[collection].update_one(query, updates, upsert=upsert)
+    return database[collection].update_one(query, updates, upsert=upsert)
 
 
 def find_one(collection: str, d: dict):
-    db = get_db()
-    return db[collection].find_one(d)
+    return database[collection].find_one(d)
 
 
 def delete_one(collection: str, d: dict):
-    db = get_db()
-    return db[collection].delete_one(d)
+    return database[collection].delete_one(d)

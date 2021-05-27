@@ -117,22 +117,36 @@ Updating
 Pull the latest changes from stable, or checkout the latest tag, sync
 dependencies, check for new configuration keys, and compile js/css.
 
-`git fetch`
+1. `git fetch`
 
-`git pull` or `git checkout <version>`
+2. `git pull` or `git checkout <version>`
 
-`pipenv sync`
+3. `pipenv sync`
 
-`pipenv run flask init-db`
+4. `pipenv run flask init-db`
 
-`npm install && npm run prod`
+5. `npm install && npm run prod`
+
+6. restart the app
+
+Contributing
+------------
+
+The `stable` branch is like the "master" branch, but pull request should not be made against `stable`.  Make pull requests against the `develop` branch.  I merge `develop` in to `stable` as I see fit.
+
+CLI
+---
+
+There are a few cli commands used for administrating a quickpaste instance
+
+`flask init-db` - For creating/updating indexes and permanent pastes
+
+`flask export-db` - Dumps the database as json lines to stdout
+
+`flask import-db` - Imports json lines from stdin to the database
 
 Random Things
 -------------
-
-**How long are pastes on official [quickpaste](https://quickpaste.net/) kept?**
-
-They are deleted after 7 days(ish).
 
 **Why do I need to configure an email sender?**
 

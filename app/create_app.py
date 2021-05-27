@@ -1,4 +1,5 @@
 import uuid
+import json
 from logging import Formatter
 from logging.handlers import RotatingFileHandler
 from flask import Flask, g
@@ -15,7 +16,7 @@ def create_app():
     init_logging()
     cache_buster = uuid.uuid4()
     app = Flask('quickpaste')
-    app.config.from_json('config.json')
+    app.config.from_file('config.json', json.load)
     handler = RotatingFileHandler(app.config['LOG_FILE'], maxBytes=1024 * 1024)
     handler.setFormatter(Formatter(LOG_FORMAT))
     app.logger.addHandler(handler)
@@ -42,7 +43,7 @@ def create_app():
     app.add_url_rule('/download/<string:id>', view_func=PasteDownload.as_view('paste.download'))
     app.add_url_rule('/download/<string:id>.<string:extension>', 'paste.download')
     app.add_url_rule('/<string:id>/delete', view_func=PasteDelete.as_view('paste.delete'))
-    app.add_url_rule('/<string:id>.<string:extension>/delete', 'paste.delete')
+    app.add_url_rule('/<string:id>.<string:extension>/delete', 'paste.delete', defaults={'extension': None})
 
     @app.after_request
     def after_request_func(response):
@@ -56,9 +57,9 @@ def create_app():
 
     @app.teardown_appcontext
     def teardown(err_or_request):
-        mongo = g.pop('mongo', None)
-        if mongo:
-            mongo.close()
+        mongo_client = g.pop('mongo_client', None)
+        if mongo_client:
+            mongo_client.close()
 
     create_cli(app)
 
