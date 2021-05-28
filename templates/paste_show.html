@@ -25,7 +25,7 @@
     {% endif %}
     <a href="{{ url_for('paste.edit', clone=id, lang=extension) }}">clone &amp; edit</a>
     {% if id in session.get('created_ids', []) %}
-    <form action="{{ url_for('paste.delete', id=id, extension=extension) }}" method="POST" class="inline">
+    <form action="{{ url_for('paste.delete', id=id) }}" method="POST" class="inline">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
         <button type="submit" class=" btn btn-link">delete</button>
     </form>

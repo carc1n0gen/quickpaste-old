@@ -43,7 +43,6 @@ def create_app():
     app.add_url_rule('/download/<string:id>', view_func=PasteDownload.as_view('paste.download'))
     app.add_url_rule('/download/<string:id>.<string:extension>', 'paste.download')
     app.add_url_rule('/<string:id>/delete', view_func=PasteDelete.as_view('paste.delete'))
-    app.add_url_rule('/<string:id>.<string:extension>/delete', 'paste.delete', defaults={'extension': None})
 
     @app.after_request
     def after_request_func(response):
