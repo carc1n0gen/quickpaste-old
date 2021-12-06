@@ -46,6 +46,7 @@ def create_cli(app):
     def init_db():
         configure_delete_index()
         create_or_update_permanent_pastes()
+        print('Database successfully initialized.')
 
     @app.cli.command(help='Dump the database as json lines to stdout.')
     def export_db():
