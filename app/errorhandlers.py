@@ -71,30 +71,29 @@ def setup_handlers(app):
             lines=text.count('\n') + 1
         ), 429
 
-    if not app.debug:
-        @app.errorhandler(500)
-        @app.errorhandler(Exception)
-        def unknown_error(ex):
-            @copy_current_request_context
-            def send_message(message):
-                try:
-                    mail.send(message)
-                except Exception:
-                    pass  # Ignore, we're going to log it anyway
+    @app.errorhandler(500)
+    @app.errorhandler(Exception)
+    def unknown_error(ex):
+        @copy_current_request_context
+        def send_message(message):
+            try:
+                mail.send(message)
+            except Exception:
+                pass  # Ignore, we're going to log it anyway
 
-            tb = traceback.format_exc()
-            message = Message(
-                subject=f'Error From {request.host_url}',
-                recipients=[app.config['MAIL_RECIPIENT']],
-                body=render_template('email/error.txt.jinja', tb=tb),
-                html=render_template('email/error.html.jinja', tb=tb)
-            )
-            thread = threading.Thread(target=send_message, args=(message,))
-            thread.start()
+        tb = traceback.format_exc()
+        message = Message(
+            subject=f'Error From {request.host_url}',
+            recipients=[app.config['MAIL_RECIPIENT']],
+            body=render_template('email/error.txt.jinja', tb=tb),
+            html=render_template('email/error.html.jinja', tb=tb)
+        )
+        thread = threading.Thread(target=send_message, args=(message,))
+        thread.start()
 
-            app.logger.exception(f'Unknown error at endpoint: {request.method} {request.full_path}')
-            return render_template(
-                'paste_show.html',
-                text=highlight(unknown_error_text, MarkdownLexer(), HtmlFormatter()),
-                lines=unknown_error_text.count('\n') + 1
-            ), 500
+        app.logger.exception(f'Unknown error at endpoint: {request.method} {request.full_path}')
+        return render_template(
+            'paste_show.html',
+            text=highlight(unknown_error_text, MarkdownLexer(), HtmlFormatter()),
+            lines=unknown_error_text.count('\n') + 1
+        ), 500
