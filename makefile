@@ -1,4 +1,26 @@
-dev:
+all: deps assets init-db
+
+deps:
+	pipenv sync
+	npm ci
+
+assets:
+	npm run prod
+
+init-db:
+	FLASK_APP=app.create_app pipenv run flask init-db
+
+dev-deps:
+	pipenv sync --dev
+	npm install
+
+dev-assets:
+	npm run dev
+
+watch-assets:
+	npm run watch
+
+dev-run:
 	pipenv run flask run
 
 test:
