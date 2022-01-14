@@ -6,7 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="Description" content="Dead simple code sharing.  Paste some code, save, and share the generated link with a friend.">
-     <meta name="keywords" content="quickpaste,code,pastebin,paste,bin,share,snippet">
+    <meta name="keywords" content="quickpaste,code,pastebin,paste,bin,share,snippet">
+    {% if id %}
+        <meta name="twitter:image:src" content="{{url_for('paste.social_banner', id=id, extension=extension)}}">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="Quickpaste">
+        <meta name="twitter:description" content="Dead simple code sharing.  Paste some code, save, and share the generated link with a friend.">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="{{ title_link }}">
+        <meta property="og:title" content="Quickpaste">
+        <meta property="og:description" content="Dead simple code sharing.  Paste some code, save, and share the generated link with a friend.">
+        <meta property="og:image" content="{{url_for('paste.social_banner', id=id, extension=extension)}}">
+    {% endif %}
     <title>quickpaste</title>
     <link rel="stylesheet" href="/static/bundle.css?{{ cache_buster }}">
 </head>

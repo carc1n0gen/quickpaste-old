@@ -6,7 +6,7 @@ A dead simple code snippet sharing tool.
 Requirements
 ------------
 
-* python 3.8 (_May work on earlier versions but is totally untested_)
+* python 3.9 (_May work on earlier versions but is totally untested_)
 * [pipenv](https://pipenv.readthedocs.io/en/latest/) is used for dependency and venv management
 * MongoDB
 

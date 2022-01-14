@@ -93,10 +93,10 @@ def find_best_lexer(text, min_confidence=0.85):
         return TextLexer()
 
 
-def highlight(text, extension=None):
+def highlight(text, extension=None, formatter=HtmlFormatter, **formatter_options):
     try:
         lexer = get_lexer_for_filename('foo.{}'.format(extension))
     except ClassNotFound:
         lexer = find_best_lexer(text)
 
-    return pygment_highlight(text, lexer, HtmlFormatter())
+    return pygment_highlight(text, lexer, formatter(**formatter_options))

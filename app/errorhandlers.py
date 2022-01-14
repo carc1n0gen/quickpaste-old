@@ -34,7 +34,7 @@ csrf_message = """# Bad Request
 def setup_handlers(app):
     @app.errorhandler(400)
     def bad_request(ex):
-        if request.headers.get('Accept'):
+        if request.headers.get('Accept') == 'text/plain':
             return '400 missing text', 400, {'Content-type': 'text/plain; charset=utf-8'}
         return redirect(url_for('paste.edit', _external=True))
 

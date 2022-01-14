@@ -9,7 +9,7 @@ from app.util import mail, limiter
 from app.errorhandlers import setup_handlers
 from app.logging import init_logging, LOG_FORMAT
 from app.cli import create_cli
-from app.views import PasteEdit, LiveHighlight, PasteShow, PasteRaw, PasteDownload, PasteDelete
+from app.views import PasteEdit, LiveHighlight, PasteShow, PasteRaw, PasteDownload, PasteDelete, SocialBanner
 
 
 def create_app():
@@ -43,6 +43,8 @@ def create_app():
     app.add_url_rule('/download/<string:id>', view_func=PasteDownload.as_view('paste.download'))
     app.add_url_rule('/download/<string:id>.<string:extension>', 'paste.download')
     app.add_url_rule('/<string:id>/delete', view_func=PasteDelete.as_view('paste.delete'))
+    app.add_url_rule('/<string:id>/social-banner.jpg', view_func=SocialBanner.as_view('paste.social_banner'))
+    app.add_url_rule('/<string:id>/<string:extension>/social-banner.jpg', 'paste.social_banner')
 
     @app.after_request
     def after_request_func(response):
