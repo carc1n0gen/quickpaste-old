@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import './highlight.css';
+
+.edit-height-fix {
+  min-height: 100vh;
+  display: flex;
+  flex-flow: column;
+}
+
+.controls-divider {
+  border-right: 4px dotted #545353;
+  margin-right: 10px;
+  padding-left: 10px;
+}
+
+.line {
+  color: #6f6f6f;
+  position: relative;
+  display: inline-block;
+  text-align: right;
+  width: 100%;
+}
+
+.line:before {
+  position: absolute;
+  content: '';
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.line.highlighted:after, .line:target:after {
+  position: absolute;
+  left: -22px;
+  content: '';
+  width: 110vw;
+  height: 100%;
+  background-color: rgba(255,255,255,.15);
+  pointer-events: none;
+}

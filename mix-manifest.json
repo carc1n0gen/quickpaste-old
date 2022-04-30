@@ -1,4 +1,5 @@
 {
-    "/static/bundle.js": "/static/bundle.js",
-    "/static/bundle.css": "/static/bundle.css"
+    "/app/static/css/main.css": "/app/static/css/main.css",
+    "/app/static/bundle.js": "/app/static/bundle.js",
+    "/app/static/img/icon.png": "/app/static/img/icon.png"
 }

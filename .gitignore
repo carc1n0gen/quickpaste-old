@@ -112,7 +112,7 @@ config.json
 /.vscode
 
 # Compiled Assets
-/static/*
+/app/static/*
 
 # macOS Shit (I thought these werre gone in sierra and above?
 .DS_Store

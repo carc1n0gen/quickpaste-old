@@ -7,7 +7,7 @@ from app.util import highlight
 
 
 class QuickPasteStyle(NativeStyle):
-    background_color = '#404040'
+    background_color = 'rgb(63, 63, 70)'
 
 
 class SocialBanner(View):
@@ -20,8 +20,10 @@ class SocialBanner(View):
             JpgImageFormatter,
             # hl_lines=highlighted # TODO: revisit highlighing in the images
             style=QuickPasteStyle,
-            line_number_bg='#404040',
+            line_pad=10,
+            line_number_bg='rgb(63, 63, 70)',
             line_number_fg='#6f6f6f',
+            line_number_pad=20,
             font_size=32
         )
 

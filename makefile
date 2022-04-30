@@ -15,7 +15,7 @@ dev-deps:
 	npm install
 
 dev-assets:
-	npm run dev
+	npm run development
 
 watch-assets:
 	npm run watch

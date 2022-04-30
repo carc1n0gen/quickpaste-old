@@ -1,0 +1,15 @@
+{% extends 'layouts/layout.html' %}
+{% block content %}
+<form method="POST" id="form" class="flex flex-1 flex-col text-zinc-200">
+    {{ form.csrf_token }}
+    {{ form.id }}
+    <div class="flex bg-zinc-700 text-zinc-200 p-2 border-b border-b-zinc-600">
+        {{ form.extension(aria_label='Programming Language', class='rounded-md bg-zinc-800 hidden md:block') }}
+        {{ form.delete_after(aria_label='Delete after this many days', class='md:ml-2 mr-2 rounded-md bg-zinc-800 display-none') }}
+        <button type="submit" class="flex ml-auto bg-blue-500 text-white border border-blue-400 rounded-md px-6 py-2 hover:bg-blue-700">Save</button>
+    </div>
+    {{ form.text(class='bg-zinc-700 border-transparent flex-auto focus:outline-0', placeholder='type or paste some code') }}
+</form>
+{% endblock %}
+{% block bottom_scripts %}
+{% endblock %}
