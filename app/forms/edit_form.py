@@ -6,13 +6,13 @@ from app.util import LANGUAGES
 
 
 delete_after_choices = [
-    ('1', '1'),
-    ('2', '2'),
-    ('3', '3'),
-    ('4', '4'),
-    ('5', '5'),
-    ('6', '6'),
-    ('7', '7'),
+    ('1', 'delete after 1 day'),
+    ('2', 'delete after 2 days'),
+    ('3', 'delete after 3 days'),
+    ('4', 'delete after 4 days'),
+    ('5', 'delete after 5 days'),
+    ('6', 'delete after 6 days'),
+    ('7', 'delete after 7 days'),
 ]
 
 

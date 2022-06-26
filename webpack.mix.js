@@ -1,16 +1,11 @@
 let mix = require('laravel-mix');
 
 mix.scripts([
-    'static-src/js/toast.js',
-    'static-src/js/editor.js'
-], 'static/bundle.js');
+    'app/assets/js/toast.js',
+], 'app/static/bundle.js');
 
-mix.styles([
-    'static-src/css/normalize.css',
-    'static-src/css/highlight.css',
-    'static-src/css/fontello.css',
-    'static-src/css/styles.css'
-], 'static/bundle.css');
+mix.postCss("app/assets/css/main.css", "app/static/css", [
+    require("tailwindcss"),
+]);
 
-mix.copyDirectory('static-src/font', 'static/font');
-mix.copyDirectory('static-src/img', 'static/img');
+mix.copyDirectory('app/assets/img', 'app/static/img');
