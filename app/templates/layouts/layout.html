@@ -22,18 +22,18 @@
     <link rel="stylesheet" href="/static/css/main.css?{{ cache_buster }}">
 </head>
 <body class="bg-zinc-700 {% if body_class %}{{ body_class }}{% endif %}">
-    <header class="flex flex-col md:flex-row bg-zinc-800 text-zinc-200 pt-1 pr-3 pb-3 pl-3 border-b border-b-zinc-600">
+    <header class="flex flex-col md:flex-row items-center bg-zinc-800 text-zinc-200 p-4 border-b border-b-zinc-600">
         {% if title and title_link %}
         <textarea id="title-link-select" aria-hidden="true" tabindex="-1" style="position:absolute;left:-10000px;">{{ title_link }}</textarea>
-        <a href="{{ title_link }}" id="title-link" class="mb-3 md:mb-0 underline decoration-blue-500 text-4xl font-bold text-center md:text-left"><h1>{{ title }}</h1></a>
+        <a href="{{ title_link }}" id="title-link" class="md:-mt-2 mb-8 md:mb-0 underline decoration-blue-500 text-4xl font-bold text-center md:text-left"><h1>{{ title }}</h1></a>
         {% else %}
-        <a href="/about.md" class="mb-3 md:mb-0 underline decoration-blue-500 text-4xl font-bold text-center md:text-left"><h1>quickpaste</h1></a>
+        <a href="/about.md" class="md:-mt-2 mb-8 md:mb-0 underline decoration-blue-500 text-4xl font-bold text-center md:text-left"><h1>quickpaste</h1></a>
         {% endif %}
-        <nav class="ml-auto mr-auto md:mr-0 text-2xl mt-2">
+        <nav class="ml-auto mr-auto mb-4 md:mb-0 md:mr-0 text-xl">
             <a href="/about.md">About</a>
             <a href="https://github.com/carc1n0gen/quickpaste" target="_blank" class="ml-7">Github</a>
             {% if hide_new is not defined %}
-            <a href="/" class="ml-7 bg-blue-500 text-white border border-blue-400 rounded-md px-4 hover:bg-blue-700">New Paste</a>
+            <a href="/" class="bg-blue-500 text-white border border-blue-400 rounded-md px-6 py-2 ml-7 hover:bg-blue-600 hover:border-blue-500">New Paste</a>
             {% endif %}
         </nav>
     </header>
