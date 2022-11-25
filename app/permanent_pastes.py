@@ -57,7 +57,9 @@ parser.add_option('-d', '--delete-after', dest='delete_after', default='7', help
 
 QUICKPASTE_HOST = os.getenv('QUICKPASTE_HOST', 'https://quickpaste.net')
 
-with request.urlopen(QUICKPASTE_HOST) as response:
+req = request.Request(QUICKPASTE_HOST)
+req.add_header('User-Agent', 'quickpaste cli client')
+with request.urlopen(req) as response:
     cookie_string = response.headers['Set-Cookie']
     csrf_token = response.headers['CSRF_TOKEN']
 
